@@ -8,7 +8,6 @@ Steps to set up:
 ```sh
 export TOOLCHAINS="swift" # use downloaded snapshot
 export VULKAN_SDK_HOME="$HOME/SDKs/vulkansdk-macos-1.1.92.1/macOS" # make sure this matches the downloaded version
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$VULKAN_SDK_HOME/lib"
 export CUSTOM_PKG_CONFIG="$HOME/pkg-config"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$CUSTOM_PKG_CONFIG"
 ```
