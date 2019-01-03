@@ -1,3 +1,3 @@
-# codemaker-sdl2
+# vulkansample
 
 A description of this package.
