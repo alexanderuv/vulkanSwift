@@ -1,15 +1,25 @@
 // Swift-bindings for VulkanAPI
-import CVulkan
 
-func convertTupleToString<T>(_ tuple: T) -> String {
+import CVulkan
+import Foundation
+
+fileprivate func convertTupleToString<T>(_ tuple: T) -> String {
     let tupleMirror = Mirror(reflecting: tuple)
     let data = tupleMirror.children.map({ $0.value as! Int8 })
     return String(cString: UnsafePointer(data))
-    // withUnsafePointer(to: data) { ptr: UnsafePointer<Int8> in
-    //     result = String(cString: ptr)
-    // }
+}
 
-    // return result
+extension String {
+    public func asCString() -> UnsafePointer<Int8>? {
+        let nsVal = self as NSString
+        return nsVal.cString(using: String.Encoding.utf8.rawValue)
+    }
+}
+
+extension Int {
+    public func toUInt32() -> UInt32 {
+        return UInt32(self)
+    }
 }
 
 public class VulkanAPI {
@@ -47,7 +57,11 @@ public class VulkanAPI {
         // reserved for future use
         //let flags = 0
 
-        let applicationInfo: VkApplicationInfo
+        let applicationInfo: VkApplicationInfo?
+        let enabledLayerCount: UInt32
+        let enabledLayerNames: [String]
+        let enabledExtensionCount: UInt32
+        let enabledExtensionNames: [String]
     }
 
     public struct VkExtensionProperties {
@@ -63,6 +77,31 @@ public class VulkanAPI {
     }
 
     public class func vkCreateInstance(_ createInfo: VkInstanceCreateInfo) -> VkInstance? {
+
+        let arrEnabledLayerNames = createInfo.enabledLayerNames.map { $0.asCString() }
+        let enabledLayerNamesPtr = UnsafePointer(arrEnabledLayerNames)
+
+        let arrEnabledExtensionNames = createInfo.enabledExtensionNames.map { $0.asCString() }
+        let enabledExtensionNamesPtr = UnsafePointer(arrEnabledExtensionNames)
+
+        let cCreateInfo = CVulkan.VkInstanceCreateInfo(
+            sType: VkInstanceCreateInfo.sType,
+            pNext: nil,
+            flags: 0,
+            pApplicationInfo: nil, // &appInfo,
+            enabledLayerCount: createInfo.enabledLayerCount,
+            ppEnabledLayerNames: enabledLayerNamesPtr,
+            enabledExtensionCount: createInfo.enabledExtensionCount,
+            ppEnabledExtensionNames: enabledExtensionNamesPtr
+        )
+
+        let instancePtr = UnsafeMutablePointer<CVulkan.VkInstance?>.allocate(capacity: 1)
+        var opResult = VK_ERROR_INITIALIZATION_FAILED
+        withUnsafePointer(to: cCreateInfo) {
+            opResult = CVulkan.vkCreateInstance($0, nil, instancePtr)
+        }
+        
+        print("vkCreateInstance result was \(opResult)")
         return nil
     }
 

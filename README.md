@@ -29,7 +29,7 @@ EOF
 
 # if you have a better way of doing this, let me know
 ln -s $VULKAN_SDK_HOME/lib/libvulkan.1.dylib /usr/local/lib/ 
-ln -s $VULKAN_SDK_HOME/lib/libMoltenVK.dylib /usr/local/lib
+ln -s $VULKAN_SDK_HOME/lib/libMoltenVK.dylib /usr/local/lib/
 ```
 5. Confirm right Swift version by running `swift --version`. Should return something like `Apple Swift version 5.0-dev`
 6. Run `swift build` at the project's root folder

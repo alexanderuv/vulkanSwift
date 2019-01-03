@@ -4,8 +4,10 @@
 
 import Foundation
 import CSDL2
-import CVulkan
 import Darwin
+
+import let CVulkan.VK_KHR_SURFACE_EXTENSION_NAME
+import let CVulkan.VK_MVK_MACOS_SURFACE_EXTENSION_NAME
 
 let SDL_WINDOWPOS_UNDEFINED_MASK: Int32 = 0x1FFF0000;
 let SDL_WINDOWPOS_UNDEFINED = SDL_WINDOWPOS_UNDEFINED_MASK;
@@ -25,96 +27,49 @@ enum WindowFlags: UInt32 {
     case SDL_WINDOW_VULKAN = 0x10000000
 }
 
-//let SDL_WINDOW_SHOWN: Uint32 = 1
-
-let instance = UnsafeMutablePointer<VkInstance?>.allocate(capacity: 1)
-
-var appInfo = VkApplicationInfo(
-    sType: VK_STRUCTURE_TYPE_APPLICATION_INFO,
-    pNext: nil,
-    pApplicationName: nil, //"Sample".asCString(),
-    applicationVersion: VK_MAKE_VERSION(1, 0, 0),
-    pEngineName: nil,
-    engineVersion: VK_MAKE_VERSION(1, 0, 0),
-    apiVersion: VK_MAKE_VERSION(1, 0, 0)
-)
-
-var createInfo = VkInstanceCreateInfo(
-    sType: VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-    pNext: nil,
-    flags: 0,
-    pApplicationInfo: nil, // &appInfo,
-    enabledLayerCount: 0,
-    ppEnabledLayerNames: nil,
-    enabledExtensionCount: 2,
-    ppEnabledExtensionNames: nil
-)
+// var appInfo = VkApplicationInfo(
+//     sType: VK_STRUCTURE_TYPE_APPLICATION_INFO,
+//     pNext: nil,
+//     pApplicationName: nil, //"Sample".asCString(),
+//     applicationVersion: VK_MAKE_VERSION(1, 0, 0),
+//     pEngineName: nil,
+//     engineVersion: VK_MAKE_VERSION(1, 0, 0),
+//     apiVersion: VK_MAKE_VERSION(1, 0, 0)
+// )
 
 public func initializeSwiftSDL2() {
     if SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS) < 0 {
         print("Some Issue")
         return
     }
-
-    let _ = VulkanAPI.vkEnumerateInstanceLayerProperties()
     
-    let initResult = initVulkan() 
-    if initResult != VK_SUCCESS {
-        print("Error initializing vulkan: \(initResult)")
-        exit(-1)
+    if !initVulkan() {
+        print("Exiting app")
+        exit(1)
     }
 }
 
-func initVulkan() -> VkResult {
-    var result = VK_ERROR_INITIALIZATION_FAILED
+func initVulkan() -> Bool {
 
-    if result != VK_SUCCESS {
-        instance.initialize(to: VkInstance(bitPattern: 0))
+    let layerProps = VulkanAPI.vkEnumerateInstanceLayerProperties()
+    let _ = VulkanAPI.vkEnumerateInstanceExtensionProperties(nil)
 
-        let extensions = [
+    let createInfo = VulkanAPI.VkInstanceCreateInfo(
+        applicationInfo: nil,
+        enabledLayerCount: UInt32(layerProps.count),
+        enabledLayerNames: [],
+        enabledExtensionCount: 2,
+        enabledExtensionNames: [
             VK_KHR_SURFACE_EXTENSION_NAME, 
             VK_MVK_MACOS_SURFACE_EXTENSION_NAME
         ]
+    )
 
-        let convExtesions = extensions.map { $0.asCString() }
-
-        let _ = VulkanAPI.vkEnumerateInstanceExtensionProperties(nil)
-
-
-        createInfo.ppEnabledExtensionNames = UnsafePointer(convExtesions)
-
-        let createInfoPtr = UnsafePointer(&createInfo)
-        let pointerToArray = createInfoPtr.pointee.ppEnabledExtensionNames!
-        print("Outside method: ")
-        print("address: \(pointerToArray[0]!)")
-        print("\\-string: \(String(cString: pointerToArray[0]!))")
-        print("address: \(pointerToArray[1]!)")
-        print("\\-string: \(String(cString: pointerToArray[1]!))")
-        print("=====")
-        result = vkCreateInstance(createInfoPtr, nil, instance);
-        print("After method: ")
-        print("address: \(pointerToArray[0]!)")
-        print("\\-string: \(String(cString: pointerToArray[0]!))")
-        print("address: \(pointerToArray[1]!)")
-        print("\\-string: \(String(cString: pointerToArray[1]!))")
-        print("=====")
+    if let _ = VulkanAPI.vkCreateInstance(createInfo) {
+        return true
     }
-
-    return result;
-}
-
-public func asCStringArray(_ args: [String]) -> UnsafePointer<UnsafePointer<Int8>?>? {
-    let cstrs = args.map { $0.asCString() }
-    let pointerToArray = UnsafePointer(cstrs)
-
-    print("In method: ")
-    print("address: \(pointerToArray[0]!)")
-            print("\\-string: \(String(cString: pointerToArray[0]!))")
-            print("address: \(pointerToArray[1]!)")
-            print("\\-string: \(String(cString: pointerToArray[1]!))")
-    print("=====")
-
-    return pointerToArray 
+    
+    return false
 }
 
 public func deinitializeSwiftSDL2() {
@@ -180,9 +135,3 @@ public class Window {
 
 }
 
-extension String {
-    public func asCString() -> UnsafePointer<Int8>? {
-        let nsVal = self as NSString
-        return nsVal.cString(using: String.Encoding.utf8.rawValue)
-    }
-}
