@@ -42,34 +42,36 @@ public func initializeSwiftSDL2() {
         print("Some Issue")
         return
     }
-    
-    if !initVulkan() {
-        print("Exiting app")
-        exit(1)
-    }
 }
 
-func initVulkan() -> Bool {
+func initVulkan(_ extensions: [String]) -> VulkanAPI.VkInstance? {
 
     let layerProps = VulkanAPI.vkEnumerateInstanceLayerProperties()
-    let _ = VulkanAPI.vkEnumerateInstanceExtensionProperties(nil)
+    print("\(layerProps.count) layer properties were found")
+
+    let extensionProps = VulkanAPI.vkEnumerateInstanceExtensionProperties(nil)
+    print("\(extensionProps.count) extension properties were found")
 
     let createInfo = VulkanAPI.VkInstanceCreateInfo(
         applicationInfo: nil,
-        enabledLayerCount: UInt32(layerProps.count),
-        enabledLayerNames: [],
-        enabledExtensionCount: 2,
-        enabledExtensionNames: [
-            VK_KHR_SURFACE_EXTENSION_NAME, 
-            VK_MVK_MACOS_SURFACE_EXTENSION_NAME
-        ]
+        enabledLayerCount: 1,
+        enabledLayerNames: ["VK_LAYER_LUNARG_standard_validation"],
+        enabledExtensionCount: extensions.count,
+        enabledExtensionNames: extensions
     )
 
-    if let _ = VulkanAPI.vkCreateInstance(createInfo) {
-        return true
+    if let instance = VulkanAPI.vkCreateInstance(createInfo) {
+        let devices = VulkanAPI.vkEnumeratePhysicalDevices(instance)
+
+        for i in 0..<devices.count {
+            let props = VulkanAPI.vkGetPhysicalDeviceProperties(devices[i])
+            print("Device Properties [\(i)]:\n\(props)") 
+        }
+
+        return instance
     }
     
-    return false
+    return nil
 }
 
 public func deinitializeSwiftSDL2() {
@@ -88,44 +90,93 @@ public class Window {
                 WindowFlags.SDL_WINDOW_VULKAN.rawValue
         );
 
-        if window == nil {
+        if let window = window {
+            let extensions = getInstanceExtensions(window)
+
+            if let instance = initVulkan(extensions) {
+                if let surface = createSurface(window, instance) {
+                    
+                    //Update the surface
+                    SDL_UpdateWindowSurface(window)
+
+                    var quit = false
+
+                    let e: UnsafeMutablePointer<SDL_Event>? = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
+
+                    while (!quit) {
+                        while true {
+                            SDL_PollEvent(e)
+
+                            if let event = e?.pointee {
+                                if event.type == SDL_QUIT.rawValue {
+                                    quit = true
+                                    break
+                                }
+                            }
+                        }
+                    }
+
+                    print("Done")
+                }
+            } else {
+                print("Exiting app")
+                exit(1)
+            }
+        
+        } else  {
             let error = SDL_GetError()
             let errorCode = String(cString: error!)
             print("Window could not be created! SDL_Error: \(errorCode)\n");
             exit(-1)
-        } else {
-            //Get window surface
-            let screenSurface: UnsafeMutablePointer<SDL_Surface> = SDL_GetWindowSurface(window)
+        }
+    }
 
-            //Fill the surface white
-            let rv = SDL_FillRect(screenSurface, nil, SDL_MapRGB(screenSurface.pointee.format, 0xFF, 0xFF, 0xFF))
+    func getInstanceExtensions(_ window: OpaquePointer) -> [String] {
+       let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
+        countPtr.initialize(to: 0)
+        defer {
+            countPtr.deallocate()
+        }
+        
+        var opResult = SDL_Vulkan_GetInstanceExtensions(window, countPtr, nil)
+        var count = Int(countPtr.pointee)
 
-            print("SDL_FillRect returned \(rv)")
-
-            //Update the surface
-            SDL_UpdateWindowSurface(window)
-
-            print("SDL_UpdateWindowSurface returned \(rv)")
-
-            var quit = false
-
-            let e: UnsafeMutablePointer<SDL_Event>? = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
-
-            while (!quit) {
-                while true {
-                    SDL_PollEvent(e)
-
-                    if let event = e?.pointee {
-                        if event.type == SDL_QUIT.rawValue {
-                            quit = true
-                            break
-                        }
-                    }
-                }
+        var result: [String] = []
+        if opResult == SDL_TRUE && count > 0 {
+            let namesPtr = UnsafeMutablePointer<UnsafePointer<Int8>?>.allocate(capacity: count)
+            defer {
+                namesPtr.deallocate()
             }
 
-            print("Done")
+            opResult = SDL_Vulkan_GetInstanceExtensions(window, countPtr, namesPtr)
+            count = Int(countPtr.pointee)
+
+            if opResult == SDL_TRUE {
+                for i in 0..<count {
+                    let namePtr = namesPtr[i]
+                    let newName = String(cString: namePtr!)
+
+                    print("Extension name: \(newName)")
+                    result.append(newName)
+                }
+            }
         }
+
+        return result
+    }
+
+    func createSurface(_ window: OpaquePointer, _ instance: VulkanAPI.VkInstance) -> VulkanAPI.VkSurfaceKHR? {
+        let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
+            defer {
+                surfacePtr.deallocate()
+            }
+
+        let opResult = SDL_Vulkan_CreateSurface(window, instance.pointer, surfacePtr)
+        if opResult == SDL_TRUE {
+            return VulkanAPI.VkSurfaceKHR(surfacePtr.pointee!)
+        }
+
+        return nil
     }
 
     deinit {
