@@ -84,7 +84,7 @@ public class Window {
 
     public init() {
         window = SDL_CreateWindow(
-                "SDL Tutorial", 100, 100, 1024, 768,
+                "Vulkan Sample", 100, 100, 1024, 768,
                 WindowFlags.SDL_WINDOW_SHOWN.rawValue | 
                 WindowFlags.SDL_WINDOW_ALWAYS_ON_TOP.rawValue | 
                 WindowFlags.SDL_WINDOW_VULKAN.rawValue
