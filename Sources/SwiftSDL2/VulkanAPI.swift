@@ -55,7 +55,7 @@ public class VulkanAPI {
         //let next: Any
 
         // reserved for future use
-        //let flags = 0
+        let flags: UInt32 = 0
 
         let applicationInfo: VkApplicationInfo?
         let enabledLayerCount: UInt32
@@ -76,6 +76,10 @@ public class VulkanAPI {
         let description: String
     }
 
+    public struct VkInstance {
+        fileprivate let ptr: OpaquePointer
+    }
+
     public class func vkCreateInstance(_ createInfo: VkInstanceCreateInfo) -> VkInstance? {
 
         let arrEnabledLayerNames = createInfo.enabledLayerNames.map { $0.asCString() }
@@ -87,7 +91,7 @@ public class VulkanAPI {
         let cCreateInfo = CVulkan.VkInstanceCreateInfo(
             sType: VkInstanceCreateInfo.sType,
             pNext: nil,
-            flags: 0,
+            flags: createInfo.flags,
             pApplicationInfo: nil, // &appInfo,
             enabledLayerCount: createInfo.enabledLayerCount,
             ppEnabledLayerNames: enabledLayerNamesPtr,
@@ -100,8 +104,13 @@ public class VulkanAPI {
         withUnsafePointer(to: cCreateInfo) {
             opResult = CVulkan.vkCreateInstance($0, nil, instancePtr)
         }
-        
-        print("vkCreateInstance result was \(opResult)")
+
+        if opResult == VK_SUCCESS {
+            return VkInstance(
+                ptr: instancePtr.pointee!
+            )
+        }
+
         return nil
     }
 
