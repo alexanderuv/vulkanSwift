@@ -34,16 +34,20 @@ let package = Package(
                     pkgConfig: "vulkan"
             ),
             .target(
-                    name: "vulkansample",
-                    dependencies: [
-                        "SwiftSDL2"
-                    ]
-            ),
-            .target(
                     name: "SwiftSDL2",
                     dependencies: [
                         "CSDL2",
+                        "SwiftVulkan"
+                    ]),
+            .target(
+                    name: "SwiftVulkan",
+                    dependencies: [
                         "CVulkan"
+                    ]),
+            .target(
+                    name: "vulkansample",
+                    dependencies: [
+                        "SwiftSDL2"
                     ]),
             .testTarget(
                     name: "vulkansampleTests",

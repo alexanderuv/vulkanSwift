@@ -5,9 +5,7 @@
 import Foundation
 import CSDL2
 import Darwin
-
-import let CVulkan.VK_KHR_SURFACE_EXTENSION_NAME
-import let CVulkan.VK_MVK_MACOS_SURFACE_EXTENSION_NAME
+import SwiftVulkan
 
 let SDL_WINDOWPOS_UNDEFINED_MASK: Int32 = 0x1FFF0000;
 let SDL_WINDOWPOS_UNDEFINED = SDL_WINDOWPOS_UNDEFINED_MASK;
@@ -44,15 +42,15 @@ public func initializeSwiftSDL2() {
     }
 }
 
-func initVulkan(_ extensions: [String]) -> VulkanAPI.VkInstance? {
+func initVulkan(_ extensions: [String]) -> Instance? {
 
-    let layerProps = VulkanAPI.vkEnumerateInstanceLayerProperties()
+    let layerProps = vkEnumerateInstanceLayerProperties()
     print("\(layerProps.count) layer properties were found")
 
-    let extensionProps = VulkanAPI.vkEnumerateInstanceExtensionProperties(nil)
+    let extensionProps = vkEnumerateInstanceExtensionProperties(nil)
     print("\(extensionProps.count) extension properties were found")
 
-    let createInfo = VulkanAPI.VkInstanceCreateInfo(
+    let createInfo = VkInstanceCreateInfo(
         applicationInfo: nil,
         enabledLayerCount: 1,
         enabledLayerNames: ["VK_LAYER_LUNARG_standard_validation"],
@@ -60,11 +58,11 @@ func initVulkan(_ extensions: [String]) -> VulkanAPI.VkInstance? {
         enabledExtensionNames: extensions
     )
 
-    if let instance = VulkanAPI.vkCreateInstance(createInfo) {
-        let devices = VulkanAPI.vkEnumeratePhysicalDevices(instance)
+    if let instance = try Instance(createInfo) {
+        let devices = instance.enumeratePhysicalDevices()
 
         for i in 0..<devices.count {
-            let props = VulkanAPI.vkGetPhysicalDeviceProperties(devices[i])
+            let props = vkGetPhysicalDeviceProperties(devices[i])
             print("Device Properties [\(i)]:\n\(props)") 
         }
 
@@ -96,9 +94,6 @@ public class Window {
             if let instance = initVulkan(extensions) {
                 if let surface = createSurface(window, instance) {
                     
-                    //Update the surface
-                    SDL_UpdateWindowSurface(window)
-
                     var quit = false
 
                     let e: UnsafeMutablePointer<SDL_Event>? = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
@@ -165,16 +160,16 @@ public class Window {
         return result
     }
 
-    func createSurface(_ window: OpaquePointer, _ instance: VulkanAPI.VkInstance) -> VulkanAPI.VkSurfaceKHR? {
+    func createSurface(_ window: OpaquePointer, _ instance: VkInstance) -> VkSurfaceKHR? {
         let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
-            defer {
+        defer {
                 surfacePtr.deallocate()
-            }
-
-        let opResult = SDL_Vulkan_CreateSurface(window, instance.pointer, surfacePtr)
-        if opResult == SDL_TRUE {
-            return VulkanAPI.VkSurfaceKHR(surfacePtr.pointee!)
         }
+
+        // let opResult = SDL_Vulkan_CreateSurface(window, instance.pointer, surfacePtr)
+        // if opResult == SDL_TRUE {
+        //     return VkSurfaceKHR(surfacePtr.pointee!)
+        // }
 
         return nil
     }
