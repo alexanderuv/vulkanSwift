@@ -10,6 +10,4 @@ initializeSwiftSDL2()
 
 let w = Window()
 
-vkCreateInstance(123)
-
 deinitializeSwiftSDL2()

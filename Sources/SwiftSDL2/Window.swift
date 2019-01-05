@@ -52,19 +52,17 @@ func initVulkan(_ extensions: [String]) -> Instance? {
 
     let createInfo = VkInstanceCreateInfo(
         applicationInfo: nil,
-        enabledLayerCount: 1,
         enabledLayerNames: ["VK_LAYER_LUNARG_standard_validation"],
-        enabledExtensionCount: extensions.count,
         enabledExtensionNames: extensions
     )
 
-    if let instance = try Instance(createInfo) {
+    if let instance = try? Instance(info: createInfo) {
         let devices = instance.enumeratePhysicalDevices()
 
-        for i in 0..<devices.count {
-            let props = vkGetPhysicalDeviceProperties(devices[i])
-            print("Device Properties [\(i)]:\n\(props)") 
-        }
+        // for i in 0..<devices.count {
+        //     let props = vkGetPhysicalDeviceProperties(devices[i])
+        //     print("Device Properties [\(i)]:\n\(props)") 
+        // }
 
         return instance
     }
@@ -92,11 +90,11 @@ public class Window {
             let extensions = getInstanceExtensions(window)
 
             if let instance = initVulkan(extensions) {
-                if let surface = createSurface(window, instance) {
+                // if let surface = createSurface(window, instance) {
                     
-                    var quit = false
+                     var quit = false
 
-                    let e: UnsafeMutablePointer<SDL_Event>? = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
+                     let e: UnsafeMutablePointer<SDL_Event>? = UnsafeMutablePointer<SDL_Event>.allocate(capacity: 1)
 
                     while (!quit) {
                         while true {
@@ -112,7 +110,7 @@ public class Window {
                     }
 
                     print("Done")
-                }
+                // }
             } else {
                 print("Exiting app")
                 exit(1)
@@ -160,19 +158,19 @@ public class Window {
         return result
     }
 
-    func createSurface(_ window: OpaquePointer, _ instance: VkInstance) -> VkSurfaceKHR? {
-        let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
-        defer {
-                surfacePtr.deallocate()
-        }
+    // func createSurface(_ window: OpaquePointer, _ instance: VkInstance) -> VkSurfaceKHR? {
+    //     let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
+    //     defer {
+    //             surfacePtr.deallocate()
+    //     }
 
-        // let opResult = SDL_Vulkan_CreateSurface(window, instance.pointer, surfacePtr)
-        // if opResult == SDL_TRUE {
-        //     return VkSurfaceKHR(surfacePtr.pointee!)
-        // }
+    //     // let opResult = SDL_Vulkan_CreateSurface(window, instance.pointer, surfacePtr)
+    //     // if opResult == SDL_TRUE {
+    //     //     return VkSurfaceKHR(surfacePtr.pointee!)
+    //     // }
 
-        return nil
-    }
+    //     return nil
+    // }
 
     deinit {
         //Destroy window

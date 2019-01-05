@@ -1,6 +1,33 @@
-
 import CVulkan
 import Foundation
+
+public class VkExtensionProperties {
+    let extensionName: String
+    let specVersion: UInt32
+
+    fileprivate init(extensionName: String,
+        specVersion: Version) {
+        self.extensionName = extensionName
+        self.specVersion = specVersion.rawVersion
+    }
+}
+
+public struct VkLayerProperties {
+    let layerName: String
+    let specVersion: UInt32
+    let implementationVersion: UInt32
+    let description: String
+
+    fileprivate init(layerName: String,
+        specVersion: Version,
+        implementationVersion: Version,
+        description: String) {
+        self.layerName = layerName
+        self.specVersion = specVersion.rawVersion
+        self.implementationVersion = implementationVersion.rawVersion
+        self.description = description
+    }
+}
 
 public func vkEnumerateInstanceExtensionProperties(_ layerName: String?) -> [VkExtensionProperties] {
     let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
@@ -75,28 +102,6 @@ public func vkEnumerateInstanceLayerProperties() -> [VkLayerProperties] {
     }
 
     return result
-}
-
-
-
-func vkGetPhysicalDeviceProperties(_ physicalDevice: VkPhysicalDevice) -> VkPhysicalDeviceProperties {
-    let cProps = UnsafeMutablePointer<CVulkan.VkPhysicalDeviceProperties>.allocate(capacity: 1)
-    defer {
-        cProps.deallocate()
-    }
-
-    CVulkan.vkGetPhysicalDeviceProperties(physicalDevice.pointer, cProps)
-    let prop = cProps.pointee
-
-    return VkPhysicalDeviceProperties(
-        prop.apiVersion,
-        driverVersion: prop.driverVersion,
-        vendorID: Int(prop.vendorID),
-        deviceID: Int(prop.deviceID),
-        deviceType: VkPhysicalDeviceType(rawValue: Int(prop.deviceType.rawValue))!,
-        deviceName: convertTupleToString(prop.deviceName),
-        pipelineCacheUUID: convertTupleToByteArray(prop.pipelineCacheUUID)
-    )
 }
 
 protocol ReflectedStringConvertible : CustomStringConvertible { }

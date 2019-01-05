@@ -6,8 +6,8 @@ public class Instance {
     private let createInfo: VkInstanceCreateInfo
     private let instancePointer: VkInstance
 
-    init(createInfo: VkInstanceCreateInfo) throws {
-        self.createInfo = createInfo
+    public init(info: VkInstanceCreateInfo) throws {
+        self.createInfo = info
 
         guard let instance = vkCreateInstance(self.createInfo) else {
             throw VulkanError.failure("Unable to create instance")
@@ -15,7 +15,7 @@ public class Instance {
         self.instancePointer = instance
     }
 
-    public func enumeratePhysicalDevices() -> [VkPhysicalDevice] {
+    public func enumeratePhysicalDevices() -> [PhysicalDevice] {
         let instance = self.instancePointer
         let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
         countPtr.initialize(to: 0)
@@ -26,9 +26,9 @@ public class Instance {
         var opResult = CVulkan.vkEnumeratePhysicalDevices(instance.pointer, countPtr, nil)
         var count = Int(countPtr.pointee)
 
-        var result: [VkPhysicalDevice] = []
+        var result: [PhysicalDevice] = []
         if (opResult == VK_SUCCESS || opResult == VK_INCOMPLETE) && count > 0 {
-            let devicePtr = UnsafeMutablePointer<CVulkan.VkPhysicalDevice?>.allocate(capacity: count)
+            let devicePtr = UnsafeMutablePointer<VkPhysicalDevice?>.allocate(capacity: count)
             defer {
                 devicePtr.deallocate()
             }
@@ -38,7 +38,7 @@ public class Instance {
             if opResult == VK_SUCCESS || opResult == VK_INCOMPLETE {
                 for i in 0..<count {
                     let cDevicePtr = devicePtr[i]
-                    let newProp = VkPhysicalDevice(cDevicePtr!)
+                    let newProp = PhysicalDevice(vulkanDevice: cDevicePtr!)
 
                     result.append(newProp)
                     print(newProp)
@@ -58,6 +58,50 @@ public class Instance {
 
 public enum VulkanError: Error {
     case failure(_ msg: String)
+}
+
+
+public class VkApplicationInfo {
+    static let sType = VkStructureType.applicationInfo
+
+    // not supported for now
+    let next: Any? = nil
+
+    let applicationName: String
+    let applicationVersion: UInt32
+    let engineName: String
+    let engineVersion: UInt32
+    let apiVersion: UInt32
+
+    public init(_ applicationName: String, 
+        applicationVersion: Version, 
+        engineName: String,
+        engineVersion: Version,
+        apiVersion: Version) {
+        self.applicationName = applicationName
+        self.applicationVersion = applicationVersion.rawVersion
+        self.engineName = engineName
+        self.engineVersion = engineVersion.rawVersion
+        self.apiVersion = apiVersion.rawVersion
+    }
+}
+
+public class VkInstanceCreateInfo {
+    static let sType = VkStructureType.instanceCreateInfo
+    let next: Any? = nil
+    let flags = 0
+
+    let applicationInfo: VkApplicationInfo?
+    let enabledLayerNames: [String]
+    let enabledExtensionNames: [String]
+
+    public init(applicationInfo: VkApplicationInfo?,
+        enabledLayerNames: [String],
+        enabledExtensionNames: [String]) {
+        self.applicationInfo = applicationInfo
+        self.enabledLayerNames = enabledLayerNames
+        self.enabledExtensionNames = enabledExtensionNames
+    }
 }
 
 fileprivate class VkInstance {

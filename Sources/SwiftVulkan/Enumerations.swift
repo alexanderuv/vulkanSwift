@@ -1,3 +1,12 @@
+
+public enum PhysicalDeviceType: Int {
+    case other = 0,
+        integratedGpu,
+        discreteGpu,
+        virtualGpu,
+        cpu
+}
+
 enum VkStructureType: UInt32 {
     case applicationInfo = 0,
     instanceCreateInfo = 1,
