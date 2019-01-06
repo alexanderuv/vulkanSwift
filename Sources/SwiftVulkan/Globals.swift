@@ -1,6 +1,5 @@
 
-public typealias Flags = UInt32
-public typealias QueueFlags = Flags
+import CVulkan
 
 public struct Extent3D {
     let width: UInt32

@@ -8,7 +8,7 @@ public class PhysicalDevice {
     }
 
     public lazy var properties: PhysicalDeviceProperties = {
-        let cProps = UnsafeMutablePointer<CVulkan.VkPhysicalDeviceProperties>.allocate(capacity: 1)
+        let cProps = UnsafeMutablePointer<VkPhysicalDeviceProperties>.allocate(capacity: 1)
         defer {
             cProps.deallocate()
         }
@@ -17,7 +17,7 @@ public class PhysicalDevice {
         let prop = cProps.pointee
 
         return PhysicalDeviceProperties(
-            prop.apiVersion,
+            apiVersion: prop.apiVersion,
             driverVersion: prop.driverVersion,
             vendorID: Int(prop.vendorID),
             deviceID: Int(prop.deviceID),
@@ -43,13 +43,13 @@ public class PhysicalDevice {
             defer {
                 cProps.deallocate()
             }
-            CVulkan.vkGetPhysicalDeviceQueueFamilyProperties(self.physicalDevicePointer, countPtr, cProps)
+            vkGetPhysicalDeviceQueueFamilyProperties(self.physicalDevicePointer, countPtr, cProps)
             count = Int(countPtr.pointee)
           
             for i in 0..<count {
                 let cProp = cProps[i]
                 let newProp = QueueFamilyProperties(
-                    queueFlags: cProp.queueFlags,
+                    queueFlags: QueueFamilyProperties.Flags(rawValue: cProp.queueFlags),
                     queueCount: cProp.queueCount,
                     timestampValidBits: cProp.timestampValidBits,
                     minImageTransferGranularity: cProp.minImageTransferGranularity.swiftVersion()
@@ -64,7 +64,7 @@ public class PhysicalDevice {
     }()
 
     public lazy var features: PhysicalDeviceFeatures = {
-        let featuresPtr = UnsafeMutablePointer<CVulkan.VkPhysicalDeviceFeatures>.allocate(capacity: 1)
+        let featuresPtr = UnsafeMutablePointer<VkPhysicalDeviceFeatures>.allocate(capacity: 1)
         defer {
             featuresPtr.deallocate()
         }
@@ -77,20 +77,34 @@ public class PhysicalDevice {
         )
     }()
 
-    public func createDevice(info createInfo: DeviceCreateInfo) -> Device {
-        vkCreateDevice(self.physicalDevicePointer, nil, nil, nil)
+    public func createDevice(createInfo info: DeviceCreateInfo) -> (Result, Device?) {
+        let devicePtr = UnsafeMutablePointer<VkDevice?>.allocate(capacity: 1)
+        defer {
+            devicePtr.deallocate()
+        }
 
-        return Device()
+        var opResult = VK_SUCCESS
+        info.vulkanExec() {
+            withUnsafePointer(to: $0) {
+                opResult = vkCreateDevice(self.physicalDevicePointer, $0, nil, devicePtr)
+            }
+        }
+        
+        if opResult == VK_SUCCESS {
+            return (opResult.toResult(), Device(device: devicePtr.pointee!))
+        }
+
+        return (opResult.toResult(), nil)
     }
 }
 
-public class QueueFamilyProperties: ReflectedStringConvertible {
-    public let queueFlags: QueueFlags
+public struct QueueFamilyProperties {
+    public let queueFlags: Flags
     public let queueCount: UInt32
     public let timestampValidBits: UInt32
     public let minImageTransferGranularity: Extent3D
 
-    init(queueFlags: QueueFlags,
+    public init(queueFlags: Flags,
             queueCount: UInt32,
             timestampValidBits: UInt32,
             minImageTransferGranularity: Extent3D) {
@@ -99,9 +113,19 @@ public class QueueFamilyProperties: ReflectedStringConvertible {
         self.timestampValidBits = timestampValidBits
         self.minImageTransferGranularity = minImageTransferGranularity
     }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue    
+        }
+
+        public static let none = Flags(rawValue: 0)
+    }
 }
 
-public class PhysicalDeviceFeatures: ReflectedStringConvertible {
+public struct PhysicalDeviceFeatures {
     let robustBufferAccess: Bool
     let fullDrawIndexUint32: Bool
     let imageCubeArray: Bool
@@ -215,9 +239,69 @@ public class PhysicalDeviceFeatures: ReflectedStringConvertible {
         self.variableMultisampleRate = vkFeatures.variableMultisampleRate.toBool()
         self.inheritedQueries = vkFeatures.inheritedQueries.toBool()
     }
+
+    func toVulkan() -> VkPhysicalDeviceFeatures {
+        return VkPhysicalDeviceFeatures(
+            robustBufferAccess: self.robustBufferAccess.toUInt32(),
+            fullDrawIndexUint32: self.fullDrawIndexUint32.toUInt32(),
+            imageCubeArray: self.imageCubeArray.toUInt32(),
+            independentBlend: self.independentBlend.toUInt32(),
+            geometryShader: self.geometryShader.toUInt32(),
+            tessellationShader: self.tessellationShader.toUInt32(),
+            sampleRateShading: self.sampleRateShading.toUInt32(),
+            dualSrcBlend: self.dualSrcBlend.toUInt32(),
+            logicOp: self.logicOp.toUInt32(),
+            multiDrawIndirect: self.multiDrawIndirect.toUInt32(),
+            drawIndirectFirstInstance: self.drawIndirectFirstInstance.toUInt32(),
+            depthClamp: self.depthClamp.toUInt32(),
+            depthBiasClamp: self.depthBiasClamp.toUInt32(),
+            fillModeNonSolid: self.fillModeNonSolid.toUInt32(),
+            depthBounds: self.depthBounds.toUInt32(),
+            wideLines: self.wideLines.toUInt32(),
+            largePoints: self.largePoints.toUInt32(),
+            alphaToOne: self.alphaToOne.toUInt32(),
+            multiViewport: self.multiViewport.toUInt32(),
+            samplerAnisotropy: self.samplerAnisotropy.toUInt32(),
+            textureCompressionETC2: self.textureCompressionETC2.toUInt32(),
+            textureCompressionASTC_LDR: self.textureCompressionASTC_LDR.toUInt32(),
+            textureCompressionBC: self.textureCompressionBC.toUInt32(),
+            occlusionQueryPrecise: self.occlusionQueryPrecise.toUInt32(),
+            pipelineStatisticsQuery: self.pipelineStatisticsQuery.toUInt32(),
+            vertexPipelineStoresAndAtomics: self.vertexPipelineStoresAndAtomics.toUInt32(),
+            fragmentStoresAndAtomics: self.fragmentStoresAndAtomics.toUInt32(),
+            shaderTessellationAndGeometryPointSize: self.shaderTessellationAndGeometryPointSize.toUInt32(),
+            shaderImageGatherExtended: self.shaderImageGatherExtended.toUInt32(),
+            shaderStorageImageExtendedFormats: self.shaderStorageImageExtendedFormats.toUInt32(),
+            shaderStorageImageMultisample: self.shaderStorageImageMultisample.toUInt32(),
+            shaderStorageImageReadWithoutFormat: self.shaderStorageImageReadWithoutFormat.toUInt32(),
+            shaderStorageImageWriteWithoutFormat: self.shaderStorageImageWriteWithoutFormat.toUInt32(),
+            shaderUniformBufferArrayDynamicIndexing: self.shaderUniformBufferArrayDynamicIndexing.toUInt32(),
+            shaderSampledImageArrayDynamicIndexing: self.shaderSampledImageArrayDynamicIndexing.toUInt32(),
+            shaderStorageBufferArrayDynamicIndexing: self.shaderStorageBufferArrayDynamicIndexing.toUInt32(),
+            shaderStorageImageArrayDynamicIndexing: self.shaderStorageImageArrayDynamicIndexing.toUInt32(),
+            shaderClipDistance: self.shaderClipDistance.toUInt32(),
+            shaderCullDistance: self.shaderCullDistance.toUInt32(),
+            shaderFloat64: self.shaderFloat64.toUInt32(),
+            shaderInt64: self.shaderInt64.toUInt32(),
+            shaderInt16: self.shaderInt16.toUInt32(),
+            shaderResourceResidency: self.shaderResourceResidency.toUInt32(),
+            shaderResourceMinLod: self.shaderResourceMinLod.toUInt32(),
+            sparseBinding: self.sparseBinding.toUInt32(),
+            sparseResidencyBuffer: self.sparseResidencyBuffer.toUInt32(),
+            sparseResidencyImage2D: self.sparseResidencyImage2D.toUInt32(),
+            sparseResidencyImage3D: self.sparseResidencyImage3D.toUInt32(),
+            sparseResidency2Samples: self.sparseResidency2Samples.toUInt32(),
+            sparseResidency4Samples: self.sparseResidency4Samples.toUInt32(),
+            sparseResidency8Samples: self.sparseResidency8Samples.toUInt32(),
+            sparseResidency16Samples: self.sparseResidency16Samples.toUInt32(),
+            sparseResidencyAliased: self.sparseResidencyAliased.toUInt32(),
+            variableMultisampleRate: self.variableMultisampleRate.toUInt32(),
+            inheritedQueries: self.inheritedQueries.toUInt32()
+        )
+    }
 }
 
-public class PhysicalDeviceProperties: ReflectedStringConvertible {
+public struct PhysicalDeviceProperties {
     public let apiVersion: UInt32
     public let driverVersion: UInt32
     public let vendorID: Int
@@ -227,40 +311,6 @@ public class PhysicalDeviceProperties: ReflectedStringConvertible {
     public let pipelineCacheUUID: [UInt8]
     let limits: Any? = nil // TODO: add later if needed
     let sparseProperties: Any? = nil // TODO: add later if needed
-
-    fileprivate init(
-        _ apiVersion: UInt32,
-        driverVersion: UInt32,
-        vendorID: Int,
-        deviceID: Int,
-        deviceType: PhysicalDeviceType,
-        deviceName: String,
-        pipelineCacheUUID: [UInt8]) {
-        self.apiVersion = apiVersion
-        self.driverVersion = driverVersion
-        self.vendorID = vendorID
-        self.deviceID = deviceID
-        self.deviceType = deviceType
-        self.deviceName = deviceName
-        self.pipelineCacheUUID = pipelineCacheUUID
-    }
-}
-
-public class DeviceCreateInfo: ReflectedStringConvertible {
-}
-
-class VkSurfaceKHR {
-    let pointer: OpaquePointer
-
-    init(_ pointer: OpaquePointer) {
-        self.pointer = pointer
-    }
-}
-
-extension UInt32 {
-    func toBool() -> Bool {
-        return self > 0
-    }
 }
 
 extension VkExtent3D {

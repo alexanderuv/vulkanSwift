@@ -44,29 +44,53 @@ public func initializeSwiftSDL2() {
 
 func initVulkan(_ extensions: [String]) -> Instance? {
 
-    let layerProps = vkEnumerateInstanceLayerProperties()
+    let layerProps = enumerateInstanceLayerProperties()
     print("\(layerProps.count) layer properties were found")
 
-    let extensionProps = vkEnumerateInstanceExtensionProperties(nil)
+    let extensionProps = enumerateInstanceExtensionProperties(nil)
     print("\(extensionProps.count) extension properties were found")
 
-    let createInfo = VkInstanceCreateInfo(
+    let createInfo = InstanceCreateInfo(
         applicationInfo: nil,
         enabledLayerNames: ["VK_LAYER_LUNARG_standard_validation"],
         enabledExtensionNames: extensions
     )
 
-    if let instance = try? Instance(info: createInfo) {
-        let devices = instance.enumeratePhysicalDevices()
+    let (result, inst) = Instance.createInstance(createInfo: createInfo)
+    if let instance = inst {
+        let gpus = instance.enumeratePhysicalDevices()
 
-        // for i in 0..<devices.count {
-        //     let props = vkGetPhysicalDeviceProperties(devices[i])
-        //     print("Device Properties [\(i)]:\n\(props)") 
-        // }
+        for gpu in gpus {
+            let gpuProps = gpu.properties
+            print("GPU Properties:\n\(gpuProps)") 
+        }
+
+        let gpu = gpus[0]
+
+        let createInfo = DeviceCreateInfo(
+            flags: .none,
+            queueCreateInfos: [
+                DeviceQueueCreateInfo(
+                    flags: .none,
+                    queueFamilyIndex: 0,
+                    queueCount: 0,
+                    queuePriorities: []
+                )
+            ],
+            enabledLayers: [],
+            enabledExtensions: [],
+            enabledFeatures: nil
+        )
+
+        // use first device
+        let (result, device) = gpu.createDevice(createInfo: createInfo)
+        if let device = device {
+
+        }
 
         return instance
     }
-    
+   
     return nil
 }
 
