@@ -1,28 +1,6 @@
 import CVulkan
 import Foundation
 
-public struct ExtensionProperties {
-    let extensionName: String
-    let specVersion: Version
-}
-
-public struct LayerProperties {
-    let layerName: String
-    let specVersion: UInt32
-    let implementationVersion: UInt32
-    let description: String
-
-    fileprivate init(layerName: String,
-        specVersion: Version,
-        implementationVersion: Version,
-        description: String) {
-        self.layerName = layerName
-        self.specVersion = specVersion.rawVersion
-        self.implementationVersion = implementationVersion.rawVersion
-        self.description = description
-    }
-}
-
 public func enumerateInstanceExtensionProperties(_ layerName: String?) -> [ExtensionProperties] {
     let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
     countPtr.initialize(to: 0)

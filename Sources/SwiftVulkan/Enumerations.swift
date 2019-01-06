@@ -1,10 +1,24 @@
 
-public enum PhysicalDeviceType: Int {
+public enum PhysicalDeviceType: UInt32 {
     case other = 0,
         integratedGpu,
         discreteGpu,
         virtualGpu,
         cpu
+}
+
+public enum CommandBufferLevel: UInt32 {
+    case primary = 0,
+    secondary = 1
+}
+
+public enum PresentMode: UInt32 {
+    case immediate = 0,
+    mailbox = 1,
+    fifo = 2,
+    fifoRelaxed = 3,
+    sharedDemandRefresh = 1000111000,
+    sharedContinuousRefresh = 1000111001
 }
 
 // public enum QueueGlobalPriorityEXT {

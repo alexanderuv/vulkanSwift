@@ -47,7 +47,7 @@ public class Window {
         );
 
         guard window != nil else {
-            printLastSDLError()
+            print("Error while creating window")
             return
         }
         
@@ -55,17 +55,48 @@ public class Window {
         self.instance = createVulkanInstance(extensions)
 
         let gpu = selectPhysicalDevice()
-        let device = createDevice(gpu)
+        let surface = try! createVulkanSurface()
+        let device = try! createDevice(gpu: gpu, surface: surface)
 
-        guard device != nil else {
-            return
-        }
-
-        let commandPool = createCommandPool(device!)
-
-        runMessageLoop()     
+        //let selectedFormat = selectFormat(for: gpu, surface: surface) 
+        
+        let commandPool = try! createCommandPool(device)
+        let commandBuffer = try! allocateCommandBuffer(device: device, commandPool: commandPool)
+        
+        runMessageLoop()
         print("Done")
     }
+
+    func allocateCommandBuffer(device: Device, commandPool: CommandPool) -> CommandBuffer {
+        let info = CommandBufferAllocateInfo(
+            commandPool: commandPool,
+            level: .primary,
+            commandBufferCount: 1
+        )
+
+        return try! device.allocateCommandBuffer(createInfo: info)
+    }
+
+    // func selectFormat(for gpu: PhysicalDevice, surface: Surface)  {
+    //     let (result, formats) = gpu.getSurfaceFormats(for: surface)
+    //     if let formats = formats {
+
+    //         var chosenFormat: Format? = nil
+    //         for format in formats {
+    //             if format.format == .VK_FORMAT_B8G8R8A8_SRGB {
+    //                 chosenFormat = format.format
+    //             }
+    //         }
+
+    //         let presentModes = gpu.getSurfacePresentModes(surface: surface)
+    //         if !presentModes.contains(.fifo) {
+    //             return
+    //         }
+
+
+    //     }
+        
+    // }
 
     func runMessageLoop() {
         var quit = false
@@ -108,10 +139,10 @@ public class Window {
         return nil
     }
 
-    func createVulkanSurface() -> Surface? {
+    func createVulkanSurface() throws -> Surface {
         let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
         if SDL_Vulkan_CreateSurface(window, self.instance!.pointer, surfacePtr) != SDL_TRUE {
-            printLastSDLError()
+            throw lastSDLError()
         }
 
         return Surface(instance: self.instance!, surface: surfacePtr.pointee!)
@@ -128,57 +159,58 @@ public class Window {
         return gpus[0]
     }
 
-    func createDevice(_ gpu: PhysicalDevice) -> Device? {
-        let queueFamilyProperties = gpu.queueFamilyProperties
-
-        let createInfo = DeviceCreateInfo(
-            flags: .none,
-            queueCreateInfos: [
-                DeviceQueueCreateInfo(
-                    flags: .none,
-                    queueFamilyIndex: 0,
-                    queuePriorities: [ 1.0 ]
-                )
-            ],
-            enabledLayers: [],
-            enabledExtensions: [],
-            enabledFeatures: nil
-        )
-
-        // use first device
-        let (result, device) = gpu.createDevice(createInfo: createInfo)
-        if let device = device {
-            return device
+    func createDevice(gpu: PhysicalDevice, surface: Surface) throws -> Device {
+        
+        var chosenQueueFamily: QueueFamilyProperties? = nil
+        for fam in gpu.queueFamilyProperties {
+            if try! gpu.hasSurfaceSupport(for: fam, surface: surface) {
+                chosenQueueFamily = fam
+                break
+            }
         }
+        
+        if let chosenQueueFamily = chosenQueueFamily {
 
-        handleVulkanError(result)
-        return nil
+            print("Queue Family is \(chosenQueueFamily.index)")
+
+            let createInfo = DeviceCreateInfo(
+                flags: .none,
+                queueCreateInfos: [
+                    DeviceQueueCreateInfo(
+                        flags: .none,
+                        queueFamilyIndex: chosenQueueFamily.index,
+                        queuePriorities: [ 1.0 ]
+                    )
+                ],
+                enabledLayers: [],
+                enabledExtensions: [],
+                enabledFeatures: nil
+            )
+
+            // use first device
+            return try! gpu.createDevice(createInfo: createInfo)
+        } else {
+            throw SDLError.vulkan(msg: "Unable to find a queue family with surface presentation support")
+        }
     }
 
-    func createCommandPool(_ device: Device) -> CommandPool? {
+    func createCommandPool(_ device: Device) -> CommandPool {
         let info = CommandPoolCreateInfo(
             flags: .none,
             queueFamilyIndex: 0
         )
 
         // create command pool
-        let (result, pool) = device.createCommandPool(createInfo: info)
-        if let pool = pool {
-            return pool
-        }
-
-        handleVulkanError(result)
-        return nil
+        return try! device.createCommandPool(createInfo: info)
     }
 
     func handleVulkanError(_ r: Result) {
         print("Vulkan error: \(r)")
     }
 
-    func printLastSDLError() {
+    func lastSDLError() -> SDLError {
         let error = SDL_GetError()
-        let errorCode = String(cString: error!)
-        print("SDL_Error: \(errorCode)\n");
+        return .generic(msg: String(cString: error!))
     }
 
     func getInstanceExtensions() -> [String] {
@@ -221,3 +253,7 @@ public class Window {
     }
 }
 
+enum SDLError: Error {
+    case generic(msg: String)
+    case vulkan(msg: String)
+}
