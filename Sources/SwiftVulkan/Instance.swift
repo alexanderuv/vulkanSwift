@@ -39,12 +39,48 @@ public struct InstanceCreateInfo {
     }
 }
 
+public struct SurfaceCreateInfo {
+    #if os(macOS)
+    let sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK
+    #elseif os(Linux)
+    let sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK // whatever it is for linux
+    #endif
+    // let next: Any? = nil
+    public let flags: Flags
+    public let view: UnsafeRawPointer?
+
+    public init(flags: Flags,
+                view: UnsafeRawPointer?) {
+        self.flags = flags
+        self.view = view
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue    
+        }
+
+        public static let none = Flags(rawValue: 0)
+    }
+
+    func toVulkan() -> VkMacOSSurfaceCreateInfoMVK {
+        return VkMacOSSurfaceCreateInfoMVK(
+            sType: self.sType,
+            pNext: nil,
+            flags: UInt32(self.flags.rawValue),
+            pView: self.view
+        )
+    }
+}
+
 public class Instance {
 
-    private let instance: VkInstance
+    public let pointer: VkInstance
 
-    init(instance: VkInstance) {
-        self.instance = instance
+    init(rawInstance: VkInstance) {
+        self.pointer = rawInstance
     }
 
     public class func createInstance(createInfo info: InstanceCreateInfo) -> (Result, Instance?) {
@@ -72,7 +108,22 @@ public class Instance {
         }
 
         if opResult == VK_SUCCESS {
-            return (opResult.toResult(), Instance(instance: instancePtr.pointee!))
+            return (opResult.toResult(), Instance(rawInstance: instancePtr.pointee!))
+        }
+        
+        return (opResult.toResult(), nil)
+    }
+
+    public func createSurface(createInfo info: SurfaceCreateInfo) -> (Result, Surface?) {
+        let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
+
+        var opResult = VK_SUCCESS
+        withUnsafePointer(to: info.toVulkan()) {
+            opResult = vkCreateMacOSSurfaceMVK(self.pointer, $0, nil, surfacePtr)
+        }
+
+        if opResult == VK_SUCCESS {
+            return (opResult.toResult(), Surface(instance: self, surface: surfacePtr.pointee!))
         }
         
         return (opResult.toResult(), nil)
@@ -85,7 +136,7 @@ public class Instance {
             countPtr.deallocate()
         }
 
-        var opResult = vkEnumeratePhysicalDevices(instance, countPtr, nil)
+        var opResult = vkEnumeratePhysicalDevices(self.pointer, countPtr, nil)
         var count = Int(countPtr.pointee)
 
         var result: [PhysicalDevice] = []
@@ -94,13 +145,13 @@ public class Instance {
             defer {
                 devicePtr.deallocate()
             }
-            opResult = vkEnumeratePhysicalDevices(instance, countPtr, devicePtr)
+            opResult = vkEnumeratePhysicalDevices(self.pointer, countPtr, devicePtr)
             count = Int(countPtr.pointee)
 
             if opResult == VK_SUCCESS || opResult == VK_INCOMPLETE {
                 for i in 0..<count {
                     let cDevicePtr = devicePtr[i]
-                    let newProp = PhysicalDevice(vulkanDevice: cDevicePtr!)
+                    let newProp = PhysicalDevice(instance: self, vulkanDevice: cDevicePtr!)
 
                     result.append(newProp)
                 }
@@ -113,7 +164,7 @@ public class Instance {
     }
  
     deinit {
-        vkDestroyInstance(instance, nil)
+        vkDestroyInstance(pointer, nil)
     }
 }
 

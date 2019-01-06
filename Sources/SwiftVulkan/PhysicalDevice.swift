@@ -3,7 +3,7 @@ import CVulkan
 public class PhysicalDevice {
     private let physicalDevicePointer: VkPhysicalDevice
 
-    init(vulkanDevice: VkPhysicalDevice) {
+    init(instance: Instance, vulkanDevice: VkPhysicalDevice) {
         self.physicalDevicePointer = vulkanDevice
     }
 
@@ -77,6 +77,42 @@ public class PhysicalDevice {
         )
     }()
 
+    public func getSurfaceFormats(for surface: Surface) -> (Result, [SurfaceFormat]?) {
+        let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
+        countPtr.initialize(to: 0)
+        defer {
+            countPtr.deallocate()
+        }
+
+        var opResult = VK_SUCCESS
+        var returnValue: [SurfaceFormat] = []
+        opResult = vkGetPhysicalDeviceSurfaceFormatsKHR(self.physicalDevicePointer, surface.surface, countPtr, nil)
+        var count = Int(countPtr.pointee)
+
+        if opResult == VK_SUCCESS && count > 0 {
+            let formatsPtr = UnsafeMutablePointer<VkSurfaceFormatKHR>.allocate(capacity: count)
+            defer {
+                formatsPtr.deallocate()
+            }
+
+            opResult = vkGetPhysicalDeviceSurfaceFormatsKHR(self.physicalDevicePointer, surface.surface, countPtr, formatsPtr)
+            if opResult == VK_SUCCESS && count > 0 {
+                for i in 0..<count {
+                    let format = formatsPtr[i]
+                    let newFormat = SurfaceFormat(
+                        format: Format(rawValue: format.format.rawValue)!,
+                        colorSpace: ColorSpace(rawValue: format.colorSpace.rawValue)!
+                    )
+
+                    print(newFormat)
+                    returnValue.append(newFormat)
+                }
+            }
+        }
+        
+        return (opResult.toResult(), returnValue)
+    }
+
     public func createDevice(createInfo info: DeviceCreateInfo) -> (Result, Device?) {
         let devicePtr = UnsafeMutablePointer<VkDevice?>.allocate(capacity: 1)
         defer {
@@ -85,8 +121,8 @@ public class PhysicalDevice {
 
         var opResult = VK_SUCCESS
         info.vulkanExec() {
-            withUnsafePointer(to: $0) {
-                opResult = vkCreateDevice(self.physicalDevicePointer, $0, nil, devicePtr)
+            withUnsafePointer(to: $0) { deviceCreatePtr in
+                opResult = vkCreateDevice(self.physicalDevicePointer, deviceCreatePtr, nil, devicePtr)
             }
         }
         
@@ -96,6 +132,26 @@ public class PhysicalDevice {
 
         return (opResult.toResult(), nil)
     }
+}
+
+public class Surface {
+
+    let instance: Instance
+    let surface: VkSurfaceKHR
+
+    public init(instance: Instance, surface: VkSurfaceKHR) {
+        self.instance = instance
+        self.surface = surface
+    }
+
+    deinit {
+        vkDestroySurfaceKHR(instance.pointer, surface, nil)
+    }
+}
+
+public struct SurfaceFormat {
+    public let format: Format
+    public let colorSpace: ColorSpace
 }
 
 public struct QueueFamilyProperties {
@@ -118,10 +174,15 @@ public struct QueueFamilyProperties {
         public let rawValue: UInt32
 
         public init(rawValue: UInt32) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
-        public static let none = Flags(rawValue: 0)
+        public static let none = Flags(rawValue: 1 << 0)
+        public static let graphicsBit = Flags(rawValue: 1 << 1)
+        public static let computeBit = Flags(rawValue: 1 << 2)
+        public static let transferBit = Flags(rawValue: 1 << 3)
+        public static let sparseBindingBit = Flags(rawValue: 1 << 4)
+        public static let protectedBit = Flags(rawValue: 1 << 5)
     }
 }
 

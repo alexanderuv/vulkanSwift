@@ -3,14 +3,13 @@ import CVulkan
 public struct DeviceQueueCreateInfo {
     public let flags: Flags
     public let queueFamilyIndex: UInt32
-    public let queueCount: UInt32
     public let queuePriorities: [Float]
     
     public struct Flags: OptionSet {
         public let rawValue: Int
 
         public init(rawValue: Int) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -19,11 +18,9 @@ public struct DeviceQueueCreateInfo {
 
     public init(flags: Flags,
                 queueFamilyIndex: UInt32,
-                queueCount: UInt32,
                 queuePriorities: [Float]) {
         self.flags = flags
         self.queueFamilyIndex = queueFamilyIndex
-        self.queueCount = queueCount
         self.queuePriorities = queuePriorities
     }
 
@@ -33,7 +30,7 @@ public struct DeviceQueueCreateInfo {
             pNext: nil,
             flags: UInt32(self.flags.rawValue),
             queueFamilyIndex: self.queueFamilyIndex,
-            queueCount: self.queueCount,
+            queueCount: UInt32(self.queuePriorities.count),
             pQueuePriorities: self.queuePriorities
         )
     }
@@ -70,6 +67,8 @@ public struct DeviceCreateInfo {
 
     func vulkanExec(action: (VkDeviceCreateInfo) -> Void) {
 
+        let queueCreateInfos = self.queueCreateInfos.map { $0.toVulkan() }
+
         if let vulkanFeatures = enabledFeatures?.toVulkan() {
             withUnsafePointer(to: vulkanFeatures) {
                 let dc = VkDeviceCreateInfo(
@@ -77,7 +76,7 @@ public struct DeviceCreateInfo {
                     pNext: nil,
                     flags: UInt32(flags.rawValue),
                     queueCreateInfoCount: UInt32(self.queueCreateInfos.count),
-                    pQueueCreateInfos: self.queueCreateInfos.map { $0.toVulkan() },
+                    pQueueCreateInfos: queueCreateInfos,
                     enabledLayerCount: UInt32(self.enabledLayers.count),
                     ppEnabledLayerNames: self.enabledLayers.asCStringArray(),
                     enabledExtensionCount: UInt32(self.enabledExtensions.count),
@@ -93,7 +92,7 @@ public struct DeviceCreateInfo {
                 pNext: nil,
                 flags: UInt32(flags.rawValue),
                 queueCreateInfoCount: UInt32(self.queueCreateInfos.count),
-                pQueueCreateInfos: self.queueCreateInfos.map { $0.toVulkan() },
+                pQueueCreateInfos: queueCreateInfos,
                 enabledLayerCount: UInt32(self.enabledLayers.count),
                 ppEnabledLayerNames: self.enabledLayers.asCStringArray(),
                 enabledExtensionCount: UInt32(self.enabledExtensions.count),
@@ -107,7 +106,35 @@ public struct DeviceCreateInfo {
 }
 
 public class Device {
-    init(device: VkDevice) {
 
+    let pointer: VkDevice
+
+    init(device: VkDevice) {
+        self.pointer = device
+    }
+
+    public func createCommandPool(createInfo info: CommandPoolCreateInfo) -> (Result, CommandPool?) {
+        var cCommandPool = VkCommandPool(bitPattern: 0)
+        var opResult = VK_SUCCESS
+
+        withUnsafeMutablePointer(to: &cCommandPool) { cp in
+            withUnsafePointer(to: info.toVulkan()) { createInfo in
+                opResult = vkCreateCommandPool(pointer, createInfo, nil, cp)
+            }
+        }
+
+        var commandPool: CommandPool? = nil
+        if opResult == VK_SUCCESS {
+            commandPool = CommandPool(
+                device: self,
+                pointer: cCommandPool!
+            )
+        }
+        
+        return (opResult.toResult(), commandPool)
+    }
+
+    deinit {
+        vkDestroyDevice(pointer, nil)
     }
 }
