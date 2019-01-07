@@ -77,7 +77,7 @@ public class Window {
             let commandBuffer = try allocateCommandBuffer(device: device, commandPool: commandPool)
             print("Created Command Buffer: \(commandBuffer.pointer)\n")
 
-            print("7== CREATE COMMAND BUFFER")
+            print("7== CREATE SWAPCHAIN")
             let swapchain = try createSwapchain(gpu: gpu, surface: surface, device: device)
             print("Created Swapchain: \(swapchain.pointer)\n")
 
