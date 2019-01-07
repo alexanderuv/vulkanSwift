@@ -1,5 +1,6 @@
-//
-// Created by Alexander Ubillus on 2018-12-30.
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
 //
 
 import Foundation

@@ -1,3 +1,9 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
+
+import CVulkan
 
 public enum PhysicalDeviceType: UInt32 {
     case other = 0,
@@ -19,6 +25,82 @@ public enum PresentMode: UInt32 {
     fifoRelaxed = 3,
     sharedDemandRefresh = 1000111000,
     sharedContinuousRefresh = 1000111001
+
+    var vulkan: VkPresentModeKHR {
+        return VkPresentModeKHR(self.rawValue)
+    }
+}
+
+public enum SharingMode: UInt32 {
+    case exclusive = 0,
+    concurrent = 1
+
+    var vulkan: VkSharingMode {
+        return VkSharingMode(self.rawValue)
+    }
+}
+
+public struct CompositeAlphaFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = CompositeAlphaFlags(rawValue: 0)
+    public static let opaque = CompositeAlphaFlags(rawValue: 1 << 0)
+    public static let preMultiplied = CompositeAlphaFlags(rawValue: 1 << 1)
+    public static let postMultiplied = CompositeAlphaFlags(rawValue: 1 << 2)
+    public static let inherit = CompositeAlphaFlags(rawValue: 1 << 3)
+
+    var vulkan: VkCompositeAlphaFlagBitsKHR {
+        return VkCompositeAlphaFlagBitsKHR(self.rawValue)
+    }
+}
+
+public struct SurfaceTransformFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = SurfaceTransformFlags(rawValue: 0)
+    public static let identity = SurfaceTransformFlags(rawValue: 1 << 0)
+    public static let rotate90 = SurfaceTransformFlags(rawValue: 1 << 1)
+    public static let rotate180 = SurfaceTransformFlags(rawValue: 1 << 2)
+    public static let rotate270 = SurfaceTransformFlags(rawValue: 1 << 3)
+    public static let horizontalMirror = SurfaceTransformFlags(rawValue: 1 << 4)
+    public static let horizontalMirrorRotate90 = SurfaceTransformFlags(rawValue: 1 << 5)
+    public static let horizontalMirrorRotate180 = SurfaceTransformFlags(rawValue: 1 << 6)
+    public static let horizontalMirrorRotate270 = SurfaceTransformFlags(rawValue: 1 << 7)
+    public static let inherit = SurfaceTransformFlags(rawValue: 1 << 8)
+
+    var vulkan: VkSurfaceTransformFlagBitsKHR {
+        return VkSurfaceTransformFlagBitsKHR(self.rawValue)
+    }
+}
+
+public struct ImageUsageFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let transferSrc = ImageUsageFlags(rawValue: 1 << 0)
+    public static let transferDst = ImageUsageFlags(rawValue: 1 << 1)
+    public static let sampled = ImageUsageFlags(rawValue: 1 << 2)
+    public static let storage = ImageUsageFlags(rawValue: 1 << 3)
+    public static let colorAttachment = ImageUsageFlags(rawValue: 1 << 4)
+    public static let depthStencilAttachment = ImageUsageFlags(rawValue: 1 << 5)
+    public static let transientAttachment = ImageUsageFlags(rawValue: 1 << 6)
+    public static let inputAttachment = ImageUsageFlags(rawValue: 1 << 7)
+    public static let shadingRateImage = ImageUsageFlags(rawValue: 1 << 8)
+
+    var vulkan: VkImageUsageFlagBits {
+        return VkImageUsageFlagBits(self.rawValue)
+    }
 }
 
 // public enum QueueGlobalPriorityEXT {
@@ -327,6 +409,10 @@ public enum Format: UInt32 {
     static let VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR = VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM
     static let VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR = VK_FORMAT_G16_B16R16_2PLANE_422_UNORM
     static let VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR = VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM
+
+    var vulkan: VkFormat {
+        return VkFormat(self.rawValue)
+    }
 }
 
 public enum ColorSpace: UInt32 {
@@ -347,4 +433,8 @@ public enum ColorSpace: UInt32 {
     VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT = 1000104014
 
     static let VK_COLORSPACE_SRGB_NONLINEAR_KHR = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR
+
+    var vulkan: VkColorSpaceKHR {
+        return VkColorSpaceKHR(self.rawValue)
+    }
 }

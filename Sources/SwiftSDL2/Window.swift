@@ -1,6 +1,7 @@
-//
-// Created by Alexander Ubillus on 2018-12-30.
-//
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//  
 
 import Foundation
 import CSDL2
@@ -51,52 +52,110 @@ public class Window {
             return
         }
         
-        let extensions = getInstanceExtensions()
-        self.instance = createVulkanInstance(extensions)
+        do {
+            print("1== CREATE VULKAN INSTANCE")
+            let extensions = try getInstanceExtensions()
+            self.instance = try createVulkanInstance(extensions)
 
-        let gpu = selectPhysicalDevice()
-        let surface = try! createVulkanSurface()
-        let device = try! createDevice(gpu: gpu, surface: surface)
+            print("2== CREATE PHYSICAL DEVICE")
+            let gpu = try selectPhysicalDevice()
+            print("Created GPU (Physical device): \(gpu.pointer)\n")
 
-        //let selectedFormat = selectFormat(for: gpu, surface: surface) 
-        
-        let commandPool = try! createCommandPool(device)
-        let commandBuffer = try! allocateCommandBuffer(device: device, commandPool: commandPool)
-        
-        runMessageLoop()
-        print("Done")
+            print("3== CREATE SURFACE (Metal->MoltenVK) using SDL")
+            let surface = try createVulkanSurface()
+            print("Created Surface: \(surface.pointer)\n")
+
+            print("4== CREATE DEVICE")
+            let device = try createDevice(gpu: gpu, surface: surface)
+            print("Created Device: \(device.pointer)\n")
+            
+            print("5== CREATE COMMAND POOL")
+            let commandPool = try createCommandPool(device)
+            print("Created Command Pool: \(commandPool.pointer)\n")
+
+            print("6== CREATE COMMAND BUFFER")
+            let commandBuffer = try allocateCommandBuffer(device: device, commandPool: commandPool)
+            print("Created Command Buffer: \(commandBuffer.pointer)\n")
+
+            print("7== CREATE COMMAND BUFFER")
+            let swapchain = try createSwapchain(gpu: gpu, surface: surface, device: device)
+            print("Created Swapchain: \(swapchain.pointer)\n")
+
+            runMessageLoop()
+            print("Done")
+        } catch {
+            print("FATAL ERROR: \(error)")
+        }
     }
 
-    func allocateCommandBuffer(device: Device, commandPool: CommandPool) -> CommandBuffer {
+    func createSwapchain(gpu: PhysicalDevice, surface: Surface, device: Device) throws -> Swapchain {
+
+        let capabilities = try gpu.getSurfaceCapabilities(surface: surface)
+        let surfaceFormat = try selectFormat(for: gpu, surface: surface)
+
+        let preTransform = capabilities.supportedTransforms.contains(.identity) ?
+            .identity : capabilities.currentTransform
+
+        // Find a supported composite alpha mode - one of these is guaranteed to be set
+        var compositeAlpha: CompositeAlphaFlags = .opaque;
+        let desiredCompositeAlpha = 
+            [compositeAlpha, .preMultiplied, .postMultiplied, .inherit]
+        
+        for desired in desiredCompositeAlpha {
+            if capabilities.supportedCompositeAlpha.contains(desired) {
+                compositeAlpha = desired
+                break
+            }
+        }
+        
+        let info = SwapchainCreateInfo(
+            flags: .none,
+            surface: surface,
+            minImageCount: capabilities.minImageCount,
+            imageFormat: surfaceFormat.format,
+            imageColorSpace: surfaceFormat.colorSpace,
+            imageExtent: Extent2D(),
+            imageArrayLayers: 1,
+            imageUsage: .colorAttachment,
+            imageSharingMode: .exclusive,
+            queueFamilyIndices: [],
+            preTransform: preTransform,
+            compositeAlpha: compositeAlpha,
+            presentMode: .fifo,
+            clipped: true,
+            oldSwapchain: nil
+        )
+
+        return try device.createSwapchain(createInfo: info)
+    }
+
+    func allocateCommandBuffer(device: Device, commandPool: CommandPool) throws -> CommandBuffer {
         let info = CommandBufferAllocateInfo(
             commandPool: commandPool,
             level: .primary,
             commandBufferCount: 1
         )
 
-        return try! device.allocateCommandBuffer(createInfo: info)
+        return try device.allocateCommandBuffer(createInfo: info)
     }
 
-    // func selectFormat(for gpu: PhysicalDevice, surface: Surface)  {
-    //     let (result, formats) = gpu.getSurfaceFormats(for: surface)
-    //     if let formats = formats {
+    func selectFormat(for gpu: PhysicalDevice, surface: Surface) throws -> SurfaceFormat {
+        let formats = try gpu.getSurfaceFormats(for: surface)
+    
+        for format in formats {
+            if format.format == .VK_FORMAT_B8G8R8A8_SRGB {
+                return format
+            }
+        }
 
-    //         var chosenFormat: Format? = nil
-    //         for format in formats {
-    //             if format.format == .VK_FORMAT_B8G8R8A8_SRGB {
-    //                 chosenFormat = format.format
-    //             }
-    //         }
+        for format in formats {
+            if format.format == .VK_FORMAT_R8G8B8A8_UNORM {
+                return format
+            }
+        }
 
-    //         let presentModes = gpu.getSurfacePresentModes(surface: surface)
-    //         if !presentModes.contains(.fifo) {
-    //             return
-    //         }
-
-
-    //     }
-        
-    // }
+        return formats[0]
+    }
 
     func runMessageLoop() {
         var quit = false
@@ -117,12 +176,15 @@ public class Window {
         }
     }
 
-    func createVulkanInstance(_ extensions: [String]) -> Instance? {
-        let layerProps = enumerateInstanceLayerProperties()
-        print("\(layerProps.count) layer properties were found")
+    func createVulkanInstance(_ extensions: [String]) throws -> Instance? {
+        //let layerProps = try enumerateInstanceLayerProperties()
+        //let extensionProps = try enumerateInstanceExtensionProperties(nil)
 
-        let extensionProps = enumerateInstanceExtensionProperties(nil)
-        print("\(extensionProps.count) extension properties were found")
+        print("Enabling extensions:")
+        for ext in extensions {
+            print("\(ext)")
+        }
+        print("===\n")
 
         let createInfo = InstanceCreateInfo(
             applicationInfo: nil,
@@ -130,32 +192,21 @@ public class Window {
             enabledExtensionNames: extensions
         )
 
-        let (result, inst) = Instance.createInstance(createInfo: createInfo)
-        if let instance = inst {
-            return instance
-        }
-
-        handleVulkanError(result)
-        return nil
+        return try Instance.createInstance(createInfo: createInfo)
     }
 
     func createVulkanSurface() throws -> Surface {
-        let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
-        if SDL_Vulkan_CreateSurface(window, self.instance!.pointer, surfacePtr) != SDL_TRUE {
+        var surface = VkSurfaceKHR(bitPattern: 0)
+
+        if SDL_Vulkan_CreateSurface(window, self.instance!.pointer, &surface) != SDL_TRUE {
             throw lastSDLError()
         }
 
-        return Surface(instance: self.instance!, surface: surfacePtr.pointee!)
+        return Surface(instance: self.instance!, surface: surface!)
     }
 
-    func selectPhysicalDevice() -> PhysicalDevice {
-        let gpus = self.instance!.enumeratePhysicalDevices()
-
-        for gpu in gpus {
-            let gpuProps = gpu.properties
-            print("GPU Properties:\n\(gpuProps)") 
-        }
-
+    func selectPhysicalDevice() throws -> PhysicalDevice {
+        let gpus = try self.instance!.enumeratePhysicalDevices()
         return gpus[0]
     }
 
@@ -163,15 +214,14 @@ public class Window {
         
         var chosenQueueFamily: QueueFamilyProperties? = nil
         for fam in gpu.queueFamilyProperties {
-            if try! gpu.hasSurfaceSupport(for: fam, surface: surface) {
+            if try gpu.hasSurfaceSupport(for: fam, surface: surface) {
                 chosenQueueFamily = fam
                 break
             }
         }
         
         if let chosenQueueFamily = chosenQueueFamily {
-
-            print("Queue Family is \(chosenQueueFamily.index)")
+            print("Chosen queue Family is \(chosenQueueFamily.index)")
 
             let createInfo = DeviceCreateInfo(
                 flags: .none,
@@ -188,24 +238,20 @@ public class Window {
             )
 
             // use first device
-            return try! gpu.createDevice(createInfo: createInfo)
+            return try gpu.createDevice(createInfo: createInfo)
         } else {
             throw SDLError.vulkan(msg: "Unable to find a queue family with surface presentation support")
         }
     }
 
-    func createCommandPool(_ device: Device) -> CommandPool {
+    func createCommandPool(_ device: Device) throws -> CommandPool {
         let info = CommandPoolCreateInfo(
             flags: .none,
             queueFamilyIndex: 0
         )
 
         // create command pool
-        return try! device.createCommandPool(createInfo: info)
-    }
-
-    func handleVulkanError(_ r: Result) {
-        print("Vulkan error: \(r)")
+        return try device.createCommandPool(createInfo: info)
     }
 
     func lastSDLError() -> SDLError {
@@ -213,32 +259,29 @@ public class Window {
         return .generic(msg: String(cString: error!))
     }
 
-    func getInstanceExtensions() -> [String] {
-       let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
-        countPtr.initialize(to: 0)
-        defer {
-            countPtr.deallocate()
-        }
-        
-        var opResult = SDL_Vulkan_GetInstanceExtensions(self.window, countPtr, nil)
-        var count = Int(countPtr.pointee)
-
+    func getInstanceExtensions() throws -> [String] {
+        var opResult = SDL_FALSE
+        var countArr: [UInt32] = [0]
         var result: [String] = []
-        if opResult == SDL_TRUE && count > 0 {
+
+        opResult = SDL_Vulkan_GetInstanceExtensions(self.window, &countArr, nil)
+        if opResult != SDL_TRUE {
+            throw lastSDLError()
+        }
+
+        let count = Int(countArr[0])
+        if count > 0 {
             let namesPtr = UnsafeMutablePointer<UnsafePointer<Int8>?>.allocate(capacity: count)
             defer {
                 namesPtr.deallocate()
             }
 
-            opResult = SDL_Vulkan_GetInstanceExtensions(self.window, countPtr, namesPtr)
-            count = Int(countPtr.pointee)
-
+            opResult = SDL_Vulkan_GetInstanceExtensions(self.window, &countArr, namesPtr)
+            
             if opResult == SDL_TRUE {
                 for i in 0..<count {
                     let namePtr = namesPtr[i]
                     let newName = String(cString: namePtr!)
-
-                    print("Extension name: \(newName)")
                     result.append(newName)
                 }
             }

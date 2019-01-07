@@ -1,3 +1,7 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
 
 import CVulkan
 
@@ -9,7 +13,7 @@ public class Instance {
         self.pointer = rawInstance
     }
 
-    public class func createInstance(createInfo info: InstanceCreateInfo) -> (Result, Instance?) {
+    public class func createInstance(createInfo info: InstanceCreateInfo) throws -> Instance {
         let arrEnabledLayerNames = info.enabledLayerNames.map { $0.asCString() }
         let enabledLayerNamesPtr = UnsafePointer(arrEnabledLayerNames)
 
@@ -27,63 +31,62 @@ public class Instance {
             ppEnabledExtensionNames: enabledExtensionNamesPtr
         )
 
-        let instancePtr = UnsafeMutablePointer<VkInstance?>.allocate(capacity: 1)
+        var instancePtr = VkInstance(bitPattern: 0)
         var opResult = VK_ERROR_INITIALIZATION_FAILED
         withUnsafePointer(to: cCreateInfo) {
-            opResult = vkCreateInstance($0, nil, instancePtr)
+            opResult = vkCreateInstance($0, nil, &instancePtr)
         }
 
         if opResult == VK_SUCCESS {
-            return (opResult.toResult(), Instance(rawInstance: instancePtr.pointee!))
+            return Instance(rawInstance: instancePtr!)
         }
         
-        return (opResult.toResult(), nil)
+        throw opResult.toResult()
     }
 
-    public func createSurface(createInfo info: SurfaceCreateInfo) -> (Result, Surface?) {
-        let surfacePtr = UnsafeMutablePointer<VkSurfaceKHR?>.allocate(capacity: 1)
+    public func createSurface(createInfo info: SurfaceCreateInfo) throws -> Surface {
+        var surface = VkSurfaceKHR(bitPattern: 0)
 
         var opResult = VK_SUCCESS
         withUnsafePointer(to: info.toVulkan()) {
-            opResult = vkCreateMacOSSurfaceMVK(self.pointer, $0, nil, surfacePtr)
+            opResult = vkCreateMacOSSurfaceMVK(self.pointer, $0, nil, &surface)
         }
 
         if opResult == VK_SUCCESS {
-            return (opResult.toResult(), Surface(instance: self,  surface: surfacePtr.pointee!))
+            return Surface(instance: self,  surface: surface!)
         }
         
-        return (opResult.toResult(), nil)
+        throw opResult.toResult()
     }
 
-    public func enumeratePhysicalDevices() -> [PhysicalDevice] {
-        let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
-        countPtr.initialize(to: 0)
-        defer {
-            countPtr.deallocate()
+    public func enumeratePhysicalDevices() throws -> [PhysicalDevice] {
+        var count: UInt32 = 0
+        var result: [PhysicalDevice] = []
+        var opResult = VK_SUCCESS
+
+        withUnsafeMutablePointer(to: &count) {
+            opResult = vkEnumeratePhysicalDevices(self.pointer, $0, nil)    
         }
 
-        var opResult = vkEnumeratePhysicalDevices(self.pointer, countPtr, nil)
-        var count = Int(countPtr.pointee)
+        if opResult != VK_SUCCESS {
+            throw opResult.toResult()
+        }
 
-        var result: [PhysicalDevice] = []
-        if (opResult == VK_SUCCESS || opResult == VK_INCOMPLETE) && count > 0 {
-            let devicePtr = UnsafeMutablePointer<VkPhysicalDevice?>.allocate(capacity: count)
-            defer {
-                devicePtr.deallocate()
+        if count > 0 {
+            var devices = [VkPhysicalDevice?](repeating: VkPhysicalDevice(bitPattern: 0), count: Int(count))
+            
+            withUnsafeMutablePointer(to: &count) {
+                opResult = vkEnumeratePhysicalDevices(self.pointer, $0, &devices)
             }
-            opResult = vkEnumeratePhysicalDevices(self.pointer, countPtr, devicePtr)
-            count = Int(countPtr.pointee)
 
-            if opResult == VK_SUCCESS || opResult == VK_INCOMPLETE {
-                for i in 0..<count {
-                    let cDevicePtr = devicePtr[i]
-                    let newProp = PhysicalDevice(instance: self, vulkanDevice: cDevicePtr!)
-
-                    result.append(newProp)
-                }
+            if opResult != VK_SUCCESS {
+                throw opResult.toResult()
             }
-        } else {
-            // throw error here
+
+            for device in devices {
+                let item = PhysicalDevice(instance: self, vulkanDevice: device!)
+                result.append(item)
+            }
         }
 
         return result

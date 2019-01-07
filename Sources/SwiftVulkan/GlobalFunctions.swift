@@ -1,75 +1,68 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
+
 import CVulkan
 import Foundation
 
-public func enumerateInstanceExtensionProperties(_ layerName: String?) -> [ExtensionProperties] {
-    let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
-    countPtr.initialize(to: 0)
-    defer {
-        countPtr.deallocate()
+public func enumerateInstanceExtensionProperties(_ layerName: String?) throws -> [ExtensionProperties] {
+    var countArr: [UInt32] = [0]
+    var opResult = vkEnumerateInstanceExtensionProperties(layerName, &countArr, nil)
+    if opResult != VK_SUCCESS {
+        throw opResult.toResult()
     }
 
-    var opResult = vkEnumerateInstanceExtensionProperties(layerName, countPtr, nil)
-    var count = Int(countPtr.pointee)
-
+    let count = Int(countArr[0])
     var result: [ExtensionProperties] = []
-    if (opResult == VK_SUCCESS || opResult == VK_INCOMPLETE) && count > 0 {
-        let cProps = UnsafeMutablePointer<VkExtensionProperties>.allocate(capacity: count)
-        defer {
-            cProps.deallocate()
-        }
-        opResult = vkEnumerateInstanceExtensionProperties(layerName, countPtr, cProps)
-        count = Int(countPtr.pointee)
+    if count > 0 {
+        var props = [VkExtensionProperties](repeating: VkExtensionProperties(), count: count)
+        opResult = vkEnumerateInstanceExtensionProperties(layerName, &countArr, &props)
 
-        if opResult == VK_SUCCESS || opResult == VK_INCOMPLETE {
-            for i in 0..<count {
-                let cProp = cProps[i]
-                let newProp = ExtensionProperties(
-                    extensionName: convertTupleToString(cProp.extensionName),
-                    specVersion: Version(from: cProp.specVersion)
-                )
-
-                result.append(newProp)
-                print(newProp)
-            }
+        if opResult != VK_SUCCESS {
+            throw opResult.toResult()
         }
-    } else {
-        // throw error here
-    }
+
+        for cProp in props {
+            let newProp = ExtensionProperties(
+                extensionName: convertTupleToString(cProp.extensionName),
+                specVersion: Version(from: cProp.specVersion)
+            )
+
+            result.append(newProp)
+        }  
+    } 
 
     return result
 }
 
-public func enumerateInstanceLayerProperties() -> [LayerProperties] {
-    let countPtr = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
-    countPtr.initialize(to: 0)
-    defer {
-        countPtr.deallocate()
+public func enumerateInstanceLayerProperties() throws -> [LayerProperties] {
+    var countArr: [UInt32] = [0]
+    var opResult = vkEnumerateInstanceLayerProperties(&countArr, nil)
+
+    if opResult != VK_SUCCESS {
+        throw opResult.toResult()
     }
-    
-    var opResult = vkEnumerateInstanceLayerProperties(countPtr, nil)
-    var count = Int(countPtr.pointee)
 
+    let count = Int(countArr[0])
     var result: [LayerProperties] = []
-    if opResult == VK_SUCCESS && count > 0 {
-        let cProps = UnsafeMutablePointer<VkLayerProperties>.allocate(capacity: count)
-        defer {
-            cProps.deallocate()
+    if count > 0 {
+        var props = [VkLayerProperties](repeating: VkLayerProperties(), count: count)
+        opResult = vkEnumerateInstanceLayerProperties(&countArr, &props)
+        
+        if opResult != VK_SUCCESS {
+            throw opResult.toResult()
         }
-        opResult = vkEnumerateInstanceLayerProperties(countPtr, cProps)
-        count = Int(countPtr.pointee)
-        if opResult == VK_SUCCESS {
-            for i in 0..<count {
-                let cProp = cProps[i]
-                let newProp = LayerProperties(
-                    layerName: convertTupleToString(cProp.layerName),
-                    specVersion: Version(from: cProp.specVersion),
-                    implementationVersion: Version(from: cProp.implementationVersion),
-                    description: convertTupleToString(cProp.description)
-                )
 
-                print(newProp)
-                result.append(newProp)
-            }
+        for cProp in props {
+            let newProp = LayerProperties(
+                layerName: convertTupleToString(cProp.layerName),
+                specVersion: Version(from: cProp.specVersion),
+                implementationVersion: Version(from: cProp.implementationVersion),
+                description: convertTupleToString(cProp.description)
+            )
+
+            result.append(newProp)
         }
     }
 

@@ -1,9 +1,13 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
 
 import CVulkan
 
 public class CommandBuffer {
 
-    let pointer: VkCommandBuffer
+    public let pointer: VkCommandBuffer
 
     init(pointer: VkCommandBuffer) {
         self.pointer = pointer

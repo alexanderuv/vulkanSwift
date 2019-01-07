@@ -1,3 +1,7 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
 
 import CVulkan
 import Foundation
@@ -32,6 +36,9 @@ extension VkResult {
 }
 
 extension Bool {
+    var vulkan: VkBool32 {
+        return self ? 1 : 0
+    }
     func toUInt32() -> UInt32 {
         return self ? 1 : 0
     }

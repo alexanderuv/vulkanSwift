@@ -1,3 +1,7 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
 
 import CVulkan
 
@@ -190,6 +194,30 @@ public struct DeviceQueueCreateInfo {
 public struct ExtensionProperties {
     let extensionName: String
     let specVersion: Version
+}
+
+public struct Extent2D {
+    public let width: UInt32
+    public let height: UInt32
+
+    public init() {
+        self.width = 0
+        self.height = 0
+    }
+
+    public init(width: UInt32, height: UInt32) {
+        self.width = width
+        self.height = height
+    }
+
+    init(fromVulkan extent: VkExtent2D) {
+        self.width = extent.width
+        self.height = extent.height
+    }
+
+    var vulkan: VkExtent2D {
+        return VkExtent2D(width: self.width, height: self.height)
+    }
 }
 
 public struct Extent3D {
@@ -453,6 +481,32 @@ public struct QueueFamilyProperties {
     }
 }
 
+public struct SurfaceCapabilities {
+    public let minImageCount: UInt32
+    public let maxImageCount: UInt32
+    public let currentExtent: Extent2D
+    public let minImageExtent: Extent2D
+    public let maxImageExtent: Extent2D
+    public let maxImageArrayLayers: UInt32
+    public let supportedTransforms: SurfaceTransformFlags
+    public let currentTransform: SurfaceTransformFlags
+    public let supportedCompositeAlpha: CompositeAlphaFlags
+    public let supportedUsageFlags: ImageUsageFlags
+
+    init(fromVulkan capabilities: VkSurfaceCapabilitiesKHR) {
+        self.minImageCount = capabilities.minImageCount
+        self.maxImageCount = capabilities.maxImageCount
+        self.currentExtent = Extent2D(fromVulkan: capabilities.currentExtent)
+        self.minImageExtent = Extent2D(fromVulkan: capabilities.minImageExtent)
+        self.maxImageExtent = Extent2D(fromVulkan: capabilities.maxImageExtent)
+        self.maxImageArrayLayers = capabilities.maxImageArrayLayers
+        self.supportedTransforms = SurfaceTransformFlags(rawValue: capabilities.supportedTransforms)
+        self.currentTransform = SurfaceTransformFlags(rawValue: capabilities.currentTransform.rawValue)
+        self.supportedCompositeAlpha = CompositeAlphaFlags(rawValue: capabilities.supportedCompositeAlpha)
+        self.supportedUsageFlags = ImageUsageFlags(rawValue: capabilities.supportedUsageFlags)
+    }
+}
+
 public struct SurfaceCreateInfo {
     #if os(macOS)
     let sType = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK
@@ -492,6 +546,92 @@ public struct SurfaceCreateInfo {
 public struct SurfaceFormat {
     public let format: Format
     public let colorSpace: ColorSpace
+}
+
+public struct SwapchainCreateInfo {
+    public let pNext: UnsafeRawPointer? = nil
+    public let flags: Flags
+    public let surface: Surface
+    public let minImageCount: UInt32
+    public let imageFormat: Format
+    public let imageColorSpace: ColorSpace
+    public let imageExtent: Extent2D
+    public let imageArrayLayers: UInt32
+    public let imageUsage: ImageUsageFlags
+    public let imageSharingMode: SharingMode
+    public let queueFamilyIndices: [UInt32]
+    public let preTransform: SurfaceTransformFlags
+    public let compositeAlpha: CompositeAlphaFlags
+    public let presentMode: PresentMode
+    public let clipped: Bool
+    public let oldSwapchain: Swapchain?
+
+    public init(flags: Flags,
+                surface: Surface,
+                minImageCount: UInt32,
+                imageFormat: Format,
+                imageColorSpace: ColorSpace,
+                imageExtent: Extent2D,
+                imageArrayLayers: UInt32,
+                imageUsage: ImageUsageFlags,
+                imageSharingMode: SharingMode,
+                queueFamilyIndices: [UInt32],
+                preTransform: SurfaceTransformFlags,
+                compositeAlpha: CompositeAlphaFlags,
+                presentMode: PresentMode,
+                clipped: Bool,
+                oldSwapchain: Swapchain? = nil) {
+        self.flags = flags
+        self.surface = surface
+        self.minImageCount = minImageCount
+        self.imageFormat = imageFormat
+        self.imageColorSpace = imageColorSpace
+        self.imageExtent = imageExtent
+        self.imageArrayLayers = imageArrayLayers
+        self.imageUsage = imageUsage
+        self.imageSharingMode = imageSharingMode
+        self.queueFamilyIndices = queueFamilyIndices
+        self.preTransform = preTransform
+        self.compositeAlpha = compositeAlpha
+        self.presentMode = presentMode
+        self.clipped = clipped
+        self.oldSwapchain = oldSwapchain
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue 
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let splitInstanceBindRegions = Flags(rawValue: 1 << 0)
+        public static let protected = Flags(rawValue: 1 << 1)
+    }
+
+    func toVulkan() -> VkSwapchainCreateInfoKHR {
+        return VkSwapchainCreateInfoKHR(
+            sType: VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+            pNext: self.pNext,
+            flags: VkSwapchainCreateFlagsKHR(self.flags.rawValue),
+            surface: self.surface.pointer,
+            minImageCount: self.minImageCount,
+            imageFormat: self.imageFormat.vulkan,
+            imageColorSpace: self.imageColorSpace.vulkan,
+            imageExtent: self.imageExtent.vulkan,
+            imageArrayLayers: self.imageArrayLayers,
+            imageUsage: self.imageUsage.rawValue,
+            imageSharingMode: self.imageSharingMode.vulkan,
+            queueFamilyIndexCount: UInt32(self.queueFamilyIndices.count),
+            pQueueFamilyIndices: self.queueFamilyIndices,
+            preTransform: self.preTransform.vulkan,
+            compositeAlpha: self.compositeAlpha.vulkan,
+            presentMode: self.presentMode.vulkan,
+            clipped: self.clipped.vulkan,
+            oldSwapchain: self.oldSwapchain?.pointer
+        )
+    }
 }
 
 // This is not a Vulkan struct, but we're adding it to improve semantics

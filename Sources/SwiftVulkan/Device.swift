@@ -1,8 +1,13 @@
+//  
+// Copyright (c) Alexander Ubillus. All rights reserved.  
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.  
+//
+
 import CVulkan
 
 public class Device {
 
-    let pointer: VkDevice
+    public let pointer: VkDevice
 
     init(device: VkDevice) {
         self.pointer = device
@@ -12,12 +17,10 @@ public class Device {
         var cCommandPool = VkCommandPool(bitPattern: 0)
         var opResult = VK_SUCCESS
 
-        withUnsafeMutablePointer(to: &cCommandPool) { cp in
-            withUnsafePointer(to: info.toVulkan()) { createInfo in
-                opResult = vkCreateCommandPool(pointer, createInfo, nil, cp)
-            }
+        withUnsafePointer(to: info.toVulkan()) { 
+            opResult = vkCreateCommandPool(pointer, $0, nil, &cCommandPool)
         }
-
+    
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
@@ -45,6 +48,25 @@ public class Device {
         }
         
         return CommandBuffer(pointer: output!)
+    }
+
+    public func createSwapchain(createInfo info: SwapchainCreateInfo) throws -> Swapchain {
+        //var swapchain = VkSwapchainKHR(bitPattern: 0)
+        var swapchainPtr = UnsafeMutablePointer<VkSwapchainKHR?>.allocate(capacity: 1)
+        defer {
+            swapchainPtr.deallocate()
+        }
+
+        var opResult = VK_SUCCESS
+        withUnsafePointer(to: info.toVulkan()) {
+            opResult = vkCreateSwapchainKHR(self.pointer, $0, nil, swapchainPtr)
+        }
+        
+        if opResult == VK_SUCCESS {
+            return Swapchain(device: self, pointer: swapchainPtr.pointee!)
+        }
+
+        throw opResult.toResult()
     }
 
     deinit {
