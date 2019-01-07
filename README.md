@@ -2,6 +2,7 @@
 
 Steps to set up:
 
+1. Install SDL2 with Homebrew: `brew install sdl2`
 1. We need Swift 5 for this, so download a snapshot from [Swift.org](https://swift.org/download/#snapshots). Install the `.pkg` file.
 1. Download Vulkan/MoltenVK from [here](https://vulkan.lunarg.com/sdk/home#mac) and unzip to `$HOME/SDKs`. Example: `$HOME/SDKs/vulkansdk-macos-1.1.92.1`
 1. Set up variables in `~/.bash_profile`:
@@ -18,7 +19,7 @@ export VK_ICD_FILENAMES="$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json"
 export CUSTOM_PKG_CONFIG="$HOME/pkg-config"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$CUSTOM_PKG_CONFIG"
 ```
-4. After the changes above are in place (`source ~/.bash_profile` to be sure), create `vulkan.pc` by running this:
+5. After the changes above are in place (`source ~/.bash_profile` to be sure), create `vulkan.pc` by running this:
 ```sh
 mkdir -p $CUSTOM_PKG_CONFIG # make sure this exists
 cat > $CUSTOM_PKG_CONFIG/vulkan.pc << EOF
@@ -37,5 +38,5 @@ EOF
 ln -s $VULKAN_SDK/lib/libvulkan.1.dylib /usr/local/lib 
 ln -s $VULKAN_SDK/lib/libMoltenVK.dylib /usr/local/lib
 ```
-5. Confirm right Swift version by running `swift --version`. Should return something like `Apple Swift version 5.0-dev`
-6. Run `swift build` at the project's root folder
+6. Confirm right Swift version by running `swift --version`. Should return something like `Apple Swift version 5.0-dev`
+7. Run `swift build` at the project's root folder
