@@ -25,7 +25,7 @@ enum WindowFlags: UInt32 {
 
 public func initializeSwiftSDL2() {
     if SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS) < 0 {
-        print("Some Issue")
+        print(lastSDLError())
         return
     }
 }
@@ -254,11 +254,6 @@ public class Window {
         return try device.createCommandPool(createInfo: info)
     }
 
-    func lastSDLError() -> SDLError {
-        let error = SDL_GetError()
-        return .generic(msg: String(cString: error!))
-    }
-
     func getInstanceExtensions() throws -> [String] {
         var opResult = SDL_FALSE
         var countArr: [UInt32] = [0]
@@ -299,4 +294,9 @@ public class Window {
 enum SDLError: Error {
     case generic(msg: String)
     case vulkan(msg: String)
+}
+
+func lastSDLError() -> SDLError {
+    let error = SDL_GetError()
+    return .generic(msg: String(cString: error!))
 }
