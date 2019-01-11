@@ -75,6 +75,24 @@ public class PhysicalDevice {
         )
     }()
 
+    public func getExtensionProperties() throws -> [ExtensionProperties] {
+        var countArr: [UInt32] = [ 0 ]
+        var opResult = vkEnumerateDeviceExtensionProperties(self.pointer, nil, &countArr, nil)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        var vkProperties = [VkExtensionProperties](repeating: VkExtensionProperties(), count: Int(countArr[0]))
+        opResult = vkEnumerateDeviceExtensionProperties(self.pointer, nil, &countArr, &vkProperties)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        return vkProperties.map { ExtensionProperties(props: $0) }
+    }
+
     public func getSurfaceFormats(for surface: Surface) throws -> [SurfaceFormat] {
         
         var returnValue: [SurfaceFormat] = []

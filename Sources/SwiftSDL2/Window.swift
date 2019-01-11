@@ -178,11 +178,16 @@ public class Window {
 
     func createVulkanInstance(_ extensions: [String]) throws -> Instance? {
         //let layerProps = try enumerateInstanceLayerProperties()
-        //let extensionProps = try enumerateInstanceExtensionProperties(nil)
+        let extensionProps = try enumerateInstanceExtensionProperties(nil)
+        print("Available extensions:")
+        for ext in extensionProps {
+            print(ext)
+        }
+        print("===\n")
 
         print("Enabling extensions:")
         for ext in extensions {
-            print("\(ext)")
+            print(ext)
         }
         print("===\n")
 
@@ -207,7 +212,14 @@ public class Window {
 
     func selectPhysicalDevice() throws -> PhysicalDevice {
         let gpus = try self.instance!.enumeratePhysicalDevices()
-        return gpus[0]
+        let gpu = gpus[0]
+        let extensions = try gpu.getExtensionProperties()
+
+        for ext in extensions {
+            print("Device extension: \(ext)")
+        }
+
+        return gpu
     }
 
     func createDevice(gpu: PhysicalDevice, surface: Surface) throws -> Device {
@@ -233,7 +245,7 @@ public class Window {
                     )
                 ],
                 enabledLayers: [],
-                enabledExtensions: [],
+                enabledExtensions: [ "VK_KHR_swapchain", "VK_MVK_moltenvk" ],
                 enabledFeatures: nil
             )
 
