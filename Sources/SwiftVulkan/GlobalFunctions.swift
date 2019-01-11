@@ -24,11 +24,7 @@ public func enumerateInstanceExtensionProperties(_ layerName: String?) throws ->
         }
 
         for cProp in props {
-            let newProp = ExtensionProperties(
-                extensionName: convertTupleToString(cProp.extensionName),
-                specVersion: Version(from: cProp.specVersion)
-            )
-
+            let newProp = ExtensionProperties(props: cProp)
             result.append(newProp)
         }  
     } 

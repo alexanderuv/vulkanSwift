@@ -192,8 +192,13 @@ public struct DeviceQueueCreateInfo {
 }
 
 public struct ExtensionProperties {
-    let extensionName: String
-    let specVersion: Version
+    public let extensionName: String
+    public let specVersion: Version
+
+    init(props: VkExtensionProperties) {
+        self.extensionName = convertTupleToString(props.extensionName)
+        self.specVersion = Version(from: props.specVersion)
+    }
 }
 
 public struct Extent2D {

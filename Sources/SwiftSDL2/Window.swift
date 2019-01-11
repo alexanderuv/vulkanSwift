@@ -216,7 +216,14 @@ public class Window {
 
     func selectPhysicalDevice() throws -> PhysicalDevice {
         let gpus = try self.instance!.enumeratePhysicalDevices()
-        return gpus[0]
+        let gpu = gpus[0]
+        let extensions = try gpu.getExtensionProperties()
+
+        for ext in extensions {
+            print("Device extension: \(ext)")
+        }
+
+        return gpu
     }
 
     func createDevice(gpu: PhysicalDevice, surface: Surface) throws -> Device {
@@ -242,7 +249,7 @@ public class Window {
                     )
                 ],
                 enabledLayers: [],
-                enabledExtensions: [],
+                enabledExtensions: [ "VK_KHR_swapchain", "VK_MVK_moltenvk" ],
                 enabledFeatures: nil
             )
 
