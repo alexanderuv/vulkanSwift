@@ -6,9 +6,11 @@
 import CVulkan
 
 public class PhysicalDevice {
+    public let instance: Instance
     public let pointer: VkPhysicalDevice
 
     init(instance: Instance, vulkanDevice: VkPhysicalDevice) {
+        self.instance = instance
         self.pointer = vulkanDevice
     }
 
@@ -200,7 +202,7 @@ public class PhysicalDevice {
         }
         
         if opResult == VK_SUCCESS {
-            return Device(device: device!)
+            return Device(instance: instance, device: device!)
         }
 
         throw opResult.toResult()

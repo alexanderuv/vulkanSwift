@@ -7,9 +7,12 @@ import CVulkan
 
 public class Device {
 
+    public let instance: Instance
     public let pointer: VkDevice
 
-    init(device: VkDevice) {
+    init(instance: Instance,
+         device: VkDevice) {
+        self.instance = instance
         self.pointer = device
     }
 
@@ -51,19 +54,17 @@ public class Device {
     }
 
     public func createSwapchain(createInfo info: SwapchainCreateInfo) throws -> Swapchain {
-        //var swapchain = VkSwapchainKHR(bitPattern: 0)
-        var swapchainPtr = UnsafeMutablePointer<VkSwapchainKHR?>.allocate(capacity: 1)
-        defer {
-            swapchainPtr.deallocate()
-        }
+        var swapchain = VkSwapchainKHR(bitPattern: 0)
 
         var opResult = VK_SUCCESS
-        withUnsafePointer(to: info.toVulkan()) {
-            opResult = vkCreateSwapchainKHR(self.pointer, $0, nil, swapchainPtr)
-        }
+        var infoArr = [info.toVulkan()]
+
+        var function = vkGetInstanceProcAddr(self.instance.pointer, "vkCreateSwapchainKHR")
+        var rightFunction = unsafeBitCast(function, to: PFN_vkCreateSwapchainKHR.self)
+        opResult = rightFunction(self.pointer, &infoArr, nil, &swapchain)
         
         if opResult == VK_SUCCESS {
-            return Swapchain(device: self, pointer: swapchainPtr.pointee!)
+            return Swapchain(device: self, pointer: swapchain!)
         }
 
         throw opResult.toResult()

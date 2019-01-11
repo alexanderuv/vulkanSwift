@@ -68,18 +68,18 @@ public class Window {
             print("4== CREATE DEVICE")
             let device = try createDevice(gpu: gpu, surface: surface)
             print("Created Device: \(device.pointer)\n")
+
+            print("5== CREATE SWAPCHAIN")
+            let swapchain = try createSwapchain(gpu: gpu, surface: surface, device: device)
+            print("Created Swapchain: \(swapchain.pointer)\n")
             
-            print("5== CREATE COMMAND POOL")
+            print("6== CREATE COMMAND POOL")
             let commandPool = try createCommandPool(device)
             print("Created Command Pool: \(commandPool.pointer)\n")
 
-            print("6== CREATE COMMAND BUFFER")
+            print("7== CREATE COMMAND BUFFER")
             let commandBuffer = try allocateCommandBuffer(device: device, commandPool: commandPool)
             print("Created Command Buffer: \(commandBuffer.pointer)\n")
-
-            print("7== CREATE SWAPCHAIN")
-            let swapchain = try createSwapchain(gpu: gpu, surface: surface, device: device)
-            print("Created Swapchain: \(swapchain.pointer)\n")
 
             runMessageLoop()
             print("Done")
@@ -107,18 +107,23 @@ public class Window {
                 break
             }
         }
+
+        var numberOfImages = capabilities.minImageCount + 1
+        if capabilities.maxImageCount > 0 {
+            numberOfImages = max(numberOfImages, capabilities.maxImageCount)
+        }
         
         let info = SwapchainCreateInfo(
             flags: .none,
             surface: surface,
-            minImageCount: capabilities.minImageCount,
+            minImageCount: numberOfImages,
             imageFormat: surfaceFormat.format,
             imageColorSpace: surfaceFormat.colorSpace,
-            imageExtent: Extent2D(),
+            imageExtent: Extent2D(width: 100, height: 100),
             imageArrayLayers: 1,
             imageUsage: .colorAttachment,
             imageSharingMode: .exclusive,
-            queueFamilyIndices: [],
+            queueFamilyIndices: [0],
             preTransform: preTransform,
             compositeAlpha: compositeAlpha,
             presentMode: .fifo,
@@ -177,19 +182,23 @@ public class Window {
     }
 
     func createVulkanInstance(_ extensions: [String]) throws -> Instance? {
-        //let layerProps = try enumerateInstanceLayerProperties()
-        //let extensionProps = try enumerateInstanceExtensionProperties(nil)
+        let layerProps = try enumerateInstanceLayerProperties()
+        let extensionProps = try enumerateInstanceExtensionProperties(nil) 
+        let actualExtensions = extensionProps.map { $0.extensionName } 
+        //let actualExtensions = extensions + ["VK_EXT_debug_report"]
 
         print("Enabling extensions:")
-        for ext in extensions {
+        for ext in actualExtensions {
             print("\(ext)")
         }
         print("===\n")
 
         let createInfo = InstanceCreateInfo(
             applicationInfo: nil,
-            enabledLayerNames: ["VK_LAYER_LUNARG_standard_validation"],
-            enabledExtensionNames: extensions
+            enabledLayerNames: [
+                "VK_LAYER_LUNARG_standard_validation"
+                ],
+            enabledExtensionNames: actualExtensions 
         )
 
         return try Instance.createInstance(createInfo: createInfo)
