@@ -37,32 +37,33 @@ public class Instance {
             opResult = vkCreateInstance($0, nil, &instancePtr)
         }
 
-        var function = vkGetInstanceProcAddr(instancePtr!, "vkCreateDebugReportCallbackEXT")
-        var rightFunction = unsafeBitCast(function, to: PFN_vkCreateDebugReportCallbackEXT.self)
+        // let function = vkGetInstanceProcAddr(instancePtr!, "vkCreateDebugReportCallbackEXT")
+        // let vkCreateDebugReportCallbackEXT = 
+        //     unsafeBitCast(function, to: PFN_vkCreateDebugReportCallbackEXT.self)
 
-        var infoArr = [VkDebugReportCallbackCreateInfoEXT(
-            sType: VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
-            pNext: nil,
-            flags: VK_DEBUG_REPORT_INFORMATION_BIT_EXT.rawValue | 
-            VK_DEBUG_REPORT_WARNING_BIT_EXT.rawValue | 
-            VK_DEBUG_REPORT_ERROR_BIT_EXT.rawValue | 
-            VK_DEBUG_REPORT_DEBUG_BIT_EXT.rawValue,
-            pfnCallback: { (flags: VkDebugReportFlagsEXT, 
-                            objectType: VkDebugReportObjectTypeEXT,
-                            object: UInt64,
-                            location: Int,
-                            messageCode: Int32,
-                            pLayerPrefix: UnsafePointer<Int8>?,
-                            pMessage: UnsafePointer<Int8>?,
-                            pUserData: UnsafeMutableRawPointer?) in
-                print("\(objectType) message: \(String(cString: pMessage!))")
-                return 0
-            },
-            pUserData: nil
-        )]
+        // var infoArr = [VkDebugReportCallbackCreateInfoEXT(
+        //     sType: VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
+        //     pNext: nil,
+        //     flags: VK_DEBUG_REPORT_INFORMATION_BIT_EXT.rawValue | 
+        //     VK_DEBUG_REPORT_WARNING_BIT_EXT.rawValue | 
+        //     VK_DEBUG_REPORT_ERROR_BIT_EXT.rawValue | 
+        //     VK_DEBUG_REPORT_DEBUG_BIT_EXT.rawValue,
+        //     pfnCallback: { (flags: VkDebugReportFlagsEXT, 
+        //                     objectType: VkDebugReportObjectTypeEXT,
+        //                     object: UInt64,
+        //                     location: Int,
+        //                     messageCode: Int32,
+        //                     pLayerPrefix: UnsafePointer<Int8>?,
+        //                     pMessage: UnsafePointer<Int8>?,
+        //                     pUserData: UnsafeMutableRawPointer?) in
+        //         print("[\(objectType.rawValue)] message: \(String(cString: pMessage!))")
+        //         return 0
+        //     },
+        //     pUserData: nil
+        // )]
 
-        var callback = VkDebugReportCallbackEXT(bitPattern: 0)
-        opResult = rightFunction(instancePtr!, &infoArr, nil, &callback)
+        // var callback = VkDebugReportCallbackEXT(bitPattern: 0)
+        // opResult = vkCreateDebugReportCallbackEXT(instancePtr!, &infoArr, nil, &callback)
 
         if opResult == VK_SUCCESS {
             return Instance(rawInstance: instancePtr!)
@@ -120,6 +121,7 @@ public class Instance {
     }
  
     deinit {
+        print("Destroying instance")
         vkDestroyInstance(pointer, nil)
     }
 }

@@ -16,6 +16,29 @@ public class Device {
         self.pointer = device
     }
 
+    public func createImageView(createInfo info: ImageViewCreateInfo) throws -> ImageView {
+
+        var imageViewArr = [VkImageView?](repeating: VkImageView(bitPattern: 0), count: 1)
+
+        var opResult = VK_SUCCESS
+        withUnsafePointer(to: info.toVulkan()) {
+            opResult = vkCreateImageView(self.pointer, $0, nil, &imageViewArr)
+        }
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        return ImageView(pointer: imageViewArr[0]!, device: self)
+    }
+
+    public func createQueue(presentFamilyIndex: UInt32) -> Queue {
+        var queueArr = [VkQueue?](repeating: VkQueue(bitPattern: 0), count: 1)
+        vkGetDeviceQueue(self.pointer, UInt32(presentFamilyIndex), 0, &queueArr)
+
+        return Queue(fromVulkan: queueArr[0]!)
+    }
+
     public func createCommandPool(createInfo info: CommandPoolCreateInfo) throws -> CommandPool {
         var cCommandPool = VkCommandPool(bitPattern: 0)
         var opResult = VK_SUCCESS
@@ -59,9 +82,7 @@ public class Device {
         var opResult = VK_SUCCESS
         var infoArr = [info.toVulkan()]
 
-        var function = vkGetInstanceProcAddr(self.instance.pointer, "vkCreateSwapchainKHR")
-        var rightFunction = unsafeBitCast(function, to: PFN_vkCreateSwapchainKHR.self)
-        opResult = rightFunction(self.pointer, &infoArr, nil, &swapchain)
+        opResult = vkCreateSwapchainKHR(self.pointer, &infoArr, nil, &swapchain)
         
         if opResult == VK_SUCCESS {
             return Swapchain(device: self, pointer: swapchain!)
@@ -71,6 +92,7 @@ public class Device {
     }
 
     deinit {
+        print("Destroying device")
         vkDestroyDevice(pointer, nil)
     }
 }

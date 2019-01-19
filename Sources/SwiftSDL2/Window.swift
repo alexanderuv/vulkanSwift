@@ -3,11 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.  
 //  
 
-import Foundation
 import CSDL2
-import Darwin
 import SwiftVulkan
-import MetalKit
 
 let SDL_WINDOWPOS_UNDEFINED_MASK: Int32 = 0x1FFF0000;
 let SDL_WINDOWPOS_UNDEFINED = SDL_WINDOWPOS_UNDEFINED_MASK;
@@ -81,6 +78,14 @@ public class Window {
             let commandBuffer = try allocateCommandBuffer(device: device, commandPool: commandPool)
             print("Created Command Buffer: \(commandBuffer.pointer)\n")
 
+            print("8== GET SWAPCHAIN IMAGES")
+            let images = try swapchain.getSwapchainImages()
+            print("Get swapchain images: \(images)\n")
+
+            print("9== GET QUEUE")
+            let queue = device.createQueue(presentFamilyIndex: 0)
+            print("Present queue: \(queue.pointer)\n")
+
             runMessageLoop()
             print("Done")
         } catch {
@@ -92,6 +97,9 @@ public class Window {
 
         let capabilities = try gpu.getSurfaceCapabilities(surface: surface)
         let surfaceFormat = try selectFormat(for: gpu, surface: surface)
+
+        let presentModes = try gpu.getSurfacePresentModes(surface: surface)
+        print("Present modes available for swapchain: \(presentModes)")
 
         let preTransform = capabilities.supportedTransforms.contains(.identity) ?
             .identity : capabilities.currentTransform
@@ -107,19 +115,14 @@ public class Window {
                 break
             }
         }
-
-        var numberOfImages = capabilities.minImageCount + 1
-        if capabilities.maxImageCount > 0 {
-            numberOfImages = max(numberOfImages, capabilities.maxImageCount)
-        }
         
         let info = SwapchainCreateInfo(
             flags: .none,
             surface: surface,
-            minImageCount: numberOfImages,
+            minImageCount: capabilities.maxImageCount,
             imageFormat: surfaceFormat.format,
             imageColorSpace: surfaceFormat.colorSpace,
-            imageExtent: Extent2D(width: 100, height: 100),
+            imageExtent: capabilities.maxImageExtent,
             imageArrayLayers: 1,
             imageUsage: .colorAttachment,
             imageSharingMode: .exclusive,
@@ -130,6 +133,8 @@ public class Window {
             clipped: true,
             oldSwapchain: nil
         )
+
+        print("Swapchain parameters: \(info)")
 
         return try device.createSwapchain(createInfo: info)
     }
@@ -148,13 +153,13 @@ public class Window {
         let formats = try gpu.getSurfaceFormats(for: surface)
     
         for format in formats {
-            if format.format == .VK_FORMAT_B8G8R8A8_SRGB {
+            if format.format == .R8G8B8A8_UNORM {
                 return format
             }
         }
 
         for format in formats {
-            if format.format == .VK_FORMAT_R8G8B8A8_UNORM {
+            if format.format == .B8G8R8A8_SRGB {
                 return format
             }
         }
@@ -182,11 +187,9 @@ public class Window {
     }
 
     func createVulkanInstance(_ extensions: [String]) throws -> Instance? {
-        let layerProps = try enumerateInstanceLayerProperties()
         let extensionProps = try enumerateInstanceExtensionProperties(nil) 
         let actualExtensions = extensionProps.map { $0.extensionName } 
-        //let actualExtensions = extensions + ["VK_EXT_debug_report"]
-
+        
         print("Enabling extensions:")
         for ext in actualExtensions {
             print("\(ext)")
@@ -195,9 +198,7 @@ public class Window {
 
         let createInfo = InstanceCreateInfo(
             applicationInfo: nil,
-            enabledLayerNames: [
-                "VK_LAYER_LUNARG_standard_validation"
-                ],
+            enabledLayerNames: [ "VK_LAYER_LUNARG_standard_validation" ],
             enabledExtensionNames: actualExtensions 
         )
 
@@ -249,7 +250,7 @@ public class Window {
                     )
                 ],
                 enabledLayers: [],
-                enabledExtensions: [ "VK_KHR_swapchain", "VK_MVK_moltenvk" ],
+                enabledExtensions: [ "VK_KHR_swapchain" ],
                 enabledFeatures: nil
             )
 

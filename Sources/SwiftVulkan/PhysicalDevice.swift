@@ -172,41 +172,24 @@ public class PhysicalDevice {
     }
 
     public func getSurfacePresentModes(surface surf: Surface) throws -> [PresentMode] {
-
-        var result: [PresentMode] = []
-        var opResult = VK_SUCCESS
-        var count = UInt32(0)
-        withUnsafeMutablePointer(to: &count) { countPtr in
-            opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
-                self.pointer, surf.pointer, countPtr, nil)
-        }
+        var countArr = [UInt32](repeating: 0, count: 1)
         
-        if opResult != VK_SUCCESS {
+        var opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
+                self.pointer, surf.pointer, &countArr, nil)
+        
+        guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
 
-        var cPresentModes = UnsafeMutablePointer<VkPresentModeKHR>.allocate(capacity: Int(count))
-        defer {
-            cPresentModes.deallocate()
-        }
-        withUnsafeMutablePointer(to: &count) { countPtr in
-            opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
-                self.pointer, surf.pointer, countPtr, cPresentModes)
-        }
-
-        if opResult != VK_SUCCESS {
+        var cPresentModes = [VkPresentModeKHR](repeating: VkPresentModeKHR(rawValue: 0), count: Int(countArr[0]))
+        opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
+                self.pointer, surf.pointer, &countArr, &cPresentModes)
+        
+        guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
 
-        for i in 0..<count {
-            let presentMode = cPresentModes[Int(i)]
-            let newPresentMode = PresentMode(rawValue: presentMode.rawValue)!
-
-            print(newPresentMode)
-            result.append(newPresentMode)
-        }
-
-        return result
+        return cPresentModes.map { PresentMode(rawValue: $0.rawValue)! }
     }
 
     public func createDevice(createInfo info: DeviceCreateInfo) throws -> Device {

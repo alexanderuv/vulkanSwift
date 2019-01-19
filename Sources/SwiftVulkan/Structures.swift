@@ -86,6 +86,31 @@ public struct CommandPoolCreateInfo {
     }
 }
 
+public struct ComponentMapping {
+    public let r: ComponentSwizzle
+    public let g: ComponentSwizzle
+    public let b: ComponentSwizzle
+    public let a: ComponentSwizzle
+
+    public init(r: ComponentSwizzle,
+                g: ComponentSwizzle,
+                b: ComponentSwizzle,
+                a: ComponentSwizzle) {
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
+    }
+
+    var vulkan: VkComponentMapping {
+        return VkComponentMapping(r: self.r.vulkan, 
+                                g: self.g.vulkan, 
+                                b: self.b.vulkan,
+                                a: self.a.vulkan)
+    }
+
+}
+
 public struct DeviceCreateInfo {
     public let flags: Flags
     public let queueCreateInfos: [DeviceQueueCreateInfo]
@@ -115,42 +140,29 @@ public struct DeviceCreateInfo {
         public static let none = Flags(rawValue: 0)
     }
 
-    func vulkanExec(action: (VkDeviceCreateInfo) -> Void) {
+    func vulkanExec(action: (VkDeviceCreateInfo) -> ()) {
 
         let queueCreateInfos = self.queueCreateInfos.map { $0.toVulkan() }
 
-        if let vulkanFeatures = enabledFeatures?.toVulkan() {
-            withUnsafePointer(to: vulkanFeatures) {
+        withArrayOfCStrings(self.enabledLayers) { layers in
+            withArrayOfCStrings(self.enabledExtensions) { extensions in
+
+                var featureArr = [self.enabledFeatures?.toVulkan()]
                 let dc = VkDeviceCreateInfo(
-                    sType: VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-                    pNext: nil,
-                    flags: UInt32(flags.rawValue),
-                    queueCreateInfoCount: UInt32(self.queueCreateInfos.count),
-                    pQueueCreateInfos: queueCreateInfos,
-                    enabledLayerCount: UInt32(self.enabledLayers.count),
-                    ppEnabledLayerNames: self.enabledLayers.asCStringArray(),
-                    enabledExtensionCount: UInt32(self.enabledExtensions.count),
-                    ppEnabledExtensionNames: self.enabledExtensions.asCStringArray(),
-                    pEnabledFeatures: $0
+                        sType: VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                        pNext: nil,
+                        flags: UInt32(flags.rawValue),
+                        queueCreateInfoCount: UInt32(self.queueCreateInfos.count),
+                        pQueueCreateInfos: queueCreateInfos,
+                        enabledLayerCount: UInt32(self.enabledLayers.count),
+                        ppEnabledLayerNames: layers,
+                        enabledExtensionCount: UInt32(self.enabledExtensions.count),
+                        ppEnabledExtensionNames: extensions,
+                        pEnabledFeatures: UnsafePointer(&featureArr)
                 )
 
                 action(dc)
             }
-        } else {
-            let dc = VkDeviceCreateInfo(
-                sType: VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-                pNext: nil,
-                flags: UInt32(flags.rawValue),
-                queueCreateInfoCount: UInt32(self.queueCreateInfos.count),
-                pQueueCreateInfos: queueCreateInfos,
-                enabledLayerCount: UInt32(self.enabledLayers.count),
-                ppEnabledLayerNames: self.enabledLayers.asCStringArray(),
-                enabledExtensionCount: UInt32(self.enabledExtensions.count),
-                ppEnabledExtensionNames: self.enabledExtensions.asCStringArray(),
-                pEnabledFeatures: nil
-            )
-
-            action(dc)
         }
     }
 }
@@ -226,9 +238,182 @@ public struct Extent2D {
 }
 
 public struct Extent3D {
-    let width: UInt32
-    let height: UInt32
-    let depth: UInt32
+    public let width: UInt32
+    public let height: UInt32
+    public let depth: UInt32
+
+    var vulkanValue: VkExtent3D {
+        return VkExtent3D(width: self.width, height: self.height, depth: self.depth)
+    }
+}
+
+public struct ImageCreateInfo {
+    public let flags: Flags
+    public let imageType: ImageType
+    public let format: Format
+    public let extent: Extent3D
+    public let mipLevels: UInt32
+    public let arrayLayers: UInt32
+    public let samples: SampleCountFlags
+    public let tiling: ImageTiling
+    public let usage: ImageUsageFlags
+    public let sharingMode: SharingMode
+    public let queueFamilyIndices: [UInt32]
+    public let initialLayout: ImageLayout
+
+    public init(flags: Flags,
+                imageType: ImageType,
+                format: Format,
+                extent: Extent3D,
+                mipLevels: UInt32,
+                arrayLayers: UInt32,
+                samples: SampleCountFlags,
+                tiling: ImageTiling,
+                usage: ImageUsageFlags,
+                sharingMode: SharingMode,
+                queueFamilyIndices: [UInt32],
+                initialLayout: ImageLayout) {
+        self.flags = flags
+        self.imageType = imageType
+        self.format = format
+        self.extent = extent
+        self.mipLevels = mipLevels
+        self.arrayLayers = arrayLayers
+        self.samples = samples
+        self.tiling = tiling
+        self.usage = usage
+        self.sharingMode = sharingMode
+        self.queueFamilyIndices = queueFamilyIndices
+        self.initialLayout = initialLayout
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue    
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let sparseBinding = Flags(rawValue: 1 << 0)
+        public static let sparseResidency = Flags(rawValue: 1 << 1)
+        public static let sparseAliased = Flags(rawValue: 1 << 2)
+        public static let mutableFormat = Flags(rawValue: 1 << 3)
+        public static let cubeCompatible = Flags(rawValue: 1 << 4)
+        public static let alias = Flags(rawValue: 0x00000400)
+        public static let splitInstanceBindRegions = Flags(rawValue: 0x00000040)
+        public static let _2dArrayCompatible = Flags(rawValue: 0x00000020)
+        public static let blockTexelViewCompatible = Flags(rawValue: 0x00000080)
+        public static let extendedUsage = Flags(rawValue: 0x00000100)
+        public static let protected = Flags(rawValue: 0x00000800)
+        public static let disjoint = Flags(rawValue: 0x00000200)
+        public static let cornerSampled = Flags(rawValue: 0x00002000)
+        public static let sampleLocationsCompatibleDepth = Flags(rawValue: 0x00001000)
+        public static let subsampled = Flags(rawValue: 0x00004000)
+
+        var vulkan: VkImageCreateFlags {
+            return VkImageCreateFlags(rawValue)
+        }
+    }
+
+    var vulkan: VkImageCreateInfo {
+        return VkImageCreateInfo(
+            sType: VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, 
+            pNext: nil, 
+            flags: self.flags.vulkan,
+            imageType: self.imageType.vulkan,
+            format: self.format.vulkan,
+            extent: self.extent.vulkanValue,
+            mipLevels: self.mipLevels,
+            arrayLayers: self.arrayLayers,
+            samples: self.samples.vulkan,
+            tiling: self.tiling.vulkan,
+            usage: self.usage.vulkan.rawValue,
+            sharingMode: self.sharingMode.vulkan,
+            queueFamilyIndexCount: UInt32(self.queueFamilyIndices.count),
+            pQueueFamilyIndices: self.queueFamilyIndices,
+            initialLayout: self.initialLayout.vulkan)
+    }
+}
+
+public struct ImageViewCreateInfo {
+
+    public let flags: Flags
+    public let image: Image
+    public let viewType: ImageViewType
+    public let format: Format
+    public let components: ComponentMapping
+    public let subresourceRange: ImageSubresourceRange
+
+    public init(flags: Flags,
+                image: Image,
+                viewType: ImageViewType,
+                format: Format,
+                components: ComponentMapping,
+                subresourceRange: ImageSubresourceRange) {
+        self.flags = flags
+        self.image = image
+        self.viewType = viewType
+        self.format = format
+        self.components = components
+        self.subresourceRange = subresourceRange
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue    
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let fragmentDensityMapDynamic = Flags(rawValue: 1)
+
+        var vulkan: VkImageViewCreateFlags {
+            return VkImageViewCreateFlags(rawValue)
+        }
+    }
+
+    func toVulkan() -> VkImageViewCreateInfo {
+        return VkImageViewCreateInfo(
+            sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, 
+            pNext: nil, 
+            flags: self.flags.vulkan,
+            image: self.image.pointer,
+            viewType: self.viewType.vulkan,
+            format: self.format.vulkan,
+            components: self.components.vulkan,
+            subresourceRange: self.subresourceRange.vulkan)
+    }
+}
+
+public struct ImageSubresourceRange {
+    public let aspectMask: ImageAspectFlags
+    public let baseMipLevel: UInt32
+    public let levelCount: UInt32
+    public let baseArrayLayer: UInt32
+    public let layerCount: UInt32
+
+    public init(aspectMask: ImageAspectFlags,
+                baseMipLevel: UInt32,
+                levelCount: UInt32,
+                baseArrayLayer: UInt32,
+                layerCount: UInt32) {
+        self.aspectMask = aspectMask
+        self.baseMipLevel = baseMipLevel
+        self.levelCount = levelCount
+        self.baseArrayLayer = baseArrayLayer
+        self.layerCount = layerCount
+    }
+
+    var vulkan: VkImageSubresourceRange {
+        return VkImageSubresourceRange(
+            aspectMask: self.aspectMask.vulkan, 
+            baseMipLevel: self.baseMipLevel, 
+            levelCount: self.levelCount,
+            baseArrayLayer: self.baseArrayLayer,
+            layerCount: self.layerCount)
+    }
 }
 
 public struct InstanceCreateInfo {

@@ -24,6 +24,7 @@ public class CommandPool {
     }
 
     deinit {
+        print("Destroying command pool")
         vkDestroyCommandPool(device.pointer, pointer, nil)
     }
 }

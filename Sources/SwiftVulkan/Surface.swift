@@ -16,6 +16,7 @@ public class Surface {
     }
 
     deinit {
+        print("Destroying surface")
         vkDestroySurfaceKHR(instance.pointer, pointer, nil)
     }
 }

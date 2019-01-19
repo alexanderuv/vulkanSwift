@@ -16,12 +16,6 @@ extension VkExtent3D {
     }
 }
 
-extension Array where Element == String {
-    func asCStringArray() -> UnsafePointer<UnsafePointer<Int8>?> {
-        return UnsafePointer(self.map { $0.asCString() })
-    }
-}
-
 extension String {
     public func asCString() -> UnsafePointer<Int8>? {
         let nsVal = self as NSString

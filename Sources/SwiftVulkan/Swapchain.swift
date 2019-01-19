@@ -14,7 +14,22 @@ public class Swapchain {
         self.device = device
     }
 
+    public func getSwapchainImages() throws -> [Image] {
+        var countArr: [UInt32] = [0]
+        var opResult = vkGetSwapchainImagesKHR(self.device.pointer, self.pointer, &countArr, nil)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        var images = [VkImage?](repeating: VkImage(bitPattern: 0), count: Int(countArr[0]))
+        opResult = vkGetSwapchainImagesKHR(self.device.pointer, self.pointer, &countArr, &images)
+
+        return images.map { Image(fromVulkan: $0!, device: self.device, swapchain: self) }
+    }
+
     deinit {
+        print("Destroying swapchain")
         vkDestroySwapchainKHR(device.pointer, self.pointer, nil)
     }
 }
