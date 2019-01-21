@@ -5,6 +5,8 @@
 
 import CVulkan
 
+public typealias DeviceSize = UInt64
+
 public struct ApplicationInfo {
     // not supported for now
     public let next: Any? = nil
@@ -24,6 +26,54 @@ public struct ApplicationInfo {
         self.engineName = engineName
         self.engineVersion = engineVersion.rawVersion
         self.apiVersion = apiVersion.rawVersion
+    }
+}
+
+public struct BufferCreateInfo {
+    public let flags: Flags
+    public var size: DeviceSize
+    public var usage: BufferUsageFlags
+    public var sharingMode: SharingMode
+    public var queueFamilyIndices: [UInt32]?
+
+    public init(flags: Flags,
+                size: DeviceSize,
+                usage: BufferUsageFlags,
+                sharingMode: SharingMode,
+                queueFamilyIndices: [UInt32]?) {
+        self.flags = flags
+        self.size = size
+        self.usage = usage
+        self.sharingMode = sharingMode
+        self.queueFamilyIndices = queueFamilyIndices
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue 
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let sparseBinding = Flags(rawValue: 0x00000001)
+        public static let sparseResidency = Flags(rawValue: 0x00000002)
+        public static let sparseAliased = Flags(rawValue: 0x00000004)
+        public static let protected = Flags(rawValue: 0x00000008)
+        public static let deviceAddressCaptureReplay = Flags(rawValue: 0x00000010)
+    }
+
+    var vulkan: VkBufferCreateInfo {
+        return VkBufferCreateInfo(
+            sType: VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+            pNext: nil,
+            flags: self.flags.rawValue,
+            size: self.size,
+            usage: self.usage.vulkan,
+            sharingMode: self.sharingMode.vulkan,
+            queueFamilyIndexCount: UInt32(self.queueFamilyIndices?.count ?? 0),
+            pQueueFamilyIndices: self.queueFamilyIndices
+        )
     }
 }
 
@@ -109,6 +159,7 @@ public struct ComponentMapping {
                                 a: self.a.vulkan)
     }
 
+    public static let identity = ComponentMapping.init(r: .r, g: .g, b: .b, a: .a)
 }
 
 public struct DeviceCreateInfo {
@@ -214,8 +265,8 @@ public struct ExtensionProperties {
 }
 
 public struct Extent2D {
-    public let width: UInt32
-    public let height: UInt32
+    public var width: UInt32
+    public var height: UInt32
 
     public init() {
         self.width = 0
@@ -235,15 +286,31 @@ public struct Extent2D {
     var vulkan: VkExtent2D {
         return VkExtent2D(width: self.width, height: self.height)
     }
+
+    public func to3D(withDepth depth: UInt32) -> Extent3D {
+        return Extent3D(width: self.width, height: self.height, depth: depth)
+    }
 }
 
 public struct Extent3D {
-    public let width: UInt32
-    public let height: UInt32
-    public let depth: UInt32
+    public var width: UInt32
+    public var height: UInt32
+    public var depth: UInt32
 
     var vulkanValue: VkExtent3D {
         return VkExtent3D(width: self.width, height: self.height, depth: self.depth)
+    }
+}
+
+public struct FormatProperties {
+    public let linearTilingFeatures: FormatFeatureFlags
+    public let optimalTilingFeatures: FormatFeatureFlags
+    public let bufferFeatures: FormatFeatureFlags
+
+    init(_ properties: VkFormatProperties) {
+        self.linearTilingFeatures = FormatFeatureFlags(rawValue: properties.linearTilingFeatures)
+        self.optimalTilingFeatures = FormatFeatureFlags(rawValue: properties.optimalTilingFeatures)
+        self.bufferFeatures = FormatFeatureFlags(rawValue: properties.bufferFeatures)
     }
 }
 
@@ -258,7 +325,7 @@ public struct ImageCreateInfo {
     public let tiling: ImageTiling
     public let usage: ImageUsageFlags
     public let sharingMode: SharingMode
-    public let queueFamilyIndices: [UInt32]
+    public let queueFamilyIndices: [UInt32]?
     public let initialLayout: ImageLayout
 
     public init(flags: Flags,
@@ -271,7 +338,7 @@ public struct ImageCreateInfo {
                 tiling: ImageTiling,
                 usage: ImageUsageFlags,
                 sharingMode: SharingMode,
-                queueFamilyIndices: [UInt32],
+                queueFamilyIndices: [UInt32]?,
                 initialLayout: ImageLayout) {
         self.flags = flags
         self.imageType = imageType
@@ -330,7 +397,7 @@ public struct ImageCreateInfo {
             tiling: self.tiling.vulkan,
             usage: self.usage.vulkan.rawValue,
             sharingMode: self.sharingMode.vulkan,
-            queueFamilyIndexCount: UInt32(self.queueFamilyIndices.count),
+            queueFamilyIndexCount: self.queueFamilyIndices == nil ? 0 : UInt32(self.queueFamilyIndices!.count),
             pQueueFamilyIndices: self.queueFamilyIndices,
             initialLayout: self.initialLayout.vulkan)
     }
@@ -374,7 +441,7 @@ public struct ImageViewCreateInfo {
         }
     }
 
-    func toVulkan() -> VkImageViewCreateInfo {
+    var vulkan: VkImageViewCreateInfo {
         return VkImageViewCreateInfo(
             sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, 
             pNext: nil, 
@@ -446,6 +513,58 @@ public struct LayerProperties {
         self.specVersion = specVersion.rawVersion
         self.implementationVersion = implementationVersion.rawVersion
         self.description = description
+    }
+}
+
+public struct MemoryAllocateInfo {
+    public var allocationSize: DeviceSize
+    public var memoryTypeIndex: UInt32
+
+    public init(allocationSize: DeviceSize,
+                memoryTypeIndex: UInt32) {
+        self.allocationSize = allocationSize
+        self.memoryTypeIndex = memoryTypeIndex
+    }
+
+    var vulkan: VkMemoryAllocateInfo {
+        return VkMemoryAllocateInfo(
+            sType: VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, 
+            pNext: nil,
+            allocationSize: self.allocationSize,
+            memoryTypeIndex: self.memoryTypeIndex
+        )
+    }
+}
+
+public struct MemoryRequirements {
+    public let size: DeviceSize
+    public let alignment: DeviceSize
+    public let memoryTypeBits: UInt32
+
+    init(_ memReqs: VkMemoryRequirements) {
+        self.size = memReqs.size
+        self.alignment = memReqs.alignment
+        self.memoryTypeBits = memReqs.memoryTypeBits
+    }
+}
+
+public struct MemoryHeap {
+    public let size: DeviceSize
+    public let flags: MemoryHeapFlags
+
+    init(_ memHeap: VkMemoryHeap) {
+        self.size = memHeap.size
+        self.flags = MemoryHeapFlags(rawValue: memHeap.flags)
+    }
+}
+
+public struct MemoryType {
+    public let propertyFlags: MemoryPropertyFlags
+    public let heapIndex: UInt32
+
+    init(_ memType: VkMemoryType) {
+        self.propertyFlags = MemoryPropertyFlags(rawValue: memType.propertyFlags)
+        self.heapIndex = memType.heapIndex
     }
 }
 
@@ -622,6 +741,16 @@ public struct PhysicalDeviceFeatures {
             variableMultisampleRate: self.variableMultisampleRate.toUInt32(),
             inheritedQueries: self.inheritedQueries.toUInt32()
         )
+    }
+}
+
+public struct PhysicalDeviceMemoryProperties {
+    public let memoryTypes: [MemoryType]
+    public let memoryHeaps: [MemoryHeap]
+
+    init(_ props: VkPhysicalDeviceMemoryProperties) {
+        self.memoryTypes = convertTupleToArray(props.memoryTypes).map { MemoryType($0) }
+        self.memoryHeaps = convertTupleToArray(props.memoryHeaps).map { MemoryHeap($0) }
     }
 }
 

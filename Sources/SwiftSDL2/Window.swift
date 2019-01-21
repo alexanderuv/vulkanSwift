@@ -5,6 +5,7 @@
 
 import CSDL2
 import SwiftVulkan
+import SGLMath
 
 let SDL_WINDOWPOS_UNDEFINED_MASK: Int32 = 0x1FFF0000;
 let SDL_WINDOWPOS_UNDEFINED = SDL_WINDOWPOS_UNDEFINED_MASK;
@@ -67,7 +68,7 @@ public class Window {
             print("Created Device: \(device.pointer)\n")
 
             print("5== CREATE SWAPCHAIN")
-            let swapchain = try createSwapchain(gpu: gpu, surface: surface, device: device)
+            let (info, swapchain) = try createSwapchain(gpu: gpu, surface: surface, device: device)
             print("Created Swapchain: \(swapchain.pointer)\n")
             
             print("6== CREATE COMMAND POOL")
@@ -86,6 +87,14 @@ public class Window {
             let queue = device.createQueue(presentFamilyIndex: 0)
             print("Present queue: \(queue.pointer)\n")
 
+            print("10== CREATE DEPTH BUFFER")
+            let depthBuffer = try createDepthBuffer(device: device, gpu: gpu, extent: info.imageExtent)
+            print("Depth buffer: \(depthBuffer.pointer)\n")
+
+            print("11== CREATE DEPTH BUFFER")
+            let uniformBuffer = try getUniformBuffer(device: device)
+            print("Uniform buffer: \(uniformBuffer.pointer)\n")
+
             runMessageLoop()
             print("Done")
         } catch {
@@ -93,7 +102,125 @@ public class Window {
         }
     }
 
-    func createSwapchain(gpu: PhysicalDevice, surface: Surface, device: Device) throws -> Swapchain {
+    func getUniformBuffer(device: Device) throws -> Buffer {
+
+        let projection = SGLMath.perspective(radians(45), Float(1.0), Float(0.1), Float(100))
+        let view = SGLMath.lookAt(
+            vec3(-5.0, 3, -10),
+            vec3(0, 0, 0),
+            vec3(0, -1, 0))
+        let model = mat4(1.0)
+
+        let clip = mat4(
+            1.0, 0.0, 0.0, 0.0,
+            0.0,-1.0, 0.0, 0.0,
+            0.0, 0.0, 0.5, 0.0,
+            0.0, 0.0, 0.5, 1.0
+        )
+
+        let mvp = clip * projection * view * model
+
+        let createInfo = BufferCreateInfo(
+            flags: .none,
+            size: UInt64(MemoryLayout.size(ofValue: clip)),
+            usage: .uniformBuffer,
+            sharingMode: .exclusive,
+            queueFamilyIndices: nil
+        )
+
+        let buffer = try Buffer.create(device: device, createInfo: createInfo)
+
+        return buffer
+    }
+
+    func createDepthBuffer(device: Device, gpu: PhysicalDevice, extent: Extent2D) throws -> ImageView {
+        let threeDeeExtent = extent.to3D(withDepth: 1)
+
+        let depthFormat = Format.D16_UNORM
+        let formatProps = gpu.getFormatProperties(for: depthFormat)
+        var tiling = ImageTiling.optimal
+
+        if formatProps.linearTilingFeatures.contains(.depthStencilAttachment) {
+            tiling = .linear
+        } else if formatProps.optimalTilingFeatures.contains(.depthStencilAttachment) {
+            tiling = .optimal
+        } else {
+            /* Try other depth formats? */
+            print("VK_FORMAT_D16_UNORM Unsupported.")
+            exit(-1)
+        }
+
+        let createInfo = ImageCreateInfo(
+            flags: .none, 
+            imageType: .type2D,
+            format: .D16_UNORM,
+            extent: threeDeeExtent,
+            mipLevels: 1,
+            arrayLayers: 1,
+            samples: ._1bit,
+            tiling: tiling, 
+            usage: .depthStencilAttachment,
+            sharingMode: .exclusive,
+            queueFamilyIndices: nil,
+            initialLayout: .undefined
+        )
+
+        let image = try Image.create(withInfo: createInfo, device: device)
+        let memReqs = image.memoryRequirements
+
+        let memAlloc = MemoryAllocateInfo(
+            allocationSize: memReqs.size,
+            memoryTypeIndex: 0
+        )
+
+        let index = try memoryTypeFromProperties(gpu: gpu, 
+                                typeFlags: memReqs.memoryTypeBits,
+                                requirementsMask: .deviceLocal)
+
+        guard index >= 0 else {
+            print("Failed to find a compatibly memory type")
+            exit(-1)
+        }
+
+        let mem = try device.allocateMemory(allocInfo: memAlloc)
+        try image.bindMemory(memory: mem)
+
+        let viewCreateInfo = ImageViewCreateInfo(
+            flags: .none,
+            image: image, 
+            viewType: .type2D,
+            format: depthFormat,
+            components: .identity,
+            subresourceRange: ImageSubresourceRange(
+                aspectMask: .depth,
+                baseMipLevel: 0,
+                levelCount: 1,
+                baseArrayLayer: 0,
+                layerCount: 1
+            )
+        )
+
+        return try ImageView.create(device: device, createInfo: viewCreateInfo)
+    }
+
+    func memoryTypeFromProperties(gpu: PhysicalDevice, 
+                                typeFlags: UInt32, 
+                                requirementsMask: MemoryPropertyFlags) throws -> Int {
+        let memProps = try gpu.getMemoryProperties()
+        var index = UInt32(0)
+        for memType in memProps.memoryTypes {
+            if typeFlags & 1 == 1 {
+                if memType.propertyFlags.rawValue == requirementsMask.rawValue {
+                    return Int(index)
+                }
+            }
+            index = index + 1
+        }
+
+        return -1
+    }
+
+    func createSwapchain(gpu: PhysicalDevice, surface: Surface, device: Device) throws -> (SwapchainCreateInfo, Swapchain) {
 
         let capabilities = try gpu.getSurfaceCapabilities(surface: surface)
         let surfaceFormat = try selectFormat(for: gpu, surface: surface)
@@ -136,7 +263,7 @@ public class Window {
 
         print("Swapchain parameters: \(info)")
 
-        return try device.createSwapchain(createInfo: info)
+        return (info, try device.createSwapchain(createInfo: info))
     }
 
     func allocateCommandBuffer(device: Device, commandPool: CommandPool) throws -> CommandBuffer {

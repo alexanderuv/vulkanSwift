@@ -17,7 +17,12 @@ func convertTupleToByteArray<T>(_ tuple: T) -> [UInt8] {
     return tupleMirror.children.map({ $0.value as! UInt8 })
 }
 
-public func withArrayOfCStrings<R>(
+func convertTupleToArray<T, K>(_ tuple: T) -> [K] {
+    let tupleMirror = Mirror(reflecting: tuple)
+    return tupleMirror.children.map({ $0.value as! K })
+}
+
+func withArrayOfCStrings<R>(
         _ args: [String], _ body: ([UnsafePointer<CChar>?]) -> R
 ) -> R {
     let argsCounts = Array(args.map { $0.utf8.count + 1 })

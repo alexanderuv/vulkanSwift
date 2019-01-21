@@ -30,7 +30,7 @@ public class PhysicalDevice {
             deviceID: Int(prop.deviceID),
             deviceType: PhysicalDeviceType(rawValue: prop.deviceType.rawValue)!,
             deviceName: convertTupleToString(prop.deviceName),
-            pipelineCacheUUID: convertTupleToByteArray(prop.pipelineCacheUUID)
+            pipelineCacheUUID: convertTupleToArray(prop.pipelineCacheUUID)
         )
     }()
 
@@ -77,6 +77,13 @@ public class PhysicalDevice {
         )
     }()
 
+    public func getFormatProperties(for format: Format) -> FormatProperties {
+        var props = [ VkFormatProperties() ]
+        vkGetPhysicalDeviceFormatProperties(self.pointer, format.vulkan, &props)
+
+        return FormatProperties(props[0]) 
+    }
+
     public func getExtensionProperties() throws -> [ExtensionProperties] {
         var countArr: [UInt32] = [ 0 ]
         var opResult = vkEnumerateDeviceExtensionProperties(self.pointer, nil, &countArr, nil)
@@ -93,6 +100,14 @@ public class PhysicalDevice {
         }
 
         return vkProperties.map { ExtensionProperties(props: $0) }
+    }
+
+    public func getMemoryProperties() throws -> PhysicalDeviceMemoryProperties {
+
+        var properties = [VkPhysicalDeviceMemoryProperties()]
+        vkGetPhysicalDeviceMemoryProperties(self.pointer, &properties)
+
+        return PhysicalDeviceMemoryProperties(properties[0])
     }
 
     public func getSurfaceFormats(for surface: Surface) throws -> [SurfaceFormat] {

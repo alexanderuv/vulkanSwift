@@ -16,22 +16,6 @@ public class Device {
         self.pointer = device
     }
 
-    public func createImageView(createInfo info: ImageViewCreateInfo) throws -> ImageView {
-
-        var imageViewArr = [VkImageView?](repeating: VkImageView(bitPattern: 0), count: 1)
-
-        var opResult = VK_SUCCESS
-        withUnsafePointer(to: info.toVulkan()) {
-            opResult = vkCreateImageView(self.pointer, $0, nil, &imageViewArr)
-        }
-
-        guard opResult == VK_SUCCESS else {
-            throw opResult.toResult()
-        }
-
-        return ImageView(pointer: imageViewArr[0]!, device: self)
-    }
-
     public func createQueue(presentFamilyIndex: UInt32) -> Queue {
         var queueArr = [VkQueue?](repeating: VkQueue(bitPattern: 0), count: 1)
         vkGetDeviceQueue(self.pointer, UInt32(presentFamilyIndex), 0, &queueArr)
@@ -55,6 +39,20 @@ public class Device {
                 device: self,
                 pointer: cCommandPool!
             )
+    }
+
+    public func allocateMemory(allocInfo allocateInfo: MemoryAllocateInfo) throws -> DeviceMemory {
+
+        var deviceMemory = VkDeviceMemory(bitPattern: 0)
+        let opResult = withUnsafePointer(to: allocateInfo.vulkan) {
+            return vkAllocateMemory(self.pointer, $0, nil, &deviceMemory)
+        }
+        
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        return DeviceMemory(deviceMemory!, device: self)
     }
 
     public func allocateCommandBuffer(createInfo info: CommandBufferAllocateInfo) throws -> CommandBuffer {

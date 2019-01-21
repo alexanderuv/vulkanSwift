@@ -8,6 +8,34 @@ import CVulkan
 
 // FLAGS ========
 
+public struct BufferUsageFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = BufferUsageFlags(rawValue: 0)
+    public static let transferSrc = BufferUsageFlags(rawValue: 0x00000001)
+    public static let transferDst = BufferUsageFlags(rawValue: 0x00000002)
+    public static let uniformTexelBuffer = BufferUsageFlags(rawValue: 0x00000004)
+    public static let storageTexelBuffer = BufferUsageFlags(rawValue: 0x00000008)
+    public static let uniformBuffer = BufferUsageFlags(rawValue: 0x00000010)
+    public static let storageBuffer = BufferUsageFlags(rawValue: 0x00000020)
+    public static let indexBuffer = BufferUsageFlags(rawValue: 0x00000040)
+    public static let vertexBuffer = BufferUsageFlags(rawValue: 0x00000080)
+    public static let indirectBuffer = BufferUsageFlags(rawValue: 0x00000100)
+    public static let transformFeedbackBuffer = BufferUsageFlags(rawValue: 0x00000800)
+    public static let transformFeedbackCounterBuffer = BufferUsageFlags(rawValue: 0x00001000)
+    public static let conditionalRendering = BufferUsageFlags(rawValue: 0x00000200)
+    public static let rayTracing = BufferUsageFlags(rawValue: 0x00000400)
+    public static let shaderDeviceAddress = BufferUsageFlags(rawValue: 0x00020000)
+    
+    var vulkan: VkBufferUsageFlags {
+        return VkBufferUsageFlags(self.rawValue)
+    }
+}
+
 public struct CompositeAlphaFlags: OptionSet {
     public let rawValue: UInt32
 
@@ -72,6 +100,81 @@ public struct ImageUsageFlags: OptionSet {
     }
 }
 
+public struct FormatFeatureFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = FormatFeatureFlags(rawValue: 0)
+    public static let sampledImage = FormatFeatureFlags(rawValue: 0x00000001)
+    public static let storageImage = FormatFeatureFlags(rawValue: 0x00000002)
+    public static let storageImageAtomic = FormatFeatureFlags(rawValue: 0x00000004)
+    public static let unifomTexelBuffer = FormatFeatureFlags(rawValue: 0x00000008)
+    public static let storageTexelBuffer = FormatFeatureFlags(rawValue: 0x00000010)
+    public static let storageTexelBufferAtomic = FormatFeatureFlags(rawValue: 0x00000020)
+    public static let vertexBuffer = FormatFeatureFlags(rawValue: 0x00000040)
+    public static let colorAttachment = FormatFeatureFlags(rawValue: 0x00000080)
+    public static let colorAttachmentBlend = FormatFeatureFlags(rawValue: 0x00000100)
+    public static let depthStencilAttachment = FormatFeatureFlags(rawValue: 0x00000200)
+    public static let blitSrc = FormatFeatureFlags(rawValue: 0x00000400)
+    public static let blitDst = FormatFeatureFlags(rawValue: 0x00000800)
+    public static let sampledImageFilterLinear = FormatFeatureFlags(rawValue: 0x00001000)
+    public static let transferSrc = FormatFeatureFlags(rawValue: 0x00004000)
+    public static let transferDst = FormatFeatureFlags(rawValue: 0x00008000)
+    public static let midpointChromaSamples = FormatFeatureFlags(rawValue: 0x00020000)
+    public static let sampledImageYcbcrConversionLinearFilter = FormatFeatureFlags(rawValue: 0x00040000)
+    public static let sampledImageYcbcrConversionSeparateReconstructionFilter = FormatFeatureFlags(rawValue: 0x00080000)
+    public static let sampledImageYcbcrConversionChromaReconstructionExplicit = FormatFeatureFlags(rawValue: 0x00100000)
+    public static let sampledImageYcbcrConversionChromaReconstructionExplicitForceable = FormatFeatureFlags(rawValue: 0x00200000)
+    public static let disjoint = FormatFeatureFlags(rawValue: 0x00400000)
+    public static let cositedChromaSamples = FormatFeatureFlags(rawValue: 0x00800000)
+    public static let sampledImageFilterCubic = FormatFeatureFlags(rawValue: 0x00002000)
+    public static let sampledImageFilterMinmax = FormatFeatureFlags(rawValue: 0x00010000)
+    public static let fragmentDensityMap = FormatFeatureFlags(rawValue: 0x01000000)
+
+    var vulkan: VkFormatFeatureFlags {
+        return VkFormatFeatureFlags(self.rawValue)
+    }
+}
+
+public struct MemoryHeapFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = MemoryHeapFlags(rawValue: 0)
+    public static let deviceLocal = MemoryHeapFlags(rawValue: 0x00000001)
+    public static let multiInstance = MemoryHeapFlags(rawValue: 0x00000002)
+    
+    var vulkan: VkMemoryHeapFlags {
+        return VkMemoryHeapFlags(self.rawValue)
+    }
+}
+
+public struct MemoryPropertyFlags: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue 
+    }
+
+    public static let none = MemoryPropertyFlags(rawValue: 0)
+    public static let deviceLocal = MemoryPropertyFlags(rawValue: 0x00000001)
+    public static let hostVisible = MemoryPropertyFlags(rawValue: 0x00000002)
+    public static let hostCoherent = MemoryPropertyFlags(rawValue: 0x00000004)
+    public static let hostCached = MemoryPropertyFlags(rawValue: 0x00000008)
+    public static let lazilyAllocated = MemoryPropertyFlags(rawValue: 0x00000010)
+    public static let protected = MemoryPropertyFlags(rawValue: 0x00000020)
+
+    var vulkan: VkMemoryPropertyFlags {
+        return VkMemoryPropertyFlags(self.rawValue)
+    }
+}
+
 public struct SampleCountFlags: OptionSet {
     public let rawValue: UInt32
 
@@ -79,14 +182,14 @@ public struct SampleCountFlags: OptionSet {
         self.rawValue = rawValue 
     }
 
-    public static let none = ImageUsageFlags(rawValue: 0)
-    public static let _1bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _2bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _4bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _8bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _16bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _32bit = ImageUsageFlags(rawValue: 0x00000001)
-    public static let _64bit = ImageUsageFlags(rawValue: 0x00000001)
+    public static let none = SampleCountFlags(rawValue: 0)
+    public static let _1bit = SampleCountFlags(rawValue: 0x00000001)
+    public static let _2bit = SampleCountFlags(rawValue: 0x00000002)
+    public static let _4bit = SampleCountFlags(rawValue: 0x00000004)
+    public static let _8bit = SampleCountFlags(rawValue: 0x00000008)
+    public static let _16bit = SampleCountFlags(rawValue: 0x00000010)
+    public static let _32bit = SampleCountFlags(rawValue: 0x00000020)
+    public static let _64bit = SampleCountFlags(rawValue: 0x00000040)
 
     var vulkan: VkSampleCountFlagBits {
         return VkSampleCountFlagBits(self.rawValue)

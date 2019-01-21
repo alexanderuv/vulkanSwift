@@ -29,9 +29,24 @@ public class Image {
         return Image(fromVulkan: image!, device: device, swapchain: nil)
     }
 
+    public func bindMemory(memory: DeviceMemory) throws {
+        let opResult = vkBindImageMemory(self.device.pointer, self.pointer, memory.pointer, 0)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+    }
+
+    public lazy var memoryRequirements: MemoryRequirements = {
+        var memReqs = [VkMemoryRequirements()]
+        vkGetImageMemoryRequirements(self.device.pointer, self.pointer, &memReqs)
+
+        return MemoryRequirements(memReqs[0])
+    }()
+
     deinit {
+        // if this image belongs to a swapchain, it will be destroyed along with it
         if swapchain == nil {
-            print("Destroying image")
             vkDestroyImage(self.device.pointer, self.pointer, nil)
         }
     }

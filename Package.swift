@@ -37,7 +37,8 @@ let package = Package(
                     name: "SwiftSDL2",
                     dependencies: [
                         "CSDL2",
-                        "SwiftVulkan"
+                        "SwiftVulkan",
+                        "SGLMath"
                     ]),
             .target(
                     name: "SwiftVulkan",
