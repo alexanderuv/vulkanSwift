@@ -9,9 +9,39 @@ public class Swapchain {
     public let pointer: VkSwapchainKHR
     public let device: Device
 
-    public init(device: Device, pointer: VkSwapchainKHR) {
+    private let surface: Surface
+
+    public init(device: Device, pointer: VkSwapchainKHR, surface: Surface) {
         self.pointer = pointer
         self.device = device
+        self.surface = surface
+    }
+
+    public class func create(inDevice: Device, createInfo: SwapchainCreateInfo) throws -> Swapchain {
+        var swapchain = VkSwapchainKHR(bitPattern: 0)
+
+        var opResult = VK_SUCCESS
+        var infoArr = [createInfo.toVulkan()]
+
+        opResult = vkCreateSwapchainKHR(inDevice.pointer, &infoArr, nil, &swapchain)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        return Swapchain(device: inDevice, pointer: swapchain!, surface: createInfo.surface)
+    }
+
+    public func acquireNextImage(timeout: UInt64, semaphore: Semaphore?,
+                                 fence: Fence?, imageIndex: UInt32) throws {
+        var localImageIndex = imageIndex
+        let opResult = vkAcquireNextImageKHR(
+                self.device.pointer, self.pointer, timeout,
+                semaphore?.vulkanValue, fence?.vulkanValue, &localImageIndex)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
     }
 
     public func getSwapchainImages() throws -> [Image] {

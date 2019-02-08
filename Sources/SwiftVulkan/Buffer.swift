@@ -5,6 +5,8 @@ public class Buffer {
     public let pointer: VkBuffer
     public let device: Device
 
+    public var boundMemory: DeviceMemory? = nil
+
     init(pointer: VkBuffer,
         device: Device) {
         self.pointer = pointer
@@ -30,6 +32,16 @@ public class Buffer {
         }
 
         return Buffer(pointer: buffer!, device: device)
+    }
+
+    public func bindMemory(memory: DeviceMemory, offset: DeviceSize = 0) throws {
+        let opResult = vkBindBufferMemory(self.device.pointer, self.pointer, memory.pointer, offset)
+
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        self.boundMemory = memory
     }
 
     deinit {

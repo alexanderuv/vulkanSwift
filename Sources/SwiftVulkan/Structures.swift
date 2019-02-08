@@ -16,16 +16,76 @@ public struct ApplicationInfo {
     public let engineVersion: UInt32
     public let apiVersion: UInt32
 
-    public init(applicationName: String, 
-        applicationVersion: Version, 
-        engineName: String,
-        engineVersion: Version,
-        apiVersion: Version) {
+    public init(applicationName: String,
+                applicationVersion: Version,
+                engineName: String,
+                engineVersion: Version,
+                apiVersion: Version) {
         self.applicationName = applicationName
         self.applicationVersion = applicationVersion.rawVersion
         self.engineName = engineName
         self.engineVersion = engineVersion.rawVersion
         self.apiVersion = apiVersion.rawVersion
+    }
+}
+
+public struct AttachmentDescription {
+    public var flags: AttachmentDescriptionFlags
+    public var format: Format
+    public var samples: SampleCountFlags
+    public var loadOp: AttachmentLoadOp
+    public var storeOp: AttachmentStoreOp
+    public var stencilLoadOp: AttachmentLoadOp
+    public var stencilStoreOp: AttachmentStoreOp
+    public var initialLayout: ImageLayout
+    public var finalLayout: ImageLayout
+
+    public init(flags: AttachmentDescriptionFlags,
+                format: Format,
+                samples: SampleCountFlags,
+                loadOp: AttachmentLoadOp,
+                storeOp: AttachmentStoreOp,
+                stencilLoadOp: AttachmentLoadOp,
+                stencilStoreOp: AttachmentStoreOp,
+                initialLayout: ImageLayout,
+                finalLayout: ImageLayout) {
+        self.flags = flags
+        self.format = format
+        self.samples = samples
+        self.loadOp = loadOp
+        self.storeOp = storeOp
+        self.stencilLoadOp = stencilLoadOp
+        self.stencilStoreOp = stencilStoreOp
+        self.initialLayout = initialLayout
+        self.finalLayout = finalLayout
+    }
+
+    var vulkanValue: VkAttachmentDescription {
+        return VkAttachmentDescription(
+                flags: self.flags.vulkanValue,
+                format: self.format.vulkanValue,
+                samples: self.samples.vulkanValue,
+                loadOp: self.loadOp.vulkanValue,
+                storeOp: self.storeOp.vulkanValue,
+                stencilLoadOp: self.stencilLoadOp.vulkanValue,
+                stencilStoreOp: self.stencilStoreOp.vulkanValue,
+                initialLayout: self.initialLayout.vulkanValue,
+                finalLayout: self.finalLayout.vulkanValue
+        )
+    }
+}
+
+public struct AttachmentReference {
+    public let attachment: UInt32
+    public let layout: ImageLayout
+
+    public init(attachment: UInt32, layout: ImageLayout) {
+        self.attachment = attachment
+        self.layout = layout
+    }
+
+    var vulkanValue: VkAttachmentReference {
+        return VkAttachmentReference(attachment: self.attachment, layout: self.layout.vulkanValue)
     }
 }
 
@@ -52,7 +112,7 @@ public struct BufferCreateInfo {
         public let rawValue: UInt32
 
         public init(rawValue: UInt32) {
-            self.rawValue = rawValue 
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -65,14 +125,14 @@ public struct BufferCreateInfo {
 
     var vulkan: VkBufferCreateInfo {
         return VkBufferCreateInfo(
-            sType: VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-            pNext: nil,
-            flags: self.flags.rawValue,
-            size: self.size,
-            usage: self.usage.vulkan,
-            sharingMode: self.sharingMode.vulkan,
-            queueFamilyIndexCount: UInt32(self.queueFamilyIndices?.count ?? 0),
-            pQueueFamilyIndices: self.queueFamilyIndices
+                sType: VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.rawValue,
+                size: self.size,
+                usage: self.usage.vulkan,
+                sharingMode: self.sharingMode.vulkanValue,
+                queueFamilyIndexCount: UInt32(self.queueFamilyIndices?.count ?? 0),
+                pQueueFamilyIndices: self.queueFamilyIndices
         )
     }
 }
@@ -93,11 +153,11 @@ public struct CommandBufferAllocateInfo {
 
     func toVulkan() -> VkCommandBufferAllocateInfo {
         return VkCommandBufferAllocateInfo(
-            sType: VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-            pNext: nil,
-            commandPool: self.commandPool.pointer,
-            level: VkCommandBufferLevel(rawValue: self.level.rawValue),
-            commandBufferCount: self.commandBufferCount
+                sType: VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                pNext: nil,
+                commandPool: self.commandPool.pointer,
+                level: VkCommandBufferLevel(rawValue: self.level.rawValue),
+                commandBufferCount: self.commandBufferCount
         )
     }
 }
@@ -117,7 +177,7 @@ public struct CommandPoolCreateInfo {
         public let rawValue: UInt32
 
         public init(rawValue: UInt32) {
-            self.rawValue = rawValue 
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -128,10 +188,10 @@ public struct CommandPoolCreateInfo {
 
     func toVulkan() -> VkCommandPoolCreateInfo {
         return VkCommandPoolCreateInfo(
-            sType: VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-            pNext: nil,
-            flags: self.flags.rawValue,
-            queueFamilyIndex: self.queueFamilyIndex
+                sType: VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.rawValue,
+                queueFamilyIndex: self.queueFamilyIndex
         )
     }
 }
@@ -153,13 +213,202 @@ public struct ComponentMapping {
     }
 
     var vulkan: VkComponentMapping {
-        return VkComponentMapping(r: self.r.vulkan, 
-                                g: self.g.vulkan, 
-                                b: self.b.vulkan,
-                                a: self.a.vulkan)
+        return VkComponentMapping(r: self.r.vulkan,
+                g: self.g.vulkan,
+                b: self.b.vulkan,
+                a: self.a.vulkan)
     }
 
     public static let identity = ComponentMapping.init(r: .r, g: .g, b: .b, a: .a)
+}
+
+public struct CopyDescriptorSet {
+    public let srcSet: DescriptorSet
+    public let srcBinding: UInt32
+    public let srcArrayElement: UInt32
+    public let dstSet: DescriptorSet
+    public let dstBinding: UInt32
+    public let dstArrayElement: UInt32
+    public let descriptorCount: UInt32
+
+    func toVulkan() -> VkCopyDescriptorSet {
+        return VkCopyDescriptorSet(
+                sType: VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
+                pNext: nil,
+                srcSet: srcSet.vulkanValue,
+                srcBinding: srcBinding,
+                srcArrayElement: srcArrayElement,
+                dstSet: dstSet.vulkanValue,
+                dstBinding: dstBinding,
+                dstArrayElement: dstArrayElement,
+                descriptorCount: descriptorCount
+        )
+    }
+}
+
+public struct DescriptorBufferInfo {
+    public let buffer: Buffer
+    public let offset: DeviceSize
+    public let range: DeviceSize
+
+    public init(buffer: Buffer,
+                offset: DeviceSize,
+                range: DeviceSize) {
+        self.buffer = buffer
+        self.offset = offset
+        self.range = range
+    }
+
+    func toVulkan() -> VkDescriptorBufferInfo {
+        let value = VkDescriptorBufferInfo(
+                buffer: buffer.pointer,
+                offset: self.offset,
+                range: self.range
+        )
+
+        return value
+    }
+}
+
+public struct DescriptorImageInfo {
+    public let sampler: Sampler
+    public let imageView: ImageView
+    public let imageLayout: ImageLayout
+
+    func toVulkan() -> VkDescriptorImageInfo {
+        let value = VkDescriptorImageInfo(
+                sampler: sampler.vulkanValue,
+                imageView: imageView.pointer,
+                imageLayout: imageLayout.vulkanValue
+        )
+
+        return value
+    }
+}
+
+public struct DescriptorPoolCreateInfo {
+    public var flags: Flags
+    public var maxSets: UInt32
+    public let poolSizes: [DescriptorPoolSize]
+
+    public init(flags: Flags,
+                maxSets: UInt32,
+                poolSizes: [DescriptorPoolSize]) {
+        self.flags = flags
+        self.maxSets = maxSets
+        self.poolSizes = poolSizes
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let freeDescriptorSet = Flags(rawValue: 0x00000001)
+        public static let updateAfterBind = Flags(rawValue: 0x00000002)
+    }
+}
+
+public struct DescriptorPoolSize {
+    public var type: DescriptorType
+    public var descriptorCount: UInt32
+
+    public init(type: DescriptorType,
+                descriptorCount: UInt32) {
+        self.type = type
+        self.descriptorCount = descriptorCount
+    }
+
+    var vulkanValue: VkDescriptorPoolSize {
+        return VkDescriptorPoolSize(
+                type: self.type.vulkanValue,
+                descriptorCount: self.descriptorCount
+        )
+    }
+}
+
+public struct DescriptorSetAllocateInfo {
+    public var descriptorPool: DescriptorPool
+    public var descriptorSetCount: UInt32
+    public var setLayouts: [DescriptorSetLayout]
+
+    public init(descriptorPool: DescriptorPool,
+                descriptorSetCount: UInt32,
+                setLayouts: [DescriptorSetLayout]) {
+        self.descriptorPool = descriptorPool
+        self.descriptorSetCount = descriptorSetCount
+        self.setLayouts = setLayouts
+    }
+}
+
+public struct DescriptorSetLayoutCreateInfo {
+    public var flags: Flags
+    public var bindings: [DescriptorSetLayoutBinding]
+
+    public init(flags: Flags,
+                bindings: [DescriptorSetLayoutBinding]) {
+        self.flags = flags
+        self.bindings = bindings
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let pushDescriptor = Flags(rawValue: 0x00000001)
+        public static let updateAfterBindPool = Flags(rawValue: 0x00000002)
+    }
+
+    var vulkanValue: VkDescriptorSetLayoutCreateInfo {
+        return VkDescriptorSetLayoutCreateInfo(
+                sType: VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.rawValue,
+                bindingCount: UInt32(self.bindings.count),
+                pBindings: self.bindings.map {
+                    $0.vulkanValue
+                }
+        )
+    }
+}
+
+public struct DescriptorSetLayoutBinding {
+    public var binding = UInt32(0)
+    public var descriptorType = DescriptorType.sampler
+    public var descriptorCount = UInt32(0)
+    public var stageFlags = ShaderStageFlags.none
+    public var immutableSamplers: [Sampler]? = nil
+
+    public init(binding: UInt32,
+                descriptorType: DescriptorType,
+                descriptorCount: UInt32,
+                stageFlags: ShaderStageFlags,
+                immutableSamplers: [Sampler]?) {
+        self.binding = binding
+        self.descriptorType = descriptorType
+        self.descriptorCount = descriptorCount
+        self.stageFlags = stageFlags
+        self.immutableSamplers = immutableSamplers
+    }
+
+    var vulkanValue: VkDescriptorSetLayoutBinding {
+        return VkDescriptorSetLayoutBinding(
+                binding: self.binding,
+                descriptorType: self.descriptorType.vulkanValue,
+                descriptorCount: self.descriptorCount,
+                stageFlags: UInt32(self.stageFlags.rawValue),
+                pImmutableSamplers: immutableSamplers?.map {
+                    $0.vulkanValue
+                }
+        )
+    }
 }
 
 public struct DeviceCreateInfo {
@@ -169,7 +418,7 @@ public struct DeviceCreateInfo {
     public let enabledExtensions: [String]
     public let enabledFeatures: PhysicalDeviceFeatures?
 
-    public init(flags :Flags,
+    public init(flags: Flags,
                 queueCreateInfos: [DeviceQueueCreateInfo],
                 enabledLayers: [String],
                 enabledExtensions: [String],
@@ -180,12 +429,12 @@ public struct DeviceCreateInfo {
         self.enabledExtensions = enabledExtensions
         self.enabledFeatures = enabledFeatures
     }
-    
+
     public struct Flags: OptionSet {
         public let rawValue: Int
 
         public init(rawValue: Int) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -193,7 +442,9 @@ public struct DeviceCreateInfo {
 
     func vulkanExec(action: (VkDeviceCreateInfo) -> ()) {
 
-        let queueCreateInfos = self.queueCreateInfos.map { $0.toVulkan() }
+        let queueCreateInfos = self.queueCreateInfos.map {
+            $0.toVulkan()
+        }
 
         withArrayOfCStrings(self.enabledLayers) { layers in
             withArrayOfCStrings(self.enabledExtensions) { extensions in
@@ -222,7 +473,7 @@ public struct DeviceQueueCreateInfo {
     public let flags: Flags
     public let queueFamilyIndex: UInt32
     public let queuePriorities: [Float]
-    
+
     public struct Flags: OptionSet {
         public let rawValue: Int
 
@@ -244,12 +495,12 @@ public struct DeviceQueueCreateInfo {
 
     func toVulkan() -> VkDeviceQueueCreateInfo {
         return VkDeviceQueueCreateInfo(
-            sType: VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-            pNext: nil,
-            flags: UInt32(self.flags.rawValue),
-            queueFamilyIndex: self.queueFamilyIndex,
-            queueCount: UInt32(self.queuePriorities.count),
-            pQueuePriorities: self.queuePriorities
+                sType: VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+                pNext: nil,
+                flags: UInt32(self.flags.rawValue),
+                queueFamilyIndex: self.queueFamilyIndex,
+                queueCount: UInt32(self.queuePriorities.count),
+                pQueuePriorities: self.queuePriorities
         )
     }
 }
@@ -358,7 +609,7 @@ public struct ImageCreateInfo {
         public let rawValue: Int
 
         public init(rawValue: Int) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -385,21 +636,21 @@ public struct ImageCreateInfo {
 
     var vulkan: VkImageCreateInfo {
         return VkImageCreateInfo(
-            sType: VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, 
-            pNext: nil, 
-            flags: self.flags.vulkan,
-            imageType: self.imageType.vulkan,
-            format: self.format.vulkan,
-            extent: self.extent.vulkanValue,
-            mipLevels: self.mipLevels,
-            arrayLayers: self.arrayLayers,
-            samples: self.samples.vulkan,
-            tiling: self.tiling.vulkan,
-            usage: self.usage.vulkan.rawValue,
-            sharingMode: self.sharingMode.vulkan,
-            queueFamilyIndexCount: self.queueFamilyIndices == nil ? 0 : UInt32(self.queueFamilyIndices!.count),
-            pQueueFamilyIndices: self.queueFamilyIndices,
-            initialLayout: self.initialLayout.vulkan)
+                sType: VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.vulkan,
+                imageType: self.imageType.vulkan,
+                format: self.format.vulkanValue,
+                extent: self.extent.vulkanValue,
+                mipLevels: self.mipLevels,
+                arrayLayers: self.arrayLayers,
+                samples: self.samples.vulkanValue,
+                tiling: self.tiling.vulkan,
+                usage: self.usage.vulkan.rawValue,
+                sharingMode: self.sharingMode.vulkanValue,
+                queueFamilyIndexCount: self.queueFamilyIndices == nil ? 0 : UInt32(self.queueFamilyIndices!.count),
+                pQueueFamilyIndices: self.queueFamilyIndices,
+                initialLayout: self.initialLayout.vulkanValue)
     }
 }
 
@@ -430,7 +681,7 @@ public struct ImageViewCreateInfo {
         public let rawValue: Int
 
         public init(rawValue: Int) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -443,14 +694,14 @@ public struct ImageViewCreateInfo {
 
     var vulkan: VkImageViewCreateInfo {
         return VkImageViewCreateInfo(
-            sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO, 
-            pNext: nil, 
-            flags: self.flags.vulkan,
-            image: self.image.pointer,
-            viewType: self.viewType.vulkan,
-            format: self.format.vulkan,
-            components: self.components.vulkan,
-            subresourceRange: self.subresourceRange.vulkan)
+                sType: VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.vulkan,
+                image: self.image.pointer,
+                viewType: self.viewType.vulkan,
+                format: self.format.vulkanValue,
+                components: self.components.vulkan,
+                subresourceRange: self.subresourceRange.vulkan)
     }
 }
 
@@ -475,11 +726,11 @@ public struct ImageSubresourceRange {
 
     var vulkan: VkImageSubresourceRange {
         return VkImageSubresourceRange(
-            aspectMask: self.aspectMask.vulkan, 
-            baseMipLevel: self.baseMipLevel, 
-            levelCount: self.levelCount,
-            baseArrayLayer: self.baseArrayLayer,
-            layerCount: self.layerCount)
+                aspectMask: self.aspectMask.vulkan,
+                baseMipLevel: self.baseMipLevel,
+                levelCount: self.levelCount,
+                baseArrayLayer: self.baseArrayLayer,
+                layerCount: self.layerCount)
     }
 }
 
@@ -491,8 +742,8 @@ public struct InstanceCreateInfo {
     public let enabledExtensionNames: [String]
 
     public init(applicationInfo: ApplicationInfo?,
-        enabledLayerNames: [String],
-        enabledExtensionNames: [String]) {
+                enabledLayerNames: [String],
+                enabledExtensionNames: [String]) {
         self.applicationInfo = applicationInfo
         self.enabledLayerNames = enabledLayerNames
         self.enabledExtensionNames = enabledExtensionNames
@@ -506,9 +757,9 @@ public struct LayerProperties {
     let description: String
 
     init(layerName: String,
-        specVersion: Version,
-        implementationVersion: Version,
-        description: String) {
+         specVersion: Version,
+         implementationVersion: Version,
+         description: String) {
         self.layerName = layerName
         self.specVersion = specVersion.rawVersion
         self.implementationVersion = implementationVersion.rawVersion
@@ -520,6 +771,11 @@ public struct MemoryAllocateInfo {
     public var allocationSize: DeviceSize
     public var memoryTypeIndex: UInt32
 
+    public init() {
+        self.allocationSize = 0
+        self.memoryTypeIndex = 0
+    }
+
     public init(allocationSize: DeviceSize,
                 memoryTypeIndex: UInt32) {
         self.allocationSize = allocationSize
@@ -528,10 +784,10 @@ public struct MemoryAllocateInfo {
 
     var vulkan: VkMemoryAllocateInfo {
         return VkMemoryAllocateInfo(
-            sType: VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, 
-            pNext: nil,
-            allocationSize: self.allocationSize,
-            memoryTypeIndex: self.memoryTypeIndex
+                sType: VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                pNext: nil,
+                allocationSize: self.allocationSize,
+                memoryTypeIndex: self.memoryTypeIndex
         )
     }
 }
@@ -565,6 +821,76 @@ public struct MemoryType {
     init(_ memType: VkMemoryType) {
         self.propertyFlags = MemoryPropertyFlags(rawValue: memType.propertyFlags)
         self.heapIndex = memType.heapIndex
+    }
+}
+
+public struct PipelineLayoutCreateInfo {
+    public var flags: Flags = .none
+    public var setLayouts: [DescriptorSetLayout] = []
+    public var pushConstantRanges: [PushConstantRange] = []
+
+    public init(flags: Flags,
+                setLayouts: [DescriptorSetLayout],
+                pushConstantRanges: [PushConstantRange]) {
+        self.flags = flags
+        self.setLayouts = setLayouts
+        self.pushConstantRanges = pushConstantRanges
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+    }
+
+    var vulkanValue: VkPipelineLayoutCreateInfo {
+        return VkPipelineLayoutCreateInfo(
+                sType: VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                pNext: nil,
+                flags: flags.rawValue,
+                setLayoutCount: UInt32(setLayouts.count),
+                pSetLayouts: setLayouts.map {
+                    $0.vulkanValue
+                },
+                pushConstantRangeCount: UInt32(pushConstantRanges.count),
+                pPushConstantRanges: pushConstantRanges.map {
+                    $0.vulkanValue
+                }
+        )
+    }
+}
+
+public class PipelineShaderStageCreateInfo {
+    public let flags: Flags
+    public let stage: ShaderStageFlags
+    public let module: ShaderModule
+    public let name: String
+    public let specializationInfo: SpecializationInfo?
+
+    public init(flags: Flags,
+                stage: ShaderStageFlags,
+                module: ShaderModule,
+                name: String,
+                specializationInfo: SpecializationInfo?) {
+        self.flags = flags
+        self.stage = stage
+        self.module = module
+        self.name = name
+        self.specializationInfo = specializationInfo
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
     }
 }
 
@@ -685,61 +1011,61 @@ public struct PhysicalDeviceFeatures {
 
     func toVulkan() -> VkPhysicalDeviceFeatures {
         return VkPhysicalDeviceFeatures(
-            robustBufferAccess: self.robustBufferAccess.toUInt32(),
-            fullDrawIndexUint32: self.fullDrawIndexUint32.toUInt32(),
-            imageCubeArray: self.imageCubeArray.toUInt32(),
-            independentBlend: self.independentBlend.toUInt32(),
-            geometryShader: self.geometryShader.toUInt32(),
-            tessellationShader: self.tessellationShader.toUInt32(),
-            sampleRateShading: self.sampleRateShading.toUInt32(),
-            dualSrcBlend: self.dualSrcBlend.toUInt32(),
-            logicOp: self.logicOp.toUInt32(),
-            multiDrawIndirect: self.multiDrawIndirect.toUInt32(),
-            drawIndirectFirstInstance: self.drawIndirectFirstInstance.toUInt32(),
-            depthClamp: self.depthClamp.toUInt32(),
-            depthBiasClamp: self.depthBiasClamp.toUInt32(),
-            fillModeNonSolid: self.fillModeNonSolid.toUInt32(),
-            depthBounds: self.depthBounds.toUInt32(),
-            wideLines: self.wideLines.toUInt32(),
-            largePoints: self.largePoints.toUInt32(),
-            alphaToOne: self.alphaToOne.toUInt32(),
-            multiViewport: self.multiViewport.toUInt32(),
-            samplerAnisotropy: self.samplerAnisotropy.toUInt32(),
-            textureCompressionETC2: self.textureCompressionETC2.toUInt32(),
-            textureCompressionASTC_LDR: self.textureCompressionASTC_LDR.toUInt32(),
-            textureCompressionBC: self.textureCompressionBC.toUInt32(),
-            occlusionQueryPrecise: self.occlusionQueryPrecise.toUInt32(),
-            pipelineStatisticsQuery: self.pipelineStatisticsQuery.toUInt32(),
-            vertexPipelineStoresAndAtomics: self.vertexPipelineStoresAndAtomics.toUInt32(),
-            fragmentStoresAndAtomics: self.fragmentStoresAndAtomics.toUInt32(),
-            shaderTessellationAndGeometryPointSize: self.shaderTessellationAndGeometryPointSize.toUInt32(),
-            shaderImageGatherExtended: self.shaderImageGatherExtended.toUInt32(),
-            shaderStorageImageExtendedFormats: self.shaderStorageImageExtendedFormats.toUInt32(),
-            shaderStorageImageMultisample: self.shaderStorageImageMultisample.toUInt32(),
-            shaderStorageImageReadWithoutFormat: self.shaderStorageImageReadWithoutFormat.toUInt32(),
-            shaderStorageImageWriteWithoutFormat: self.shaderStorageImageWriteWithoutFormat.toUInt32(),
-            shaderUniformBufferArrayDynamicIndexing: self.shaderUniformBufferArrayDynamicIndexing.toUInt32(),
-            shaderSampledImageArrayDynamicIndexing: self.shaderSampledImageArrayDynamicIndexing.toUInt32(),
-            shaderStorageBufferArrayDynamicIndexing: self.shaderStorageBufferArrayDynamicIndexing.toUInt32(),
-            shaderStorageImageArrayDynamicIndexing: self.shaderStorageImageArrayDynamicIndexing.toUInt32(),
-            shaderClipDistance: self.shaderClipDistance.toUInt32(),
-            shaderCullDistance: self.shaderCullDistance.toUInt32(),
-            shaderFloat64: self.shaderFloat64.toUInt32(),
-            shaderInt64: self.shaderInt64.toUInt32(),
-            shaderInt16: self.shaderInt16.toUInt32(),
-            shaderResourceResidency: self.shaderResourceResidency.toUInt32(),
-            shaderResourceMinLod: self.shaderResourceMinLod.toUInt32(),
-            sparseBinding: self.sparseBinding.toUInt32(),
-            sparseResidencyBuffer: self.sparseResidencyBuffer.toUInt32(),
-            sparseResidencyImage2D: self.sparseResidencyImage2D.toUInt32(),
-            sparseResidencyImage3D: self.sparseResidencyImage3D.toUInt32(),
-            sparseResidency2Samples: self.sparseResidency2Samples.toUInt32(),
-            sparseResidency4Samples: self.sparseResidency4Samples.toUInt32(),
-            sparseResidency8Samples: self.sparseResidency8Samples.toUInt32(),
-            sparseResidency16Samples: self.sparseResidency16Samples.toUInt32(),
-            sparseResidencyAliased: self.sparseResidencyAliased.toUInt32(),
-            variableMultisampleRate: self.variableMultisampleRate.toUInt32(),
-            inheritedQueries: self.inheritedQueries.toUInt32()
+                robustBufferAccess: self.robustBufferAccess.toUInt32(),
+                fullDrawIndexUint32: self.fullDrawIndexUint32.toUInt32(),
+                imageCubeArray: self.imageCubeArray.toUInt32(),
+                independentBlend: self.independentBlend.toUInt32(),
+                geometryShader: self.geometryShader.toUInt32(),
+                tessellationShader: self.tessellationShader.toUInt32(),
+                sampleRateShading: self.sampleRateShading.toUInt32(),
+                dualSrcBlend: self.dualSrcBlend.toUInt32(),
+                logicOp: self.logicOp.toUInt32(),
+                multiDrawIndirect: self.multiDrawIndirect.toUInt32(),
+                drawIndirectFirstInstance: self.drawIndirectFirstInstance.toUInt32(),
+                depthClamp: self.depthClamp.toUInt32(),
+                depthBiasClamp: self.depthBiasClamp.toUInt32(),
+                fillModeNonSolid: self.fillModeNonSolid.toUInt32(),
+                depthBounds: self.depthBounds.toUInt32(),
+                wideLines: self.wideLines.toUInt32(),
+                largePoints: self.largePoints.toUInt32(),
+                alphaToOne: self.alphaToOne.toUInt32(),
+                multiViewport: self.multiViewport.toUInt32(),
+                samplerAnisotropy: self.samplerAnisotropy.toUInt32(),
+                textureCompressionETC2: self.textureCompressionETC2.toUInt32(),
+                textureCompressionASTC_LDR: self.textureCompressionASTC_LDR.toUInt32(),
+                textureCompressionBC: self.textureCompressionBC.toUInt32(),
+                occlusionQueryPrecise: self.occlusionQueryPrecise.toUInt32(),
+                pipelineStatisticsQuery: self.pipelineStatisticsQuery.toUInt32(),
+                vertexPipelineStoresAndAtomics: self.vertexPipelineStoresAndAtomics.toUInt32(),
+                fragmentStoresAndAtomics: self.fragmentStoresAndAtomics.toUInt32(),
+                shaderTessellationAndGeometryPointSize: self.shaderTessellationAndGeometryPointSize.toUInt32(),
+                shaderImageGatherExtended: self.shaderImageGatherExtended.toUInt32(),
+                shaderStorageImageExtendedFormats: self.shaderStorageImageExtendedFormats.toUInt32(),
+                shaderStorageImageMultisample: self.shaderStorageImageMultisample.toUInt32(),
+                shaderStorageImageReadWithoutFormat: self.shaderStorageImageReadWithoutFormat.toUInt32(),
+                shaderStorageImageWriteWithoutFormat: self.shaderStorageImageWriteWithoutFormat.toUInt32(),
+                shaderUniformBufferArrayDynamicIndexing: self.shaderUniformBufferArrayDynamicIndexing.toUInt32(),
+                shaderSampledImageArrayDynamicIndexing: self.shaderSampledImageArrayDynamicIndexing.toUInt32(),
+                shaderStorageBufferArrayDynamicIndexing: self.shaderStorageBufferArrayDynamicIndexing.toUInt32(),
+                shaderStorageImageArrayDynamicIndexing: self.shaderStorageImageArrayDynamicIndexing.toUInt32(),
+                shaderClipDistance: self.shaderClipDistance.toUInt32(),
+                shaderCullDistance: self.shaderCullDistance.toUInt32(),
+                shaderFloat64: self.shaderFloat64.toUInt32(),
+                shaderInt64: self.shaderInt64.toUInt32(),
+                shaderInt16: self.shaderInt16.toUInt32(),
+                shaderResourceResidency: self.shaderResourceResidency.toUInt32(),
+                shaderResourceMinLod: self.shaderResourceMinLod.toUInt32(),
+                sparseBinding: self.sparseBinding.toUInt32(),
+                sparseResidencyBuffer: self.sparseResidencyBuffer.toUInt32(),
+                sparseResidencyImage2D: self.sparseResidencyImage2D.toUInt32(),
+                sparseResidencyImage3D: self.sparseResidencyImage3D.toUInt32(),
+                sparseResidency2Samples: self.sparseResidency2Samples.toUInt32(),
+                sparseResidency4Samples: self.sparseResidency4Samples.toUInt32(),
+                sparseResidency8Samples: self.sparseResidency8Samples.toUInt32(),
+                sparseResidency16Samples: self.sparseResidency16Samples.toUInt32(),
+                sparseResidencyAliased: self.sparseResidencyAliased.toUInt32(),
+                variableMultisampleRate: self.variableMultisampleRate.toUInt32(),
+                inheritedQueries: self.inheritedQueries.toUInt32()
         )
     }
 }
@@ -749,8 +1075,12 @@ public struct PhysicalDeviceMemoryProperties {
     public let memoryHeaps: [MemoryHeap]
 
     init(_ props: VkPhysicalDeviceMemoryProperties) {
-        self.memoryTypes = convertTupleToArray(props.memoryTypes).map { MemoryType($0) }
-        self.memoryHeaps = convertTupleToArray(props.memoryHeaps).map { MemoryHeap($0) }
+        self.memoryTypes = convertTupleToArray(props.memoryTypes).map {
+            MemoryType($0)
+        }
+        self.memoryHeaps = convertTupleToArray(props.memoryHeaps).map {
+            MemoryHeap($0)
+        }
     }
 }
 
@@ -764,6 +1094,20 @@ public struct PhysicalDeviceProperties {
     public let pipelineCacheUUID: [UInt8]
     let limits: Any? = nil // TODO: add later if needed
     let sparseProperties: Any? = nil // TODO: add later if needed
+}
+
+public struct PushConstantRange {
+    public var stageFlags: ShaderStageFlags = .none
+    public var offset = UInt32(0)
+    public var size = UInt32(0)
+
+    var vulkanValue: VkPushConstantRange {
+        return VkPushConstantRange(
+                stageFlags: self.stageFlags.rawValue,
+                offset: self.offset,
+                size: self.size
+        )
+    }
 }
 
 public struct QueueFamilyProperties {
@@ -797,6 +1141,217 @@ public struct QueueFamilyProperties {
         public static let transferBit = Flags(rawValue: 1 << 2)
         public static let sparseBindingBit = Flags(rawValue: 1 << 3)
         public static let protectedBit = Flags(rawValue: 1 << 4)
+    }
+}
+
+public struct RenderPassCreateInfo {
+    public let flags: Flags
+    public let attachments: [AttachmentDescription]?
+    public let subpasses: [SubpassDescription]?
+    public let dependencies: [SubpassDependency]?
+
+    public init(flags: Flags,
+                attachments: [AttachmentDescription]?,
+                subpasses: [SubpassDescription]?,
+                dependencies: [SubpassDependency]?) {
+        self.flags = flags
+        self.attachments = attachments
+        self.subpasses = subpasses
+        self.dependencies = dependencies
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+    }
+
+    private var pAttachments: [VkAttachmentDescription]? = nil
+    private var pSubpasses: [VkSubpassDescription]? = nil
+    private var pDependencies: [VkSubpassDependency]? = nil
+
+    mutating func toVulkan() -> VkRenderPassCreateInfo {
+        if let att = self.attachments {
+            pAttachments = att.map {
+                $0.vulkanValue
+            }
+        } else {
+            pAttachments = nil
+        }
+
+        if let sub = self.subpasses {
+            pSubpasses = sub.map {
+                var s = $0
+                return s.toVulkan()
+            }
+        } else {
+            pSubpasses = nil
+        }
+
+        if let deps = self.dependencies {
+            pDependencies = deps.map {
+                $0.vulkanValue
+            }
+        } else {
+            pDependencies = nil
+        }
+
+        return VkRenderPassCreateInfo(
+                sType: VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.rawValue,
+                attachmentCount: UInt32(self.attachments?.count ?? 0),
+                pAttachments: pAttachments,
+                subpassCount: UInt32(self.subpasses?.count ?? 0),
+                pSubpasses: pSubpasses,
+                dependencyCount: UInt32(self.dependencies?.count ?? 0),
+                pDependencies: pDependencies
+        )
+    }
+}
+
+public struct SemaphoreCreateInfo {
+
+    public var flags: Flags
+
+    public init(flags: Flags) {
+        self.flags = flags
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+    }
+
+    var vulkanValue: VkSemaphoreCreateInfo {
+        return VkSemaphoreCreateInfo(
+                sType: VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                pNext: nil,
+                flags: self.flags.rawValue
+        )
+    }
+}
+
+// needed class to keep references
+public class SubpassDescription {
+    public let flags: SubpassDescriptionFlags
+    public let pipelineBindPoint: PipelineBindPoint
+    public let inputAttachments: [AttachmentReference]?
+    public let colorAttachments: [AttachmentReference]?
+    public let resolveAttachments: [AttachmentReference]?
+    public let depthStencilAttachment: AttachmentReference?
+    public let preserveAttachments: [UInt32]?
+
+    public init(flags: SubpassDescriptionFlags,
+                pipelineBindPoint: PipelineBindPoint,
+                inputAttachments: [AttachmentReference]?,
+                colorAttachments: [AttachmentReference]?,
+                resolveAttachments: [AttachmentReference]?,
+                depthStencilAttachment: AttachmentReference?,
+                preserveAttachments: [UInt32]?) {
+        self.flags = flags
+        self.pipelineBindPoint = pipelineBindPoint
+        self.inputAttachments = inputAttachments
+        self.colorAttachments = colorAttachments
+        self.resolveAttachments = resolveAttachments
+        self.depthStencilAttachment = depthStencilAttachment
+        self.preserveAttachments = preserveAttachments
+    }
+
+    private var pDepthStencilAttachment: [VkAttachmentReference]? = nil
+    private var pInputAttachments: [VkAttachmentReference]? = nil
+    private var pColorAttachments: [VkAttachmentReference]? = nil
+    private var pResolveAttachments: [VkAttachmentReference]? = nil
+
+    func toVulkan() -> VkSubpassDescription {
+
+        if let input = self.inputAttachments {
+            self.pInputAttachments = input.count == 0 ? nil : input.map { $0.vulkanValue }
+        } else {
+            self.pInputAttachments = nil
+        }
+
+        if let colors = self.colorAttachments {
+            self.pColorAttachments = colors.count == 0 ? nil : colors.map { $0.vulkanValue }
+        } else {
+            self.pColorAttachments = nil
+        }
+
+        if let resolve = self.resolveAttachments {
+            self.pResolveAttachments = resolve.count == 0 ? nil : resolve.map { $0.vulkanValue }
+        } else {
+            self.pResolveAttachments = nil
+        }
+
+        if let att = self.depthStencilAttachment?.vulkanValue {
+            pDepthStencilAttachment = [att]
+        } else {
+            pDepthStencilAttachment = nil
+        }
+
+        return VkSubpassDescription(
+                flags: self.flags.rawValue,
+                pipelineBindPoint: self.pipelineBindPoint.vulkanValue,
+                inputAttachmentCount: UInt32(self.inputAttachments?.count ?? 0),
+                pInputAttachments: self.pInputAttachments,
+                colorAttachmentCount: UInt32(self.colorAttachments?.count ?? 0),
+                pColorAttachments: self.pColorAttachments,
+                pResolveAttachments: self.pResolveAttachments,
+                pDepthStencilAttachment: self.pDepthStencilAttachment,
+                preserveAttachmentCount: UInt32(self.preserveAttachments?.count ?? 0),
+                pPreserveAttachments: self.preserveAttachments
+        )
+    }
+}
+
+public class SpecializationInfo {
+
+}
+
+public struct SubpassDependency {
+    public let srcSubpass: UInt32
+    public let dstSubpass: UInt32
+    public let srcStageMask: PipelineStageFlags
+    public let dstStageMask: PipelineStageFlags
+    public let srcAccessMask: AccessFlags
+    public let dstAccessMask: AccessFlags
+    public let dependencyFlags: DependencyFlags
+
+    public init(srcSubpass: UInt32,
+                dstSubpass: UInt32,
+                srcStageMask: PipelineStageFlags,
+                dstStageMask: PipelineStageFlags,
+                srcAccessMask: AccessFlags,
+                dstAccessMask: AccessFlags,
+                dependencyFlags: DependencyFlags) {
+        self.srcSubpass = srcSubpass
+        self.dstSubpass = dstSubpass
+        self.srcStageMask = srcStageMask
+        self.dstStageMask = dstStageMask
+        self.srcAccessMask = srcAccessMask
+        self.dstAccessMask = dstAccessMask
+        self.dependencyFlags = dependencyFlags
+    }
+
+    var vulkanValue: VkSubpassDependency {
+        return VkSubpassDependency(
+                srcSubpass: self.srcSubpass,
+                dstSubpass: self.dstSubpass,
+                srcStageMask: self.srcStageMask.rawValue,
+                dstStageMask: self.dstStageMask.rawValue,
+                srcAccessMask: self.srcAccessMask.rawValue,
+                dstAccessMask: self.dstAccessMask.rawValue,
+                dependencyFlags: self.dependencyFlags.rawValue
+        )
     }
 }
 
@@ -846,7 +1401,7 @@ public struct SurfaceCreateInfo {
         public let rawValue: Int
 
         public init(rawValue: Int) {
-            self.rawValue = rawValue    
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -854,10 +1409,10 @@ public struct SurfaceCreateInfo {
 
     func toVulkan() -> VkMacOSSurfaceCreateInfoMVK {
         return VkMacOSSurfaceCreateInfoMVK(
-            sType: self.sType,
-            pNext: nil,
-            flags: UInt32(self.flags.rawValue),
-            pView: self.view
+                sType: self.sType,
+                pNext: nil,
+                flags: UInt32(self.flags.rawValue),
+                pView: self.view
         )
     }
 }
@@ -921,7 +1476,7 @@ public struct SwapchainCreateInfo {
         public let rawValue: UInt32
 
         public init(rawValue: UInt32) {
-            self.rawValue = rawValue 
+            self.rawValue = rawValue
         }
 
         public static let none = Flags(rawValue: 0)
@@ -931,25 +1486,93 @@ public struct SwapchainCreateInfo {
 
     func toVulkan() -> VkSwapchainCreateInfoKHR {
         return VkSwapchainCreateInfoKHR(
-            sType: VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-            pNext: self.pNext,
-            flags: VkSwapchainCreateFlagsKHR(self.flags.rawValue),
-            surface: self.surface.pointer,
-            minImageCount: self.minImageCount,
-            imageFormat: self.imageFormat.vulkan,
-            imageColorSpace: self.imageColorSpace.vulkan,
-            imageExtent: self.imageExtent.vulkan,
-            imageArrayLayers: self.imageArrayLayers,
-            imageUsage: self.imageUsage.rawValue,
-            imageSharingMode: self.imageSharingMode.vulkan,
-            queueFamilyIndexCount: UInt32(self.queueFamilyIndices.count),
-            pQueueFamilyIndices: self.queueFamilyIndices,
-            preTransform: self.preTransform.vulkan,
-            compositeAlpha: self.compositeAlpha.vulkan,
-            presentMode: self.presentMode.vulkan,
-            clipped: self.clipped.vulkan,
-            oldSwapchain: self.oldSwapchain?.pointer
+                sType: VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+                pNext: self.pNext,
+                flags: VkSwapchainCreateFlagsKHR(self.flags.rawValue),
+                surface: self.surface.pointer,
+                minImageCount: self.minImageCount,
+                imageFormat: self.imageFormat.vulkanValue,
+                imageColorSpace: self.imageColorSpace.vulkanValue,
+                imageExtent: self.imageExtent.vulkan,
+                imageArrayLayers: self.imageArrayLayers,
+                imageUsage: self.imageUsage.rawValue,
+                imageSharingMode: self.imageSharingMode.vulkanValue,
+                queueFamilyIndexCount: UInt32(self.queueFamilyIndices.count),
+                pQueueFamilyIndices: self.queueFamilyIndices,
+                preTransform: self.preTransform.vulkan,
+                compositeAlpha: self.compositeAlpha.vulkan,
+                presentMode: self.presentMode.vulkan,
+                clipped: self.clipped.vulkan,
+                oldSwapchain: self.oldSwapchain?.pointer
         )
+    }
+}
+
+public class WriteDescriptorSet {
+    public let dstSet: DescriptorSet
+    public let dstBinding: UInt32
+    public let dstArrayElement: UInt32
+    public let descriptorCount: UInt32
+    public let descriptorType: DescriptorType
+    public let imageInfo: DescriptorImageInfo?
+    public let bufferInfo: DescriptorBufferInfo?
+    public let texelBufferView: BufferView?
+
+    public init(dstSet: DescriptorSet,
+                dstBinding: UInt32,
+                dstArrayElement: UInt32,
+                descriptorCount: UInt32,
+                descriptorType: DescriptorType,
+                imageInfo: DescriptorImageInfo?,
+                bufferInfo: DescriptorBufferInfo?,
+                texelBufferView: BufferView?) {
+        self.dstSet = dstSet
+        self.dstBinding = dstBinding
+        self.dstArrayElement = dstArrayElement
+        self.descriptorCount = descriptorCount
+        self.descriptorType = descriptorType
+        self.imageInfo = imageInfo
+        self.bufferInfo = bufferInfo
+        self.texelBufferView = texelBufferView
+    }
+
+    private var pDescriptorImageInfo: [VkDescriptorImageInfo]? = nil
+    private var pBufferInfo: [VkDescriptorBufferInfo]? = nil
+    private var pTexelBufferView: [VkBufferView?]? = nil
+
+    func toVulkan() -> VkWriteDescriptorSet {
+        if self.imageInfo != nil {
+            pDescriptorImageInfo = [self.imageInfo!.toVulkan()]
+        } else {
+            pDescriptorImageInfo = nil
+        }
+
+        if self.bufferInfo != nil {
+            pBufferInfo = [self.bufferInfo!.toVulkan()]
+        } else {
+            pBufferInfo = nil
+        }
+
+        if self.texelBufferView != nil {
+            pTexelBufferView = [self.texelBufferView?.vulkanValue]
+        } else {
+            pTexelBufferView = nil
+        }
+
+        let value = VkWriteDescriptorSet(
+                sType: VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                pNext: nil,
+                dstSet: self.dstSet.vulkanValue,
+                dstBinding: self.dstBinding,
+                dstArrayElement: self.dstArrayElement,
+                descriptorCount: self.descriptorCount,
+                descriptorType: self.descriptorType.vulkanValue,
+                pImageInfo: pDescriptorImageInfo,
+                pBufferInfo: pBufferInfo,
+                pTexelBufferView: pTexelBufferView
+        )
+
+        return value;
     }
 }
 

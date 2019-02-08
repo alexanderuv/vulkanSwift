@@ -6,6 +6,8 @@ public class Image {
     public let device: Device
     let swapchain: Swapchain?
 
+    var boundMemory: DeviceMemory? = nil
+
     init(fromVulkan pointer: VkImage,
         device: Device,
         swapchain: Swapchain?) {
@@ -35,6 +37,8 @@ public class Image {
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
+
+        self.boundMemory = memory
     }
 
     public lazy var memoryRequirements: MemoryRequirements = {
@@ -47,6 +51,9 @@ public class Image {
     deinit {
         // if this image belongs to a swapchain, it will be destroyed along with it
         if swapchain == nil {
+            if boundMemory != nil {
+                boundMemory = nil
+            }
             vkDestroyImage(self.device.pointer, self.pointer, nil)
         }
     }

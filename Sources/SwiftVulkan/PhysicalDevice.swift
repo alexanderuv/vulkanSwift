@@ -79,7 +79,7 @@ public class PhysicalDevice {
 
     public func getFormatProperties(for format: Format) -> FormatProperties {
         var props = [ VkFormatProperties() ]
-        vkGetPhysicalDeviceFormatProperties(self.pointer, format.vulkan, &props)
+        vkGetPhysicalDeviceFormatProperties(self.pointer, format.vulkanValue, &props)
 
         return FormatProperties(props[0]) 
     }

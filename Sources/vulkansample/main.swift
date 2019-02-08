@@ -9,6 +9,15 @@ import SwiftSDL2
 // initialize SDL2
 initializeSwiftSDL2()
 
-let w = Window()
+do {
+    let s = try VulkanSample()
+    if let sample = s {
+        try sample.initialize()
+        sample.run()
+    }
+} catch {
+    print("Error running sample \(error)")
+}
+
 
 deinitializeSwiftSDL2()

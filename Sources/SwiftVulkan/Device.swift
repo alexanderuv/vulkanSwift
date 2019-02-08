@@ -41,21 +41,7 @@ public class Device {
             )
     }
 
-    public func allocateMemory(allocInfo allocateInfo: MemoryAllocateInfo) throws -> DeviceMemory {
-
-        var deviceMemory = VkDeviceMemory(bitPattern: 0)
-        let opResult = withUnsafePointer(to: allocateInfo.vulkan) {
-            return vkAllocateMemory(self.pointer, $0, nil, &deviceMemory)
-        }
-        
-        guard opResult == VK_SUCCESS else {
-            throw opResult.toResult()
-        }
-
-        return DeviceMemory(deviceMemory!, device: self)
-    }
-
-    public func allocateCommandBuffer(createInfo info: CommandBufferAllocateInfo) throws -> CommandBuffer {
+    public func allocateCommandBuffer(allocInfo info: CommandBufferAllocateInfo) throws -> CommandBuffer {
         var output = VkCommandBuffer(bitPattern: 0) // *pOutput = NULL
         var opResult = VK_SUCCESS
 
@@ -70,23 +56,43 @@ public class Device {
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
-        
+
         return CommandBuffer(pointer: output!)
     }
 
-    public func createSwapchain(createInfo info: SwapchainCreateInfo) throws -> Swapchain {
-        var swapchain = VkSwapchainKHR(bitPattern: 0)
+    public func allocateDescriptorSets(allocateInfo info: DescriptorSetAllocateInfo) throws -> DescriptorSet {
+        var descriptor = VkDescriptorSet(bitPattern: 0)
 
-        var opResult = VK_SUCCESS
-        var infoArr = [info.toVulkan()]
+        let layouts: [VkDescriptorSetLayout?] = info.setLayouts.map { $0.vulkanValue }
+        let ai = VkDescriptorSetAllocateInfo(
+            sType: VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO, 
+            pNext: nil, 
+            descriptorPool: info.descriptorPool.vulkanValue, 
+            descriptorSetCount: info.descriptorSetCount, 
+            pSetLayouts: UnsafePointer(layouts)
+        )
 
-        opResult = vkCreateSwapchainKHR(self.pointer, &infoArr, nil, &swapchain)
-        
-        if opResult == VK_SUCCESS {
-            return Swapchain(device: self, pointer: swapchain!)
+        let opResult = withUnsafePointer(to: ai) {
+            return vkAllocateDescriptorSets(self.pointer, $0, &descriptor)
         }
 
-        throw opResult.toResult()
+        guard opResult == VK_SUCCESS else {
+            throw opResult.toResult()
+        }
+
+        return DescriptorSet(vulkanValue: descriptor!, device: self)
+    }
+
+    public func updateDescriptorSets(
+        descriptorWrites: [WriteDescriptorSet], 
+        descriptorCopies: [CopyDescriptorSet]
+    ) {
+        let writes = descriptorWrites.map { $0.toVulkan() }
+        let copies = descriptorCopies.map { $0.toVulkan() }
+
+        vkUpdateDescriptorSets(self.pointer, 
+            UInt32(descriptorWrites.count), descriptorWrites.count == 0 ? nil : writes,
+            UInt32(descriptorCopies.count), descriptorCopies.count == 0 ? nil : copies)
     }
 
     deinit {

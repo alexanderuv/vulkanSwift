@@ -5,10 +5,14 @@ public class ImageView {
     public let pointer: VkImageView
     public let device: Device
 
+    private var image: Image
+
     init(pointer: VkImageView,
-         device: Device) {
+         device: Device,
+         image: Image) {
         self.pointer = pointer
         self.device = device
+        self.image = image
     }
 
     public class func create(device dev: Device, 
@@ -23,7 +27,7 @@ public class ImageView {
             throw opResult.toResult()
         }
 
-        return ImageView(pointer: imageView!, device: dev)
+        return ImageView(pointer: imageView!, device: dev, image: createInfo.image)
     }
 
     deinit {
