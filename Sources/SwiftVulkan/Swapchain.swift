@@ -9,9 +9,9 @@ public class Swapchain {
     public let pointer: VkSwapchainKHR
     public let device: Device
 
-    private let surface: Surface
+    private let surface: SurfaceKHR
 
-    public init(device: Device, pointer: VkSwapchainKHR, surface: Surface) {
+    public init(device: Device, pointer: VkSwapchainKHR, surface: SurfaceKHR) {
         self.pointer = pointer
         self.device = device
         self.surface = surface

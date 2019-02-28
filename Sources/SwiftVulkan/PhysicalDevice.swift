@@ -110,7 +110,7 @@ public class PhysicalDevice {
         return PhysicalDeviceMemoryProperties(properties[0])
     }
 
-    public func getSurfaceFormats(for surface: Surface) throws -> [SurfaceFormat] {
+    public func getSurfaceFormats(for surface: SurfaceKHR) throws -> [SurfaceFormat] {
         
         var returnValue: [SurfaceFormat] = []
         var opResult = VK_SUCCESS
@@ -118,7 +118,7 @@ public class PhysicalDevice {
         var count = UInt32(0)
         withUnsafeMutablePointer(to: &count) { countPtr in
             opResult = vkGetPhysicalDeviceSurfaceFormatsKHR(
-                self.pointer, surface.pointer, countPtr, nil)    
+                self.pointer, surface.vulkanPointer, countPtr, nil)
         }
 
         if opResult != VK_SUCCESS {
@@ -134,7 +134,7 @@ public class PhysicalDevice {
             withUnsafeMutablePointer(to: &count) { c in
                 let countPtr = c
                 opResult = vkGetPhysicalDeviceSurfaceFormatsKHR(
-                        self.pointer, surface.pointer, countPtr, cFormats)
+                        self.pointer, surface.vulkanPointer, countPtr, cFormats)
             }
 
             if opResult != VK_SUCCESS {
@@ -157,11 +157,11 @@ public class PhysicalDevice {
         return returnValue
     }
 
-    public func hasSurfaceSupport(for family: QueueFamilyProperties, surface: Surface) throws -> Bool {
+    public func hasSurfaceSupport(for family: QueueFamilyProperties, surface: SurfaceKHR) throws -> Bool {
         var vulkanBool: VkBool32 = 0
         var opResult = VK_SUCCESS
         withUnsafeMutablePointer(to: &vulkanBool) {
-            opResult = vkGetPhysicalDeviceSurfaceSupportKHR(self.pointer, family.index, surface.pointer, $0)
+            opResult = vkGetPhysicalDeviceSurfaceSupportKHR(self.pointer, family.index, surface.vulkanPointer, $0)
         }
         
         if opResult == VK_SUCCESS {
@@ -171,12 +171,12 @@ public class PhysicalDevice {
         throw opResult.toResult()
     }
 
-    public func getSurfaceCapabilities(surface surf: Surface) throws -> SurfaceCapabilities {
+    public func getSurfaceCapabilities(surface surf: SurfaceKHR) throws -> SurfaceCapabilities {
         var cCapabilities = VkSurfaceCapabilitiesKHR()
 
         var opResult = VK_SUCCESS
         withUnsafeMutablePointer(to: &cCapabilities) {
-            opResult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self.pointer, surf.pointer, $0)
+            opResult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self.pointer, surf.vulkanPointer, $0)
         }
         
         if opResult == VK_SUCCESS {
@@ -186,11 +186,11 @@ public class PhysicalDevice {
         throw opResult.toResult()
     }
 
-    public func getSurfacePresentModes(surface surf: Surface) throws -> [PresentMode] {
+    public func getSurfacePresentModes(surface surf: SurfaceKHR) throws -> [PresentMode] {
         var countArr = [UInt32](repeating: 0, count: 1)
         
         var opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
-                self.pointer, surf.pointer, &countArr, nil)
+                self.pointer, surf.vulkanPointer, &countArr, nil)
         
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
@@ -198,7 +198,7 @@ public class PhysicalDevice {
 
         var cPresentModes = [VkPresentModeKHR](repeating: VkPresentModeKHR(rawValue: 0), count: Int(countArr[0]))
         opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
-                self.pointer, surf.pointer, &countArr, &cPresentModes)
+                self.pointer, surf.vulkanPointer, &countArr, &cPresentModes)
         
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()

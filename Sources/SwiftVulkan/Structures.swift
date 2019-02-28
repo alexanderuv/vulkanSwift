@@ -89,113 +89,6 @@ public struct AttachmentReference {
     }
 }
 
-public struct BufferCreateInfo {
-    public let flags: Flags
-    public var size: DeviceSize
-    public var usage: BufferUsageFlags
-    public var sharingMode: SharingMode
-    public var queueFamilyIndices: [UInt32]?
-
-    public init(flags: Flags,
-                size: DeviceSize,
-                usage: BufferUsageFlags,
-                sharingMode: SharingMode,
-                queueFamilyIndices: [UInt32]?) {
-        self.flags = flags
-        self.size = size
-        self.usage = usage
-        self.sharingMode = sharingMode
-        self.queueFamilyIndices = queueFamilyIndices
-    }
-
-    public struct Flags: OptionSet {
-        public let rawValue: UInt32
-
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
-
-        public static let none = Flags(rawValue: 0)
-        public static let sparseBinding = Flags(rawValue: 0x00000001)
-        public static let sparseResidency = Flags(rawValue: 0x00000002)
-        public static let sparseAliased = Flags(rawValue: 0x00000004)
-        public static let protected = Flags(rawValue: 0x00000008)
-        public static let deviceAddressCaptureReplay = Flags(rawValue: 0x00000010)
-    }
-
-    var vulkan: VkBufferCreateInfo {
-        return VkBufferCreateInfo(
-                sType: VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-                pNext: nil,
-                flags: self.flags.rawValue,
-                size: self.size,
-                usage: self.usage.vulkan,
-                sharingMode: self.sharingMode.vulkanValue,
-                queueFamilyIndexCount: UInt32(self.queueFamilyIndices?.count ?? 0),
-                pQueueFamilyIndices: self.queueFamilyIndices
-        )
-    }
-}
-
-public struct CommandBufferAllocateInfo {
-
-    public let commandPool: CommandPool
-    public let level: CommandBufferLevel
-    public let commandBufferCount: UInt32
-
-    public init(commandPool: CommandPool,
-                level: CommandBufferLevel,
-                commandBufferCount: UInt32) {
-        self.commandPool = commandPool
-        self.level = level
-        self.commandBufferCount = commandBufferCount
-    }
-
-    func toVulkan() -> VkCommandBufferAllocateInfo {
-        return VkCommandBufferAllocateInfo(
-                sType: VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                pNext: nil,
-                commandPool: self.commandPool.pointer,
-                level: VkCommandBufferLevel(rawValue: self.level.rawValue),
-                commandBufferCount: self.commandBufferCount
-        )
-    }
-}
-
-public struct CommandPoolCreateInfo {
-    public let next: Any? = nil
-    public let flags: Flags
-    public let queueFamilyIndex: UInt32
-
-    public init(flags: Flags,
-                queueFamilyIndex: UInt32) {
-        self.flags = flags
-        self.queueFamilyIndex = queueFamilyIndex
-    }
-
-    public struct Flags: OptionSet {
-        public let rawValue: UInt32
-
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
-
-        public static let none = Flags(rawValue: 0)
-        public static let transient = Flags(rawValue: 1 << 0)
-        public static let resetCommandBuffer = Flags(rawValue: 1 << 1)
-        public static let protected = Flags(rawValue: 1 << 2)
-    }
-
-    func toVulkan() -> VkCommandPoolCreateInfo {
-        return VkCommandPoolCreateInfo(
-                sType: VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-                pNext: nil,
-                flags: self.flags.rawValue,
-                queueFamilyIndex: self.queueFamilyIndex
-        )
-    }
-}
-
 public struct ComponentMapping {
     public let r: ComponentSwizzle
     public let g: ComponentSwizzle
@@ -283,32 +176,6 @@ public struct DescriptorImageInfo {
         )
 
         return value
-    }
-}
-
-public struct DescriptorPoolCreateInfo {
-    public var flags: Flags
-    public var maxSets: UInt32
-    public let poolSizes: [DescriptorPoolSize]
-
-    public init(flags: Flags,
-                maxSets: UInt32,
-                poolSizes: [DescriptorPoolSize]) {
-        self.flags = flags
-        self.maxSets = maxSets
-        self.poolSizes = poolSizes
-    }
-
-    public struct Flags: OptionSet {
-        public let rawValue: UInt32
-
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
-
-        public static let none = Flags(rawValue: 0)
-        public static let freeDescriptorSet = Flags(rawValue: 0x00000001)
-        public static let updateAfterBind = Flags(rawValue: 0x00000002)
     }
 }
 
@@ -1425,7 +1292,7 @@ public struct SurfaceFormat {
 public struct SwapchainCreateInfo {
     public let pNext: UnsafeRawPointer? = nil
     public let flags: Flags
-    public let surface: Surface
+    public let surface: SurfaceKHR
     public let minImageCount: UInt32
     public let imageFormat: Format
     public let imageColorSpace: ColorSpace
@@ -1441,7 +1308,7 @@ public struct SwapchainCreateInfo {
     public let oldSwapchain: Swapchain?
 
     public init(flags: Flags,
-                surface: Surface,
+                surface: SurfaceKHR,
                 minImageCount: UInt32,
                 imageFormat: Format,
                 imageColorSpace: ColorSpace,
@@ -1489,7 +1356,7 @@ public struct SwapchainCreateInfo {
                 sType: VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
                 pNext: self.pNext,
                 flags: VkSwapchainCreateFlagsKHR(self.flags.rawValue),
-                surface: self.surface.pointer,
+                surface: self.surface.vulkanPointer,
                 minImageCount: self.minImageCount,
                 imageFormat: self.imageFormat.vulkanValue,
                 imageColorSpace: self.imageColorSpace.vulkanValue,

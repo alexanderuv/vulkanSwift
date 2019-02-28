@@ -10,7 +10,7 @@ import SGLMath
 public class VulkanSample {
     public let window: Window
     public let instance: Instance // vulkan instance
-    public let surface: Surface
+    public let surface: SurfaceKHR
     public let gpu: PhysicalDevice
     public let device: Device
     public var swapchain: Swapchain? = nil
@@ -91,7 +91,7 @@ public class VulkanSample {
     }
 
     func initializeQueue() throws {
-        self.queue = self.device.createQueue(presentFamilyIndex: 0)
+        self.queue = Queue.create(fromDevice: self.device, presentFamilyIndex: 0)
     }
 
     func initializeCommands() throws {
@@ -101,7 +101,7 @@ public class VulkanSample {
         )
 
         // create command pool
-        self.commandPool = try device.createCommandPool(createInfo: info)
+        self.commandPool = try CommandPool.create(from: device, info: info)
 
         let allocateInfo = CommandBufferAllocateInfo(
                 commandPool: self.commandPool!,
@@ -109,7 +109,7 @@ public class VulkanSample {
                 commandBufferCount: 1
         )
 
-        self.commandBuffer = try device.allocateCommandBuffer(allocInfo: allocateInfo)
+        self.commandBuffer = try CommandBuffer.allocate(device: device, allocInfo: allocateInfo)
     }
 
     func initializeSwapchain() throws {
@@ -184,7 +184,7 @@ public class VulkanSample {
         return gpus[0]
     }
 
-    class func createDevice(gpu: PhysicalDevice, surface: Surface) throws -> Device {
+    class func createDevice(gpu: PhysicalDevice, surface: SurfaceKHR) throws -> Device {
 
         var chosenQueueFamily: QueueFamilyProperties? = nil
         for fam in gpu.queueFamilyProperties {
@@ -511,7 +511,7 @@ void main() {
         return nil
     }
 
-    func selectFormat(for gpu: PhysicalDevice, surface: Surface) throws -> SurfaceFormat {
+    func selectFormat(for gpu: PhysicalDevice, surface: SurfaceKHR) throws -> SurfaceFormat {
         let formats = try gpu.getSurfaceFormats(for: surface)
 
         for format in formats {

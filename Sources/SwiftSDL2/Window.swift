@@ -47,7 +47,7 @@ public class Window {
         );
 
         guard sdlPointer != nil else {
-            print("Error while creating window")
+            print("Error while creating window: \(lastSDLError())")
             return nil
         }
     }
@@ -71,14 +71,14 @@ public class Window {
         }
     }
 
-    public func createVulkanSurface(instance: Instance) throws -> Surface {
+    public func createVulkanSurface(instance: Instance) throws -> SurfaceKHR {
         var surface = VkSurfaceKHR(bitPattern: 0)
 
         if SDL_Vulkan_CreateSurface(sdlPointer, instance.pointer, &surface) != SDL_TRUE {
             throw lastSDLError()
         }
 
-        return Surface(instance: instance, surface: surface!)
+        return SurfaceKHR(instance: instance, surface: surface!)
     }
 
     public func getInstanceExtensions() throws -> [String] {

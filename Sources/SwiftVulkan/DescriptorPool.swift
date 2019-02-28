@@ -1,6 +1,32 @@
 
 import CVulkan
 
+public class DescriptorPoolCreateInfo {
+    public var flags: Flags
+    public var maxSets: UInt32
+    public let poolSizes: [DescriptorPoolSize]
+
+    public init(flags: Flags,
+                maxSets: UInt32,
+                poolSizes: [DescriptorPoolSize]) {
+        self.flags = flags
+        self.maxSets = maxSets
+        self.poolSizes = poolSizes
+    }
+
+    public struct Flags: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        public static let none = Flags(rawValue: 0)
+        public static let freeDescriptorSet = Flags(rawValue: 0x00000001)
+        public static let updateAfterBind = Flags(rawValue: 0x00000002)
+    }
+}
+
 public class DescriptorPool {
 
     public let vulkanValue: VkDescriptorPool

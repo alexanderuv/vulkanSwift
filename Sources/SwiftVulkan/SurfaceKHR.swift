@@ -8,15 +8,15 @@ import CVulkan
 public class SurfaceKHR {
 
     public let instance: Instance
-    public let pointer: VkSurfaceKHR
+    public let vulkanPointer: VkSurfaceKHR
 
     public init(instance: Instance, surface: VkSurfaceKHR) {
         self.instance = instance
-        self.pointer = surface
+        self.vulkanPointer = surface
     }
 
     deinit {
         print("Destroying surface")
-        vkDestroySurfaceKHR(instance.pointer, pointer, nil)
+        vkDestroySurfaceKHR(instance.pointer, vulkanPointer, nil)
     }
 }

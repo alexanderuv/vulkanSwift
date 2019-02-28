@@ -72,7 +72,7 @@ public class Instance {
         throw opResult.toResult()
     }
 
-    public func createSurface(createInfo info: SurfaceCreateInfo) throws -> Surface {
+    public func createSurface(createInfo info: SurfaceCreateInfo) throws -> SurfaceKHR {
         var surface = VkSurfaceKHR(bitPattern: 0)
 
         var opResult = VK_SUCCESS
@@ -81,7 +81,7 @@ public class Instance {
         }
 
         if opResult == VK_SUCCESS {
-            return Surface(instance: self,  surface: surface!)
+            return SurfaceKHR(instance: self,  surface: surface!)
         }
         
         throw opResult.toResult()
