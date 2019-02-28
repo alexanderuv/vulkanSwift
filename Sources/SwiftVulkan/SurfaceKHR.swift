@@ -5,7 +5,7 @@
 
 import CVulkan
 
-public class Surface {
+public class SurfaceKHR {
 
     public let instance: Instance
     public let pointer: VkSurfaceKHR
