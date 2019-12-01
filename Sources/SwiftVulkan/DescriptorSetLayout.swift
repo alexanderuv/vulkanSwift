@@ -2,12 +2,12 @@
 import CVulkan
 
 public class DescriptorSetLayout {
-    public let vulkanValue: VkDescriptorSetLayout
+    public let vulkanPointer: VkDescriptorSetLayout
     public let device: Device
 
-    init(vulkanValue: VkDescriptorSetLayout,
-        device: Device) {
-        self.vulkanValue = vulkanValue
+    init(vulkanPointer: VkDescriptorSetLayout,
+         device: Device) {
+        self.vulkanPointer = vulkanPointer
         self.device = device
     }
 
@@ -18,7 +18,7 @@ public class DescriptorSetLayout {
         var layout = VkDescriptorSetLayout(bitPattern: 0)
         let bindings = createInfo.bindings.map { return VkDescriptorSetLayoutBinding(
                 binding: $0.binding,
-                descriptorType: $0.descriptorType.vulkanValue,
+                descriptorType: $0.descriptorType.vulkanPointer,
                 descriptorCount: $0.descriptorCount,
                 stageFlags: UInt32($0.stageFlags.rawValue),
                 pImmutableSamplers: $0.immutableSamplers?.map { p in p.vulkanValue }

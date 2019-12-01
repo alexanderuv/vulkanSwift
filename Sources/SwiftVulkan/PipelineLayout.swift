@@ -2,20 +2,20 @@
 import CVulkan
 
 public class PipelineLayout {
-    public var vulkanValue: VkPipelineLayout
+    public var vulkanPointer: VkPipelineLayout
     public var device: Device
 
-    init(vulkanValue: VkPipelineLayout,
+    init(vulkanPointer: VkPipelineLayout,
             device: Device) {
-        self.vulkanValue = vulkanValue
+        self.vulkanPointer = vulkanPointer
         self.device = device
     }
 
     public class func create(device: Device, createInfo: PipelineLayoutCreateInfo) throws -> PipelineLayout {
         var pipelineLayout = VkPipelineLayout(bitPattern: 0)
 
-        let layouts: [VkDescriptorSetLayout?] = createInfo.setLayouts.map { $0.vulkanValue }
-        let pushConstantRanges = createInfo.pushConstantRanges.map { $0.vulkanValue }
+        let layouts: [VkDescriptorSetLayout?] = createInfo.setLayouts.map { $0.vulkanPointer }
+        let pushConstantRanges = createInfo.pushConstantRanges.map { $0.vulkanPointer }
 
         let ci = VkPipelineLayoutCreateInfo(
             sType: VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
@@ -35,10 +35,10 @@ public class PipelineLayout {
             throw opResult.toResult()
         }
 
-        return PipelineLayout(vulkanValue: pipelineLayout!, device: device)
+        return PipelineLayout(vulkanPointer: pipelineLayout!, device: device)
     }
 
     deinit {
-        vkDestroyPipelineLayout(self.device.pointer, self.vulkanValue, nil)
+        vkDestroyPipelineLayout(self.device.pointer, self.vulkanPointer, nil)
     }
 }

@@ -8,28 +8,28 @@ import CVulkan
 public class Device {
 
     public let instance: Instance
-    public let pointer: VkDevice
+    public let vulkanPointer: VkDevice
 
     init(instance: Instance,
-         device: VkDevice) {
+         vulkanPointer: VkDevice) {
         self.instance = instance
-        self.pointer = device
+        self.vulkanPointer = vulkanPointer
     }
 
     public func allocateDescriptorSets(allocateInfo info: DescriptorSetAllocateInfo) throws -> DescriptorSet {
         var descriptor = VkDescriptorSet(bitPattern: 0)
 
-        let layouts: [VkDescriptorSetLayout?] = info.setLayouts.map { $0.vulkanValue }
+        let layouts: [VkDescriptorSetLayout?] = info.setLayouts.map { $0.vulkanPointer }
         let ai = VkDescriptorSetAllocateInfo(
             sType: VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO, 
             pNext: nil, 
-            descriptorPool: info.descriptorPool.vulkanValue, 
+            descriptorPool: info.descriptorPool.vulkanPointer,
             descriptorSetCount: info.descriptorSetCount, 
             pSetLayouts: UnsafePointer(layouts)
         )
 
         let opResult = withUnsafePointer(to: ai) {
-            return vkAllocateDescriptorSets(self.pointer, $0, &descriptor)
+            return vkAllocateDescriptorSets(self.vulkanPointer, $0, &descriptor)
         }
 
         guard opResult == VK_SUCCESS else {

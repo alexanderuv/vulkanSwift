@@ -20,7 +20,7 @@ func enableDebugging2(createDebugUtilsMessengerEXT: PFN_vkCreateDebugUtilsMessen
 
     var opResult = VK_SUCCESS
     withUnsafePointer(to: x) {
-        opResult = createDebugUtilsMessengerEXT(instance.pointer, $0, nil, &result)
+        opResult = createDebugUtilsMessengerEXT(instance.vulkanPointer, $0, nil, &result)
     }
     
     guard opResult == VK_SUCCESS else {

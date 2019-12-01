@@ -24,8 +24,8 @@ extension String {
 }
 
 extension VkResult {
-    func toResult() -> Result {
-        return Result(rawValue: self.rawValue)!
+    func toResult() -> VulkanResult {
+        return VulkanResult(rawValue: self.rawValue)!
     }
 }
 

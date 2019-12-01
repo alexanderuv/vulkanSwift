@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "SGLMath",
-        "repositoryURL": "https://github.com/SwiftGL/Math.git",
+        "package": "SDL",
+        "repositoryURL": "https://github.com/alexanderuv/SDL",
         "state": {
-          "branch": null,
-          "revision": "4712dfff4fac7c459a3f997cea1b5e6475f14641",
-          "version": "2.2.0"
+          "branch": "master",
+          "revision": "980c6a9470cb77aab58488e8d7e9e0870d818559",
+          "version": null
         }
       }
     ]

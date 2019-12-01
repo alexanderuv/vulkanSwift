@@ -1,0 +1,5 @@
+module SwiftVulkanUnions [system] {
+    header "SwiftVulkanUnions.h"
+    link "SwiftVulkanUnions"
+    export *
+}

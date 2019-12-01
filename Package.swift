@@ -1,57 +1,41 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-        name: "vulkansample",
+        name: "SwiftVulkanSample",
         products: [
             // Products define the executables and libraries produced by a package, and make them visible to other packages.
-            .library(
-                    name: "SwiftSDL2",
-                    targets: ["SwiftSDL2"]),
             .executable(
-                    name: "vulkansample",
-                    targets: ["vulkansample"])
+                    name: "SwiftVulkanSample",
+                    targets: ["SwiftVulkanSample"])
         ],
         dependencies: [
             // Dependencies declare other packages that this package depends on.
-            .package(url: "https://github.com/SwiftGL/Math.git", from: "2.0.0"),
+            .package(url: "https://github.com/alexanderuv/SDL", .branch("master")),
         ],
         targets: [
-            // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-            // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-            .systemLibrary(
-                    name: "CSDL2",
-                    pkgConfig: "sdl2",
-                    providers: [
-                        .brew(["sdl2"]),
-                        .apt(["libsdl2-dev"])
-                    ]
-            ),
             .systemLibrary(
                     name: "CVulkan",
                     pkgConfig: "vulkan"
             ),
-            .target(
-                    name: "SwiftSDL2",
-                    dependencies: [
-                        "CSDL2",
-                        "SwiftVulkan",
-                        "SGLMath"
-                    ]),
+            .systemLibrary(
+                    name: "SwiftVulkanUnions"),
             .target(
                     name: "SwiftVulkan",
                     dependencies: [
-                        "CVulkan"
+                        "CVulkan",
+                        "SwiftVulkanUnions"
                     ]),
             .target(
-                    name: "vulkansample",
+                    name: "SwiftVulkanSample",
                     dependencies: [
-                        "SwiftSDL2"
+                        "SDL",
+                        "SwiftVulkan"
                     ]),
             .testTarget(
-                    name: "vulkansampleTests",
-                    dependencies: ["SwiftSDL2"]),
+                    name: "SwiftVulkanSampleTests",
+                    dependencies: ["SDL"])
         ]
 )

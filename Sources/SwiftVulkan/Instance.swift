@@ -7,7 +7,7 @@ import CVulkan
 
 public class Instance {
 
-    public let pointer: VkInstance
+    public let vulkanPointer: VkInstance
 
     init(rawInstance: VkInstance) {
         self.pointer = rawInstance
@@ -72,20 +72,20 @@ public class Instance {
         throw opResult.toResult()
     }
 
-    public func createSurface(createInfo info: SurfaceCreateInfo) throws -> SurfaceKHR {
-        var surface = VkSurfaceKHR(bitPattern: 0)
-
-        var opResult = VK_SUCCESS
-        withUnsafePointer(to: info.toVulkan()) {
-            opResult = vkCreateMacOSSurfaceMVK(self.pointer, $0, nil, &surface)
-        }
-
-        if opResult == VK_SUCCESS {
-            return SurfaceKHR(instance: self,  surface: surface!)
-        }
-        
-        throw opResult.toResult()
-    }
+//    public func createSurface(createInfo info: SurfaceCreateInfo) throws -> SurfaceKHR {
+//        var surface = VkSurfaceKHR(bitPattern: 0)
+//
+//        var opResult = VK_SUCCESS
+//        withUnsafePointer(to: info.toVulkan()) {
+//            opResult = vkCreateMacOSSurfaceMVK(self.pointer, $0, nil, &surface)
+//        }
+//
+//        if opResult == VK_SUCCESS {
+//            return SurfaceKHR(instance: self,  surface: surface!)
+//        }
+//
+//        throw opResult.toResult()
+//    }
 
     public func enumeratePhysicalDevices() throws -> [PhysicalDevice] {
         var count: UInt32 = 0
