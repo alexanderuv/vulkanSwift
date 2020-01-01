@@ -15,44 +15,44 @@ public class Device {
         self.instance = instance
         self.vulkanPointer = vulkanPointer
     }
+//
+//    public func allocateDescriptorSets(allocateInfo info: DescriptorSetAllocateInfo) throws -> DescriptorSet {
+//        var descriptor = VkDescriptorSet(bitPattern: 0)
+//
+//        let layouts: [VkDescriptorSetLayout?] = info.setLayouts.map { $0.vulkanPointer }
+//        let ai = VkDescriptorSetAllocateInfo(
+//            sType: VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+//            pNext: nil,
+//            descriptorPool: info.descriptorPool.vulkanPointer,
+//            descriptorSetCount: info.descriptorSetCount,
+//            pSetLayouts: UnsafePointer(layouts)
+//        )
+//
+//        let opResult = withUnsafePointer(to: ai) {
+//            return vkAllocateDescriptorSets(self.vulkanPointer, $0, &descriptor)
+//        }
+//
+//        guard opResult == VK_SUCCESS else {
+//            throw opResult.toResult()
+//        }
+//
+//        return DescriptorSet(vulkanValue: descriptor!, device: self)
+//    }
 
-    public func allocateDescriptorSets(allocateInfo info: DescriptorSetAllocateInfo) throws -> DescriptorSet {
-        var descriptor = VkDescriptorSet(bitPattern: 0)
-
-        let layouts: [VkDescriptorSetLayout?] = info.setLayouts.map { $0.vulkanPointer }
-        let ai = VkDescriptorSetAllocateInfo(
-            sType: VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO, 
-            pNext: nil, 
-            descriptorPool: info.descriptorPool.vulkanPointer,
-            descriptorSetCount: info.descriptorSetCount, 
-            pSetLayouts: UnsafePointer(layouts)
-        )
-
-        let opResult = withUnsafePointer(to: ai) {
-            return vkAllocateDescriptorSets(self.vulkanPointer, $0, &descriptor)
-        }
-
-        guard opResult == VK_SUCCESS else {
-            throw opResult.toResult()
-        }
-
-        return DescriptorSet(vulkanValue: descriptor!, device: self)
-    }
-
-    public func updateDescriptorSets(
-        descriptorWrites: [WriteDescriptorSet], 
-        descriptorCopies: [CopyDescriptorSet]
-    ) {
-        let writes = descriptorWrites.map { $0.toVulkan() }
-        let copies = descriptorCopies.map { $0.toVulkan() }
-
-        vkUpdateDescriptorSets(self.pointer, 
-            UInt32(descriptorWrites.count), descriptorWrites.count == 0 ? nil : writes,
-            UInt32(descriptorCopies.count), descriptorCopies.count == 0 ? nil : copies)
-    }
+//    public func updateDescriptorSets(
+//        descriptorWrites: [WriteDescriptorSet],
+//        descriptorCopies: [CopyDescriptorSet]
+//    ) {
+//        let writes = descriptorWrites.map { $0.toVulkan() }
+//        let copies = descriptorCopies.map { $0.toVulkan() }
+//
+//        vkUpdateDescriptorSets(self.pointer,
+//            UInt32(descriptorWrites.count), descriptorWrites.count == 0 ? nil : writes,
+//            UInt32(descriptorCopies.count), descriptorCopies.count == 0 ? nil : copies)
+//    }
 
     deinit {
         print("Destroying device")
-        vkDestroyDevice(pointer, nil)
+        vkDestroyDevice(self.vulkanPointer, nil)
     }
 }

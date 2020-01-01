@@ -17,6 +17,6 @@ public class SurfaceKHR {
 
     deinit {
         print("Destroying surface")
-        vkDestroySurfaceKHR(instance.pointer, vulkanPointer, nil)
+        vkDestroySurfaceKHR(instance.vulkanPointer, vulkanPointer, nil)
     }
 }

@@ -5,8 +5,6 @@
 
 import CVulkan
 
-public typealias DeviceSize = UInt64
-
 // This is not a Vulkan struct, but we're adding it to improve semantics
 public struct Version {
     let major: Int

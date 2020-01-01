@@ -10,7 +10,7 @@ public class Instance {
     public let vulkanPointer: VkInstance
 
     init(rawInstance: VkInstance) {
-        self.pointer = rawInstance
+        self.vulkanPointer = rawInstance
     }
 
     public class func createInstance(createInfo info: InstanceCreateInfo) throws -> Instance {

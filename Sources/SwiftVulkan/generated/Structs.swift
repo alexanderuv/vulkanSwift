@@ -10,44 +10,31 @@ import CVulkan
 import SwiftVulkanUnions
 
 // Mapped from VkAccelerationStructureCreateInfoNV
-public struct AccelerationStructureCreateInfoNV {
-    public let compactedSize: DeviceSize
-    public let info: AccelerationStructureInfoNV
-}
-
-// Mapped from VkAccelerationStructureInfoNV
-public struct AccelerationStructureInfoNV {
-    public let type: AccelerationStructureTypeNV
-    public let flags: BuildAccelerationStructureFlagsNV?
-    public let instanceCount: UInt32?
-    public let geometryCount: UInt32?
-    public let geometries: [GeometryNV]
-}
-
-// Mapped from VkAccelerationStructureMemoryRequirementsInfoNV
-public struct AccelerationStructureMemoryRequirementsInfoNV {
-    public let type: AccelerationStructureMemoryRequirementsTypeNV
-    public let accelerationStructure: AccelerationStructureNV
-}
-
-// Mapped from VkAcquireNextImageInfoKHR
-public struct AcquireNextImageInfoKHR {
-    public let swapchain: SwapchainKHR
-    public let timeout: UInt64
-    public let semaphore: Semaphore?
-    public let fence: Fence?
-    public let deviceMask: UInt32
-}
-
-// Mapped from VkAllocationCallbacks
-public struct AllocationCallbacks {
-    public let userData: UnsafeRawPointer?
-    public let pfnAllocation: PFN_vkAllocationFunction
-    public let pfnReallocation: PFN_vkReallocationFunction
-    public let pfnFree: PFN_vkFreeFunction
-    public let pfnInternalAllocation: PFN_vkInternalAllocationNotification?
-    public let pfnInternalFree: PFN_vkInternalFreeNotification?
-}
+//public struct AccelerationStructureCreateInfoNV {
+//    public let compactedSize: DeviceSize
+//    public let info: AccelerationStructureInfoNV
+//}
+//
+//// Mapped from VkAccelerationStructureInfoNV
+//public struct AccelerationStructureInfoNV {
+//    public let type: AccelerationStructureTypeNV
+//    public let flags: BuildAccelerationStructureFlagsNV?
+//    public let instanceCount: UInt32?
+//    public let geometryCount: UInt32?
+//    public let geometries: [GeometryNV]
+//}
+//
+//
+//
+//// Mapped from VkAllocationCallbacks
+//public struct AllocationCallbacks {
+//    public let userData: UnsafeRawPointer?
+//    public let pfnAllocation: PFN_vkAllocationFunction
+//    public let pfnReallocation: PFN_vkReallocationFunction
+//    public let pfnFree: PFN_vkFreeFunction
+//    public let pfnInternalAllocation: PFN_vkInternalAllocationNotification?
+//    public let pfnInternalFree: PFN_vkInternalFreeNotification?
+//}
 
 // Mapped from VkApplicationInfo
 public struct ApplicationInfo {
@@ -58,634 +45,609 @@ public struct ApplicationInfo {
     public let apiVersion: UInt32
 }
 
-// Mapped from VkAttachmentDescription
-public struct AttachmentDescription {
-    public let flags: AttachmentDescriptionFlags?
-    public let format: Format
-    public let samples: SampleCountFlagBits
-    public let loadOp: AttachmentLoadOp
-    public let storeOp: AttachmentStoreOp
-    public let stencilLoadOp: AttachmentLoadOp
-    public let stencilStoreOp: AttachmentStoreOp
-    public let initialLayout: ImageLayout
-    public let finalLayout: ImageLayout
-}
-
-// Mapped from VkAttachmentDescription2KHR
-public struct AttachmentDescription2KHR {
-    public let flags: AttachmentDescriptionFlags?
-    public let format: Format
-    public let samples: SampleCountFlagBits
-    public let loadOp: AttachmentLoadOp
-    public let storeOp: AttachmentStoreOp
-    public let stencilLoadOp: AttachmentLoadOp
-    public let stencilStoreOp: AttachmentStoreOp
-    public let initialLayout: ImageLayout
-    public let finalLayout: ImageLayout
-}
-
-// Mapped from VkAttachmentReference
-public struct AttachmentReference {
-    public let attachment: UInt32
-    public let layout: ImageLayout
-}
-
-// Mapped from VkAttachmentReference2KHR
-public struct AttachmentReference2KHR {
-    public let attachment: UInt32
-    public let layout: ImageLayout
-    public let aspectMask: ImageAspectFlags
-}
-
-// Mapped from VkAttachmentSampleLocationsEXT
-public struct AttachmentSampleLocationsEXT {
-    public let attachmentIndex: UInt32
-    public let sampleLocationsInfo: SampleLocationsInfoEXT
-}
-
-// Mapped from VkBindAccelerationStructureMemoryInfoNV
-public struct BindAccelerationStructureMemoryInfoNV {
-    public let accelerationStructure: AccelerationStructureNV
-    public let memory: DeviceMemory
-    public let memoryOffset: DeviceSize
-    public let deviceIndexCount: UInt32?
-    public let deviceIndices: [UInt32]
-}
-
-// Mapped from VkBindBufferMemoryDeviceGroupInfo
-public struct BindBufferMemoryDeviceGroupInfo {
-    public let deviceIndexCount: UInt32?
-    public let deviceIndices: [UInt32]
-}
-public typealias BindBufferMemoryDeviceGroupInfoKHR = BindBufferMemoryDeviceGroupInfo
-
-// Mapped from VkBindBufferMemoryInfo
-public struct BindBufferMemoryInfo {
-    public let buffer: Buffer
-    public let memory: DeviceMemory
-    public let memoryOffset: DeviceSize
-}
-public typealias BindBufferMemoryInfoKHR = BindBufferMemoryInfo
-
-// Mapped from VkBindImageMemoryDeviceGroupInfo
-public struct BindImageMemoryDeviceGroupInfo {
-    public let deviceIndexCount: UInt32?
-    public let deviceIndices: [UInt32]
-    public let splitInstanceBindRegions: [Rect2D]
-}
-public typealias BindImageMemoryDeviceGroupInfoKHR = BindImageMemoryDeviceGroupInfo
-
-// Mapped from VkBindImageMemoryInfo
-public struct BindImageMemoryInfo {
-    public let image: Image
-    public let memory: DeviceMemory
-    public let memoryOffset: DeviceSize
-}
-public typealias BindImageMemoryInfoKHR = BindImageMemoryInfo
-
-// Mapped from VkBindImageMemorySwapchainInfoKHR
-public struct BindImageMemorySwapchainInfoKHR {
-    public let swapchain: SwapchainKHR
-    public let imageIndex: UInt32
-}
-
-// Mapped from VkBindImagePlaneMemoryInfo
-public struct BindImagePlaneMemoryInfo {
-    public let planeAspect: ImageAspectFlagBits
-}
-public typealias BindImagePlaneMemoryInfoKHR = BindImagePlaneMemoryInfo
-
-// Mapped from VkBindSparseInfo
-public struct BindSparseInfo {
-    public let waitSemaphores: [Semaphore]
-    public let bufferBinds: [SparseBufferMemoryBindInfo]
-    public let imageOpaqueBinds: [SparseImageOpaqueMemoryBindInfo]
-    public let imageBinds: [SparseImageMemoryBindInfo]
-    public let signalSemaphores: [Semaphore]
-}
-
-// Mapped from VkBufferCopy
-public struct BufferCopy {
-    public let srcOffset: DeviceSize
-    public let dstOffset: DeviceSize
-    public let size: DeviceSize
-}
-
-// Mapped from VkBufferCreateInfo
-public struct BufferCreateInfo {
-    public let flags: BufferCreateFlags?
-    public let size: DeviceSize
-    public let usage: BufferUsageFlags
-    public let sharingMode: SharingMode
-    public let queueFamilyIndexCount: UInt32?
-    public let queueFamilyIndices: [UInt32]
-}
-
-// Mapped from VkBufferDeviceAddressCreateInfoEXT
-public struct BufferDeviceAddressCreateInfoEXT {
-    public let deviceAddress: DeviceAddress
-}
-
-// Mapped from VkBufferDeviceAddressInfoEXT
-public struct BufferDeviceAddressInfoEXT {
-    public let buffer: Buffer
-}
-
-// Mapped from VkBufferImageCopy
-public struct BufferImageCopy {
-    public let bufferOffset: DeviceSize
-    public let bufferRowLength: UInt32
-    public let bufferImageHeight: UInt32
-    public let imageSubresource: ImageSubresourceLayers
-    public let imageOffset: Offset3D
-    public let imageExtent: Extent3D
-}
-
-// Mapped from VkBufferMemoryBarrier
-public struct BufferMemoryBarrier {
-    public let srcAccessMask: AccessFlags?
-    public let dstAccessMask: AccessFlags?
-    public let srcQueueFamilyIndex: UInt32
-    public let dstQueueFamilyIndex: UInt32
-    public let buffer: Buffer
-    public let offset: DeviceSize
-    public let size: DeviceSize
-}
-
-// Mapped from VkBufferMemoryRequirementsInfo2
-public struct BufferMemoryRequirementsInfo2 {
-    public let buffer: Buffer
-}
-public typealias BufferMemoryRequirementsInfo2KHR = BufferMemoryRequirementsInfo2
-
-// Mapped from VkBufferViewCreateInfo
-public struct BufferViewCreateInfo {
-    public let flags: BufferViewCreateFlags?
-    public let buffer: Buffer
-    public let format: Format
-    public let offset: DeviceSize
-    public let range: DeviceSize
-}
-
-// Mapped from VkCalibratedTimestampInfoEXT
-public struct CalibratedTimestampInfoEXT {
-    public let timeDomain: TimeDomainEXT
-}
-
-// Mapped from VkCheckpointDataNV
-public struct CheckpointDataNV {
-    public let stage: PipelineStageFlagBits
-    public let checkpointMarker: UnsafeRawPointer
-}
-
-// Mapped from VkClearAttachment
-public struct ClearAttachment {
-    public let aspectMask: ImageAspectFlags
-    public let colorAttachment: UInt32
-    public let clearValue: ClearValue
-}
-
-// Mapped from VkClearDepthStencilValue
-public struct ClearDepthStencilValue {
-    public let depth: Float
-    public let stencil: UInt32
-}
-
-// Mapped from VkClearRect
-public struct ClearRect {
-    public let rect: Rect2D
-    public let baseArrayLayer: UInt32
-    public let layerCount: UInt32
-}
-
-// Mapped from VkCmdProcessCommandsInfoNVX
-public struct CmdProcessCommandsInfoNVX {
-    public let objectTable: ObjectTableNVX
-    public let indirectCommandsLayout: IndirectCommandsLayoutNVX
-    public let indirectCommandsTokens: [IndirectCommandsTokenNVX]
-    public let maxSequencesCount: UInt32
-    public let targetCommandBuffer: CommandBuffer?
-    public let sequencesCountBuffer: Buffer?
-    public let sequencesCountOffset: DeviceSize?
-    public let sequencesIndexBuffer: Buffer?
-    public let sequencesIndexOffset: DeviceSize?
-}
-
-// Mapped from VkCmdReserveSpaceForCommandsInfoNVX
-public struct CmdReserveSpaceForCommandsInfoNVX {
-    public let objectTable: ObjectTableNVX
-    public let indirectCommandsLayout: IndirectCommandsLayoutNVX
-    public let maxSequencesCount: UInt32
-}
-
-// Mapped from VkCoarseSampleLocationNV
-public struct CoarseSampleLocationNV {
-    public let pixelX: UInt32
-    public let pixelY: UInt32
-    public let sample: UInt32
-}
-
-// Mapped from VkCoarseSampleOrderCustomNV
-public struct CoarseSampleOrderCustomNV {
-    public let shadingRate: ShadingRatePaletteEntryNV
-    public let sampleLocations: [CoarseSampleLocationNV]
-}
-
-// Mapped from VkCommandBufferAllocateInfo
-public struct CommandBufferAllocateInfo {
-    public let commandPool: CommandPool
-    public let level: CommandBufferLevel
-    public let commandBufferCount: UInt32
-}
-
-// Mapped from VkCommandBufferBeginInfo
-public struct CommandBufferBeginInfo {
-    public let flags: CommandBufferUsageFlags?
-    public let inheritanceInfo: CommandBufferInheritanceInfo?
-}
-
-// Mapped from VkCommandBufferInheritanceConditionalRenderingInfoEXT
-public struct CommandBufferInheritanceConditionalRenderingInfoEXT {
-    public let conditionalRenderingEnable: Bool
-}
-
-// Mapped from VkCommandBufferInheritanceInfo
-public struct CommandBufferInheritanceInfo {
-    public let renderPass: RenderPass?
-    public let subpass: UInt32
-    public let framebuffer: Framebuffer?
-    public let occlusionQueryEnable: Bool
-    public let queryFlags: QueryControlFlags?
-    public let pipelineStatistics: QueryPipelineStatisticFlags?
-}
-
-// Mapped from VkCommandPoolCreateInfo
-public struct CommandPoolCreateInfo {
-    public let flags: CommandPoolCreateFlags?
-    public let queueFamilyIndex: UInt32
-}
-
-// Mapped from VkComponentMapping
-public struct ComponentMapping {
-    public let r: ComponentSwizzle
-    public let g: ComponentSwizzle
-    public let b: ComponentSwizzle
-    public let a: ComponentSwizzle
-}
-
-// Mapped from VkComputePipelineCreateInfo
-public struct ComputePipelineCreateInfo {
-    public let flags: PipelineCreateFlags?
-    public let stage: PipelineShaderStageCreateInfo
-    public let layout: PipelineLayout
-    public let basePipelineHandle: Pipeline?
-    public let basePipelineIndex: Int32
-}
-
-// Mapped from VkConditionalRenderingBeginInfoEXT
-public struct ConditionalRenderingBeginInfoEXT {
-    public let buffer: Buffer
-    public let offset: DeviceSize
-    public let flags: ConditionalRenderingFlagsEXT?
-}
-
-// Mapped from VkConformanceVersionKHR
-public struct ConformanceVersionKHR {
-    public let major: UInt8
-    public let minor: UInt8
-    public let subminor: UInt8
-    public let patch: UInt8
-}
-
-// Mapped from VkCooperativeMatrixPropertiesNV
-public struct CooperativeMatrixPropertiesNV {
-    public let mSize: UInt32
-    public let nSize: UInt32
-    public let kSize: UInt32
-    public let aType: ComponentTypeNV
-    public let bType: ComponentTypeNV
-    public let cType: ComponentTypeNV
-    public let dType: ComponentTypeNV
-    public let scope: ScopeNV
-}
-
-// Mapped from VkCopyDescriptorSet
-public struct CopyDescriptorSet {
-    public let srcSet: DescriptorSet
-    public let srcBinding: UInt32
-    public let srcArrayElement: UInt32
-    public let dstSet: DescriptorSet
-    public let dstBinding: UInt32
-    public let dstArrayElement: UInt32
-    public let descriptorCount: UInt32
-}
-
-// Mapped from VkDebugMarkerMarkerInfoEXT
-public struct DebugMarkerMarkerInfoEXT {
-    public let markerName: String
-    public let color: [Float]?
-}
-
-// Mapped from VkDebugMarkerObjectNameInfoEXT
-public struct DebugMarkerObjectNameInfoEXT {
-    public let objectType: DebugReportObjectTypeEXT
-    public let object: UInt64
-    public let objectName: String
-}
-
-// Mapped from VkDebugMarkerObjectTagInfoEXT
-public struct DebugMarkerObjectTagInfoEXT {
-    public let objectType: DebugReportObjectTypeEXT
-    public let object: UInt64
-    public let tagName: UInt64
-    public let tagSize: Int
-    public let tag: UnsafeRawPointer
-}
-
-// Mapped from VkDebugReportCallbackCreateInfoEXT
-public struct DebugReportCallbackCreateInfoEXT {
-    public let flags: DebugReportFlagsEXT?
-    public let pfnCallback: PFN_vkDebugReportCallbackEXT
-    public let userData: UnsafeRawPointer?
-}
-
-// Mapped from VkDebugUtilsLabelEXT
-public struct DebugUtilsLabelEXT {
-    public let labelName: String
-    public let color: [Float]?
-}
-
-// Mapped from VkDebugUtilsMessengerCallbackDataEXT
-public struct DebugUtilsMessengerCallbackDataEXT {
-    public let flags: DebugUtilsMessengerCallbackDataFlagsEXT?
-    public let messageIdName: String?
-    public let messageIdNumber: Int32?
-    public let message: String
-    public let queueLabels: [DebugUtilsLabelEXT]
-    public let cmdBufLabels: [DebugUtilsLabelEXT]
-    public let objects: [DebugUtilsObjectNameInfoEXT]
-}
-
-// Mapped from VkDebugUtilsMessengerCreateInfoEXT
-public struct DebugUtilsMessengerCreateInfoEXT {
-    public let flags: DebugUtilsMessengerCreateFlagsEXT?
-    public let messageSeverity: DebugUtilsMessageSeverityFlagsEXT
-    public let messageType: DebugUtilsMessageTypeFlagsEXT
-    public let pfnUserCallback: PFN_vkDebugUtilsMessengerCallbackEXT
-    public let userData: UnsafeRawPointer?
-}
-
-// Mapped from VkDebugUtilsObjectNameInfoEXT
-public struct DebugUtilsObjectNameInfoEXT {
-    public let objectType: ObjectType
-    public let objectHandle: UInt64
-    public let objectName: String?
-}
-
-// Mapped from VkDebugUtilsObjectTagInfoEXT
-public struct DebugUtilsObjectTagInfoEXT {
-    public let objectType: ObjectType
-    public let objectHandle: UInt64
-    public let tagName: UInt64
-    public let tagSize: Int
-    public let tag: UnsafeRawPointer
-}
-
-// Mapped from VkDedicatedAllocationBufferCreateInfoNV
-public struct DedicatedAllocationBufferCreateInfoNV {
-    public let dedicatedAllocation: Bool
-}
-
-// Mapped from VkDedicatedAllocationImageCreateInfoNV
-public struct DedicatedAllocationImageCreateInfoNV {
-    public let dedicatedAllocation: Bool
-}
-
-// Mapped from VkDedicatedAllocationMemoryAllocateInfoNV
-public struct DedicatedAllocationMemoryAllocateInfoNV {
-    public let image: Image?
-    public let buffer: Buffer?
-}
-
-// Mapped from VkDescriptorBufferInfo
-public struct DescriptorBufferInfo {
-    public let buffer: Buffer
-    public let offset: DeviceSize
-    public let range: DeviceSize
-}
-
-// Mapped from VkDescriptorImageInfo
-public struct DescriptorImageInfo {
-    public let sampler: Sampler
-    public let imageView: ImageView
-    public let imageLayout: ImageLayout
-}
-
-// Mapped from VkDescriptorPoolCreateInfo
-public struct DescriptorPoolCreateInfo {
-    public let flags: DescriptorPoolCreateFlags?
-    public let maxSets: UInt32
-    public let poolSizes: [DescriptorPoolSize]
-}
-
-// Mapped from VkDescriptorPoolInlineUniformBlockCreateInfoEXT
-public struct DescriptorPoolInlineUniformBlockCreateInfoEXT {
-    public let maxInlineUniformBlockBindings: UInt32
-}
-
-// Mapped from VkDescriptorPoolSize
-public struct DescriptorPoolSize {
-    public let type: DescriptorType
-    public let descriptorCount: UInt32
-}
-
-// Mapped from VkDescriptorSetAllocateInfo
-public struct DescriptorSetAllocateInfo {
-    public let descriptorPool: DescriptorPool
-    public let descriptorSetCount: UInt32
-    public let setLayouts: [DescriptorSetLayout]
-}
-
-// Mapped from VkDescriptorSetLayoutBinding
-public struct DescriptorSetLayoutBinding {
-    public let binding: UInt32
-    public let descriptorType: DescriptorType
-    public let stageFlags: ShaderStageFlags
-    public let immutableSamplers: [Sampler]?
-}
-
-// Mapped from VkDescriptorSetLayoutBindingFlagsCreateInfoEXT
-public struct DescriptorSetLayoutBindingFlagsCreateInfoEXT {
-    public let bindingFlags: [DescriptorBindingFlagsEXT]?
-}
-
-// Mapped from VkDescriptorSetLayoutCreateInfo
-public struct DescriptorSetLayoutCreateInfo {
-    public let flags: DescriptorSetLayoutCreateFlags?
-    public let bindings: [DescriptorSetLayoutBinding]
-}
-
-// Mapped from VkDescriptorSetLayoutSupport
-public struct DescriptorSetLayoutSupport {
-    public let supported: Bool
-}
-public typealias DescriptorSetLayoutSupportKHR = DescriptorSetLayoutSupport
-
-// Mapped from VkDescriptorSetVariableDescriptorCountAllocateInfoEXT
-public struct DescriptorSetVariableDescriptorCountAllocateInfoEXT {
-    public let descriptorSetCount: UInt32?
-    public let descriptorCounts: [UInt32]
-}
-
-// Mapped from VkDescriptorSetVariableDescriptorCountLayoutSupportEXT
-public struct DescriptorSetVariableDescriptorCountLayoutSupportEXT {
-    public let maxVariableDescriptorCount: UInt32
-}
-
-// Mapped from VkDescriptorUpdateTemplateCreateInfo
-public struct DescriptorUpdateTemplateCreateInfo {
-    public let flags: DescriptorUpdateTemplateCreateFlags?
-    public let descriptorUpdateEntryCount: UInt32
-    public let descriptorUpdateEntries: [DescriptorUpdateTemplateEntry]
-    public let templateType: DescriptorUpdateTemplateType
-    public let descriptorSetLayout: DescriptorSetLayout
-    public let pipelineBindPoint: PipelineBindPoint
-    public let pipelineLayout: PipelineLayout
-    public let set: UInt32
-}
-public typealias DescriptorUpdateTemplateCreateInfoKHR = DescriptorUpdateTemplateCreateInfo
-
-// Mapped from VkDescriptorUpdateTemplateEntry
-public struct DescriptorUpdateTemplateEntry {
-    public let dstBinding: UInt32
-    public let dstArrayElement: UInt32
-    public let descriptorType: DescriptorType
-    public let offset: Int
-    public let stride: Int
-}
-public typealias DescriptorUpdateTemplateEntryKHR = DescriptorUpdateTemplateEntry
-
-// Mapped from VkDeviceCreateInfo
-public struct DeviceCreateInfo {
-    public let flags: DeviceCreateFlags?
-    public let queueCreateInfos: [DeviceQueueCreateInfo]
-    public let enabledLayerNames: [String]
-    public let enabledExtensionNames: [String]
-    public let enabledFeatures: PhysicalDeviceFeatures?
-}
-
-// Mapped from VkDeviceEventInfoEXT
-public struct DeviceEventInfoEXT {
-    public let deviceEvent: DeviceEventTypeEXT
-}
-
-// Mapped from VkDeviceGeneratedCommandsFeaturesNVX
-public struct DeviceGeneratedCommandsFeaturesNVX {
-    public let computeBindingPointSupport: Bool
-}
-
-// Mapped from VkDeviceGeneratedCommandsLimitsNVX
-public struct DeviceGeneratedCommandsLimitsNVX {
-    public let maxIndirectCommandsLayoutTokenCount: UInt32
-    public let maxObjectEntryCounts: UInt32
-    public let minSequenceCountBufferOffsetAlignment: UInt32
-    public let minSequenceIndexBufferOffsetAlignment: UInt32
-    public let minCommandsTokenBufferOffsetAlignment: UInt32
-}
-
-// Mapped from VkDeviceGroupBindSparseInfo
-public struct DeviceGroupBindSparseInfo {
-    public let resourceDeviceIndex: UInt32
-    public let memoryDeviceIndex: UInt32
-}
-public typealias DeviceGroupBindSparseInfoKHR = DeviceGroupBindSparseInfo
-
-// Mapped from VkDeviceGroupCommandBufferBeginInfo
-public struct DeviceGroupCommandBufferBeginInfo {
-    public let deviceMask: UInt32
-}
-public typealias DeviceGroupCommandBufferBeginInfoKHR = DeviceGroupCommandBufferBeginInfo
-
-// Mapped from VkDeviceGroupDeviceCreateInfo
-public struct DeviceGroupDeviceCreateInfo {
-    public let physicalDevices: [PhysicalDevice]
-}
-public typealias DeviceGroupDeviceCreateInfoKHR = DeviceGroupDeviceCreateInfo
-
-// Mapped from VkDeviceGroupPresentCapabilitiesKHR
-public struct DeviceGroupPresentCapabilitiesKHR {
-    public let presentMask: [UInt32]
-    public let modes: DeviceGroupPresentModeFlagsKHR
-}
-
-// Mapped from VkDeviceGroupPresentInfoKHR
-public struct DeviceGroupPresentInfoKHR {
-    public let swapchainCount: UInt32?
-    public let deviceMasks: [UInt32]
-    public let mode: DeviceGroupPresentModeFlagBitsKHR
-}
-
-// Mapped from VkDeviceGroupRenderPassBeginInfo
-public struct DeviceGroupRenderPassBeginInfo {
-    public let deviceMask: UInt32
-    public let deviceRenderAreas: [Rect2D]
-}
-public typealias DeviceGroupRenderPassBeginInfoKHR = DeviceGroupRenderPassBeginInfo
-
-// Mapped from VkDeviceGroupSubmitInfo
-public struct DeviceGroupSubmitInfo {
-    public let waitSemaphoreDeviceIndices: [UInt32]
-    public let commandBufferDeviceMasks: [UInt32]
-    public let signalSemaphoreDeviceIndices: [UInt32]
-}
-public typealias DeviceGroupSubmitInfoKHR = DeviceGroupSubmitInfo
-
-// Mapped from VkDeviceGroupSwapchainCreateInfoKHR
-public struct DeviceGroupSwapchainCreateInfoKHR {
-    public let modes: DeviceGroupPresentModeFlagsKHR
-}
-
-// Mapped from VkDeviceMemoryOverallocationCreateInfoAMD
-public struct DeviceMemoryOverallocationCreateInfoAMD {
-    public let overallocationBehavior: MemoryOverallocationBehaviorAMD
-}
-
-// Mapped from VkDeviceQueueCreateInfo
-public struct DeviceQueueCreateInfo {
-    public let flags: DeviceQueueCreateFlags?
-    public let queueFamilyIndex: UInt32
-    public let queuePriorities: [Float]
-}
-
-// Mapped from VkDeviceQueueGlobalPriorityCreateInfoEXT
-public struct DeviceQueueGlobalPriorityCreateInfoEXT {
-    public let globalPriority: QueueGlobalPriorityEXT
-}
-
-// Mapped from VkDeviceQueueInfo2
-public struct DeviceQueueInfo2 {
-    public let flags: DeviceQueueCreateFlags
-    public let queueFamilyIndex: UInt32
-    public let queueIndex: UInt32
-}
-
-// Mapped from VkDispatchIndirectCommand
-public struct DispatchIndirectCommand {
-    public let x: UInt32
-    public let y: UInt32
-    public let z: UInt32
-}
-
-// Mapped from VkDisplayEventInfoEXT
-public struct DisplayEventInfoEXT {
-    public let displayEvent: DisplayEventTypeEXT
-}
-
-// Mapped from VkDisplayModeCreateInfoKHR
-public struct DisplayModeCreateInfoKHR {
-    public let flags: DisplayModeCreateFlagsKHR?
-    public let parameters: DisplayModeParametersKHR
-}
+//// Mapped from VkAttachmentDescription
+//public struct AttachmentDescription {
+//    public let flags: AttachmentDescriptionFlags?
+//    public let format: Format
+//    public let samples: SampleCountFlagBits
+//    public let loadOp: AttachmentLoadOp
+//    public let storeOp: AttachmentStoreOp
+//    public let stencilLoadOp: AttachmentLoadOp
+//    public let stencilStoreOp: AttachmentStoreOp
+//    public let initialLayout: ImageLayout
+//    public let finalLayout: ImageLayout
+//}
+//
+//// Mapped from VkAttachmentDescription2KHR
+//public struct AttachmentDescription2KHR {
+//    public let flags: AttachmentDescriptionFlags?
+//    public let format: Format
+//    public let samples: SampleCountFlagBits
+//    public let loadOp: AttachmentLoadOp
+//    public let storeOp: AttachmentStoreOp
+//    public let stencilLoadOp: AttachmentLoadOp
+//    public let stencilStoreOp: AttachmentStoreOp
+//    public let initialLayout: ImageLayout
+//    public let finalLayout: ImageLayout
+//}
+//
+//// Mapped from VkAttachmentReference
+//public struct AttachmentReference {
+//    public let attachment: UInt32
+//    public let layout: ImageLayout
+//}
+//
+//// Mapped from VkAttachmentReference2KHR
+//public struct AttachmentReference2KHR {
+//    public let attachment: UInt32
+//    public let layout: ImageLayout
+//    public let aspectMask: ImageAspectFlags
+//}
+//
+//// Mapped from VkAttachmentSampleLocationsEXT
+//public struct AttachmentSampleLocationsEXT {
+//    public let attachmentIndex: UInt32
+//    public let sampleLocationsInfo: SampleLocationsInfoEXT
+//}
+//
+//// Mapped from VkBindBufferMemoryDeviceGroupInfo
+//public struct BindBufferMemoryDeviceGroupInfo {
+//    public let deviceIndexCount: UInt32?
+//    public let deviceIndices: [UInt32]
+//}
+//public typealias BindBufferMemoryDeviceGroupInfoKHR = BindBufferMemoryDeviceGroupInfo
+//
+//// Mapped from VkBindImageMemoryDeviceGroupInfo
+//public struct BindImageMemoryDeviceGroupInfo {
+//    public let deviceIndexCount: UInt32?
+//    public let deviceIndices: [UInt32]
+//    public let splitInstanceBindRegions: [Rect2D]
+//}
+//public typealias BindImageMemoryDeviceGroupInfoKHR = BindImageMemoryDeviceGroupInfo
+//
+//// Mapped from VkBindImageMemorySwapchainInfoKHR
+//public struct BindImageMemorySwapchainInfoKHR {
+//    public let swapchain: SwapchainKHR
+//    public let imageIndex: UInt32
+//}
+//
+//// Mapped from VkBindImagePlaneMemoryInfo
+//public struct BindImagePlaneMemoryInfo {
+//    public let planeAspect: ImageAspectFlagBits
+//}
+//public typealias BindImagePlaneMemoryInfoKHR = BindImagePlaneMemoryInfo
+//
+//// Mapped from VkBindSparseInfo
+//public struct BindSparseInfo {
+//    public let waitSemaphores: [Semaphore]
+//    public let bufferBinds: [SparseBufferMemoryBindInfo]
+//    public let imageOpaqueBinds: [SparseImageOpaqueMemoryBindInfo]
+//    public let imageBinds: [SparseImageMemoryBindInfo]
+//    public let signalSemaphores: [Semaphore]
+//}
+//
+//// Mapped from VkBufferCopy
+//public struct BufferCopy {
+//    public let srcOffset: DeviceSize
+//    public let dstOffset: DeviceSize
+//    public let size: DeviceSize
+//}
+//
+//// Mapped from VkBufferCreateInfo
+//public struct BufferCreateInfo {
+//    public let flags: BufferCreateFlags?
+//    public let size: DeviceSize
+//    public let usage: BufferUsageFlags
+//    public let sharingMode: SharingMode
+//    public let queueFamilyIndexCount: UInt32?
+//    public let queueFamilyIndices: [UInt32]
+//}
+//
+//// Mapped from VkBufferDeviceAddressCreateInfoEXT
+//public struct BufferDeviceAddressCreateInfoEXT {
+//    public let deviceAddress: DeviceAddress
+//}
+//
+//// Mapped from VkBufferDeviceAddressInfoEXT
+//public struct BufferDeviceAddressInfoEXT {
+//    public let buffer: Buffer
+//}
+//
+//// Mapped from VkBufferImageCopy
+//public struct BufferImageCopy {
+//    public let bufferOffset: DeviceSize
+//    public let bufferRowLength: UInt32
+//    public let bufferImageHeight: UInt32
+//    public let imageSubresource: ImageSubresourceLayers
+//    public let imageOffset: Offset3D
+//    public let imageExtent: Extent3D
+//}
+//
+//// Mapped from VkBufferMemoryBarrier
+//public struct BufferMemoryBarrier {
+//    public let srcAccessMask: AccessFlags?
+//    public let dstAccessMask: AccessFlags?
+//    public let srcQueueFamilyIndex: UInt32
+//    public let dstQueueFamilyIndex: UInt32
+//    public let buffer: Buffer
+//    public let offset: DeviceSize
+//    public let size: DeviceSize
+//}
+//
+//// Mapped from VkBufferMemoryRequirementsInfo2
+//public struct BufferMemoryRequirementsInfo2 {
+//    public let buffer: Buffer
+//}
+//public typealias BufferMemoryRequirementsInfo2KHR = BufferMemoryRequirementsInfo2
+//
+//// Mapped from VkBufferViewCreateInfo
+//public struct BufferViewCreateInfo {
+//    public let flags: BufferViewCreateFlags?
+//    public let buffer: Buffer
+//    public let format: Format
+//    public let offset: DeviceSize
+//    public let range: DeviceSize
+//}
+//
+//// Mapped from VkCalibratedTimestampInfoEXT
+//public struct CalibratedTimestampInfoEXT {
+//    public let timeDomain: TimeDomainEXT
+//}
+//
+//// Mapped from VkCheckpointDataNV
+//public struct CheckpointDataNV {
+//    public let stage: PipelineStageFlagBits
+//    public let checkpointMarker: UnsafeRawPointer
+//}
+//
+//// Mapped from VkClearAttachment
+//public struct ClearAttachment {
+//    public let aspectMask: ImageAspectFlags
+//    public let colorAttachment: UInt32
+//    public let clearValue: ClearValue
+//}
+//
+//// Mapped from VkClearDepthStencilValue
+//public struct ClearDepthStencilValue {
+//    public let depth: Float
+//    public let stencil: UInt32
+//}
+//
+//// Mapped from VkClearRect
+//public struct ClearRect {
+//    public let rect: Rect2D
+//    public let baseArrayLayer: UInt32
+//    public let layerCount: UInt32
+//}
+//
+//// Mapped from VkCmdProcessCommandsInfoNVX
+//public struct CmdProcessCommandsInfoNVX {
+//    public let objectTable: ObjectTableNVX
+//    public let indirectCommandsLayout: IndirectCommandsLayoutNVX
+//    public let indirectCommandsTokens: [IndirectCommandsTokenNVX]
+//    public let maxSequencesCount: UInt32
+//    public let targetCommandBuffer: CommandBuffer?
+//    public let sequencesCountBuffer: Buffer?
+//    public let sequencesCountOffset: DeviceSize?
+//    public let sequencesIndexBuffer: Buffer?
+//    public let sequencesIndexOffset: DeviceSize?
+//}
+//
+//// Mapped from VkCmdReserveSpaceForCommandsInfoNVX
+//public struct CmdReserveSpaceForCommandsInfoNVX {
+//    public let objectTable: ObjectTableNVX
+//    public let indirectCommandsLayout: IndirectCommandsLayoutNVX
+//    public let maxSequencesCount: UInt32
+//}
+//
+//// Mapped from VkCoarseSampleLocationNV
+//public struct CoarseSampleLocationNV {
+//    public let pixelX: UInt32
+//    public let pixelY: UInt32
+//    public let sample: UInt32
+//}
+//
+//// Mapped from VkCoarseSampleOrderCustomNV
+//public struct CoarseSampleOrderCustomNV {
+//    public let shadingRate: ShadingRatePaletteEntryNV
+//    public let sampleLocations: [CoarseSampleLocationNV]
+//}
+//
+//// Mapped from VkCommandBufferAllocateInfo
+//public struct CommandBufferAllocateInfo {
+//    public let commandPool: CommandPool
+//    public let level: CommandBufferLevel
+//    public let commandBufferCount: UInt32
+//}
+//
+//// Mapped from VkCommandBufferBeginInfo
+//public struct CommandBufferBeginInfo {
+//    public let flags: CommandBufferUsageFlags?
+//    public let inheritanceInfo: CommandBufferInheritanceInfo?
+//}
+//
+//// Mapped from VkCommandBufferInheritanceConditionalRenderingInfoEXT
+//public struct CommandBufferInheritanceConditionalRenderingInfoEXT {
+//    public let conditionalRenderingEnable: Bool
+//}
+//
+//// Mapped from VkCommandBufferInheritanceInfo
+//public struct CommandBufferInheritanceInfo {
+//    public let renderPass: RenderPass?
+//    public let subpass: UInt32
+//    public let framebuffer: Framebuffer?
+//    public let occlusionQueryEnable: Bool
+//    public let queryFlags: QueryControlFlags?
+//    public let pipelineStatistics: QueryPipelineStatisticFlags?
+//}
+//
+//// Mapped from VkCommandPoolCreateInfo
+//public struct CommandPoolCreateInfo {
+//    public let flags: CommandPoolCreateFlags?
+//    public let queueFamilyIndex: UInt32
+//}
+//
+//// Mapped from VkComponentMapping
+//public struct ComponentMapping {
+//    public let r: ComponentSwizzle
+//    public let g: ComponentSwizzle
+//    public let b: ComponentSwizzle
+//    public let a: ComponentSwizzle
+//}
+//
+//// Mapped from VkComputePipelineCreateInfo
+//public struct ComputePipelineCreateInfo {
+//    public let flags: PipelineCreateFlags?
+//    public let stage: PipelineShaderStageCreateInfo
+//    public let layout: PipelineLayout
+//    public let basePipelineHandle: Pipeline?
+//    public let basePipelineIndex: Int32
+//}
+//
+//// Mapped from VkConditionalRenderingBeginInfoEXT
+//public struct ConditionalRenderingBeginInfoEXT {
+//    public let buffer: Buffer
+//    public let offset: DeviceSize
+//    public let flags: ConditionalRenderingFlagsEXT?
+//}
+//
+//// Mapped from VkConformanceVersionKHR
+//public struct ConformanceVersionKHR {
+//    public let major: UInt8
+//    public let minor: UInt8
+//    public let subminor: UInt8
+//    public let patch: UInt8
+//}
+//
+//// Mapped from VkCooperativeMatrixPropertiesNV
+//public struct CooperativeMatrixPropertiesNV {
+//    public let mSize: UInt32
+//    public let nSize: UInt32
+//    public let kSize: UInt32
+//    public let aType: ComponentTypeNV
+//    public let bType: ComponentTypeNV
+//    public let cType: ComponentTypeNV
+//    public let dType: ComponentTypeNV
+//    public let scope: ScopeNV
+//}
+//
+//// Mapped from VkCopyDescriptorSet
+//public struct CopyDescriptorSet {
+//    public let srcSet: DescriptorSet
+//    public let srcBinding: UInt32
+//    public let srcArrayElement: UInt32
+//    public let dstSet: DescriptorSet
+//    public let dstBinding: UInt32
+//    public let dstArrayElement: UInt32
+//    public let descriptorCount: UInt32
+//}
+//
+//// Mapped from VkDebugMarkerMarkerInfoEXT
+//public struct DebugMarkerMarkerInfoEXT {
+//    public let markerName: String
+//    public let color: [Float]?
+//}
+//
+//// Mapped from VkDebugMarkerObjectNameInfoEXT
+//public struct DebugMarkerObjectNameInfoEXT {
+//    public let objectType: DebugReportObjectTypeEXT
+//    public let object: UInt64
+//    public let objectName: String
+//}
+//
+//// Mapped from VkDebugMarkerObjectTagInfoEXT
+//public struct DebugMarkerObjectTagInfoEXT {
+//    public let objectType: DebugReportObjectTypeEXT
+//    public let object: UInt64
+//    public let tagName: UInt64
+//    public let tagSize: Int
+//    public let tag: UnsafeRawPointer
+//}
+//
+//// Mapped from VkDebugReportCallbackCreateInfoEXT
+//public struct DebugReportCallbackCreateInfoEXT {
+//    public let flags: DebugReportFlagsEXT?
+//    public let pfnCallback: PFN_vkDebugReportCallbackEXT
+//    public let userData: UnsafeRawPointer?
+//}
+//
+//// Mapped from VkDebugUtilsLabelEXT
+//public struct DebugUtilsLabelEXT {
+//    public let labelName: String
+//    public let color: [Float]?
+//}
+//
+//// Mapped from VkDebugUtilsMessengerCallbackDataEXT
+//public struct DebugUtilsMessengerCallbackDataEXT {
+//    public let flags: DebugUtilsMessengerCallbackDataFlagsEXT?
+//    public let messageIdName: String?
+//    public let messageIdNumber: Int32?
+//    public let message: String
+//    public let queueLabels: [DebugUtilsLabelEXT]
+//    public let cmdBufLabels: [DebugUtilsLabelEXT]
+//    public let objects: [DebugUtilsObjectNameInfoEXT]
+//}
+//
+//// Mapped from VkDebugUtilsMessengerCreateInfoEXT
+//public struct DebugUtilsMessengerCreateInfoEXT {
+//    public let flags: DebugUtilsMessengerCreateFlagsEXT?
+//    public let messageSeverity: DebugUtilsMessageSeverityFlagsEXT
+//    public let messageType: DebugUtilsMessageTypeFlagsEXT
+//    public let pfnUserCallback: PFN_vkDebugUtilsMessengerCallbackEXT
+//    public let userData: UnsafeRawPointer?
+//}
+//
+//// Mapped from VkDebugUtilsObjectNameInfoEXT
+//public struct DebugUtilsObjectNameInfoEXT {
+//    public let objectType: ObjectType
+//    public let objectHandle: UInt64
+//    public let objectName: String?
+//}
+//
+//// Mapped from VkDebugUtilsObjectTagInfoEXT
+//public struct DebugUtilsObjectTagInfoEXT {
+//    public let objectType: ObjectType
+//    public let objectHandle: UInt64
+//    public let tagName: UInt64
+//    public let tagSize: Int
+//    public let tag: UnsafeRawPointer
+//}
+//
+//// Mapped from VkDedicatedAllocationBufferCreateInfoNV
+//public struct DedicatedAllocationBufferCreateInfoNV {
+//    public let dedicatedAllocation: Bool
+//}
+//
+//// Mapped from VkDedicatedAllocationImageCreateInfoNV
+//public struct DedicatedAllocationImageCreateInfoNV {
+//    public let dedicatedAllocation: Bool
+//}
+//
+//// Mapped from VkDedicatedAllocationMemoryAllocateInfoNV
+//public struct DedicatedAllocationMemoryAllocateInfoNV {
+//    public let image: Image?
+//    public let buffer: Buffer?
+//}
+//
+//// Mapped from VkDescriptorBufferInfo
+//public struct DescriptorBufferInfo {
+//    public let buffer: Buffer
+//    public let offset: DeviceSize
+//    public let range: DeviceSize
+//}
+//
+//// Mapped from VkDescriptorImageInfo
+//public struct DescriptorImageInfo {
+//    public let sampler: Sampler
+//    public let imageView: ImageView
+//    public let imageLayout: ImageLayout
+//}
+//
+//// Mapped from VkDescriptorPoolCreateInfo
+//public struct DescriptorPoolCreateInfo {
+//    public let flags: DescriptorPoolCreateFlags?
+//    public let maxSets: UInt32
+//    public let poolSizes: [DescriptorPoolSize]
+//}
+//
+//// Mapped from VkDescriptorPoolInlineUniformBlockCreateInfoEXT
+//public struct DescriptorPoolInlineUniformBlockCreateInfoEXT {
+//    public let maxInlineUniformBlockBindings: UInt32
+//}
+//
+//// Mapped from VkDescriptorPoolSize
+//public struct DescriptorPoolSize {
+//    public let type: DescriptorType
+//    public let descriptorCount: UInt32
+//}
+//
+//// Mapped from VkDescriptorSetAllocateInfo
+//public struct DescriptorSetAllocateInfo {
+//    public let descriptorPool: DescriptorPool
+//    public let descriptorSetCount: UInt32
+//    public let setLayouts: [DescriptorSetLayout]
+//}
+//
+//// Mapped from VkDescriptorSetLayoutBinding
+//public struct DescriptorSetLayoutBinding {
+//    public let binding: UInt32
+//    public let descriptorType: DescriptorType
+//    public let stageFlags: ShaderStageFlags
+//    public let immutableSamplers: [Sampler]?
+//}
+//
+//// Mapped from VkDescriptorSetLayoutBindingFlagsCreateInfoEXT
+//public struct DescriptorSetLayoutBindingFlagsCreateInfoEXT {
+//    public let bindingFlags: [DescriptorBindingFlagsEXT]?
+//}
+//
+//// Mapped from VkDescriptorSetLayoutCreateInfo
+//public struct DescriptorSetLayoutCreateInfo {
+//    public let flags: DescriptorSetLayoutCreateFlags?
+//    public let bindings: [DescriptorSetLayoutBinding]
+//}
+//
+//// Mapped from VkDescriptorSetLayoutSupport
+//public struct DescriptorSetLayoutSupport {
+//    public let supported: Bool
+//}
+//public typealias DescriptorSetLayoutSupportKHR = DescriptorSetLayoutSupport
+//
+//// Mapped from VkDescriptorSetVariableDescriptorCountAllocateInfoEXT
+//public struct DescriptorSetVariableDescriptorCountAllocateInfoEXT {
+//    public let descriptorSetCount: UInt32?
+//    public let descriptorCounts: [UInt32]
+//}
+//
+//// Mapped from VkDescriptorSetVariableDescriptorCountLayoutSupportEXT
+//public struct DescriptorSetVariableDescriptorCountLayoutSupportEXT {
+//    public let maxVariableDescriptorCount: UInt32
+//}
+//
+//// Mapped from VkDescriptorUpdateTemplateCreateInfo
+//public struct DescriptorUpdateTemplateCreateInfo {
+//    public let flags: DescriptorUpdateTemplateCreateFlags?
+//    public let descriptorUpdateEntryCount: UInt32
+//    public let descriptorUpdateEntries: [DescriptorUpdateTemplateEntry]
+//    public let templateType: DescriptorUpdateTemplateType
+//    public let descriptorSetLayout: DescriptorSetLayout
+//    public let pipelineBindPoint: PipelineBindPoint
+//    public let pipelineLayout: PipelineLayout
+//    public let set: UInt32
+//}
+//public typealias DescriptorUpdateTemplateCreateInfoKHR = DescriptorUpdateTemplateCreateInfo
+//
+//// Mapped from VkDescriptorUpdateTemplateEntry
+//public struct DescriptorUpdateTemplateEntry {
+//    public let dstBinding: UInt32
+//    public let dstArrayElement: UInt32
+//    public let descriptorType: DescriptorType
+//    public let offset: Int
+//    public let stride: Int
+//}
+//public typealias DescriptorUpdateTemplateEntryKHR = DescriptorUpdateTemplateEntry
+//
+//// Mapped from VkDeviceCreateInfo
+//public struct DeviceCreateInfo {
+//    public let flags: DeviceCreateFlags?
+//    public let queueCreateInfos: [DeviceQueueCreateInfo]
+//    public let enabledLayerNames: [String]
+//    public let enabledExtensionNames: [String]
+//    public let enabledFeatures: PhysicalDeviceFeatures?
+//}
+//
+//// Mapped from VkDeviceEventInfoEXT
+//public struct DeviceEventInfoEXT {
+//    public let deviceEvent: DeviceEventTypeEXT
+//}
+//
+//// Mapped from VkDeviceGeneratedCommandsFeaturesNVX
+//public struct DeviceGeneratedCommandsFeaturesNVX {
+//    public let computeBindingPointSupport: Bool
+//}
+//
+//// Mapped from VkDeviceGeneratedCommandsLimitsNVX
+//public struct DeviceGeneratedCommandsLimitsNVX {
+//    public let maxIndirectCommandsLayoutTokenCount: UInt32
+//    public let maxObjectEntryCounts: UInt32
+//    public let minSequenceCountBufferOffsetAlignment: UInt32
+//    public let minSequenceIndexBufferOffsetAlignment: UInt32
+//    public let minCommandsTokenBufferOffsetAlignment: UInt32
+//}
+//
+//// Mapped from VkDeviceGroupBindSparseInfo
+//public struct DeviceGroupBindSparseInfo {
+//    public let resourceDeviceIndex: UInt32
+//    public let memoryDeviceIndex: UInt32
+//}
+//public typealias DeviceGroupBindSparseInfoKHR = DeviceGroupBindSparseInfo
+//
+//// Mapped from VkDeviceGroupCommandBufferBeginInfo
+//public struct DeviceGroupCommandBufferBeginInfo {
+//    public let deviceMask: UInt32
+//}
+//public typealias DeviceGroupCommandBufferBeginInfoKHR = DeviceGroupCommandBufferBeginInfo
+//
+//// Mapped from VkDeviceGroupDeviceCreateInfo
+//public struct DeviceGroupDeviceCreateInfo {
+//    public let physicalDevices: [PhysicalDevice]
+//}
+//public typealias DeviceGroupDeviceCreateInfoKHR = DeviceGroupDeviceCreateInfo
+//
+//// Mapped from VkDeviceGroupPresentCapabilitiesKHR
+//public struct DeviceGroupPresentCapabilitiesKHR {
+//    public let presentMask: [UInt32]
+//    public let modes: DeviceGroupPresentModeFlagsKHR
+//}
+//
+//// Mapped from VkDeviceGroupPresentInfoKHR
+//public struct DeviceGroupPresentInfoKHR {
+//    public let swapchainCount: UInt32?
+//    public let deviceMasks: [UInt32]
+//    public let mode: DeviceGroupPresentModeFlagBitsKHR
+//}
+//
+//// Mapped from VkDeviceGroupRenderPassBeginInfo
+//public struct DeviceGroupRenderPassBeginInfo {
+//    public let deviceMask: UInt32
+//    public let deviceRenderAreas: [Rect2D]
+//}
+//public typealias DeviceGroupRenderPassBeginInfoKHR = DeviceGroupRenderPassBeginInfo
+//
+//// Mapped from VkDeviceGroupSubmitInfo
+//public struct DeviceGroupSubmitInfo {
+//    public let waitSemaphoreDeviceIndices: [UInt32]
+//    public let commandBufferDeviceMasks: [UInt32]
+//    public let signalSemaphoreDeviceIndices: [UInt32]
+//}
+//public typealias DeviceGroupSubmitInfoKHR = DeviceGroupSubmitInfo
+//
+//// Mapped from VkDeviceGroupSwapchainCreateInfoKHR
+//public struct DeviceGroupSwapchainCreateInfoKHR {
+//    public let modes: DeviceGroupPresentModeFlagsKHR
+//}
+//
+//// Mapped from VkDeviceMemoryOverallocationCreateInfoAMD
+//public struct DeviceMemoryOverallocationCreateInfoAMD {
+//    public let overallocationBehavior: MemoryOverallocationBehaviorAMD
+//}
+//
+//// Mapped from VkDeviceQueueCreateInfo
+//public struct DeviceQueueCreateInfo {
+//    public let flags: DeviceQueueCreateFlags?
+//    public let queueFamilyIndex: UInt32
+//    public let queuePriorities: [Float]
+//}
+//
+//// Mapped from VkDeviceQueueGlobalPriorityCreateInfoEXT
+//public struct DeviceQueueGlobalPriorityCreateInfoEXT {
+//    public let globalPriority: QueueGlobalPriorityEXT
+//}
+//
+//// Mapped from VkDeviceQueueInfo2
+//public struct DeviceQueueInfo2 {
+//    public let flags: DeviceQueueCreateFlags
+//    public let queueFamilyIndex: UInt32
+//    public let queueIndex: UInt32
+//}
+//
+//// Mapped from VkDispatchIndirectCommand
+//public struct DispatchIndirectCommand {
+//    public let x: UInt32
+//    public let y: UInt32
+//    public let z: UInt32
+//}
+//
+//// Mapped from VkDisplayEventInfoEXT
+//public struct DisplayEventInfoEXT {
+//    public let displayEvent: DisplayEventTypeEXT
+//}
+//
+//// Mapped from VkDisplayModeCreateInfoKHR
+//public struct DisplayModeCreateInfoKHR {
+//    public let flags: DisplayModeCreateFlagsKHR?
+//    public let parameters: DisplayModeParametersKHR
+//}
 
 // Mapped from VkDisplayModeParametersKHR
 public struct DisplayModeParametersKHR {
@@ -693,159 +655,159 @@ public struct DisplayModeParametersKHR {
     public let refreshRate: UInt32
 }
 
-// Mapped from VkDisplayModeProperties2KHR
-public struct DisplayModeProperties2KHR {
-    public let displayModeProperties: DisplayModePropertiesKHR
-}
-
-// Mapped from VkDisplayModePropertiesKHR
-public struct DisplayModePropertiesKHR {
-    public let displayMode: DisplayModeKHR
-    public let parameters: DisplayModeParametersKHR
-}
-
-// Mapped from VkDisplayNativeHdrSurfaceCapabilitiesAMD
-public struct DisplayNativeHdrSurfaceCapabilitiesAMD {
-    public let localDimmingSupport: Bool
-}
-
-// Mapped from VkDisplayPlaneCapabilities2KHR
-public struct DisplayPlaneCapabilities2KHR {
-    public let capabilities: DisplayPlaneCapabilitiesKHR
-}
-
-// Mapped from VkDisplayPlaneCapabilitiesKHR
-public struct DisplayPlaneCapabilitiesKHR {
-    public let supportedAlpha: DisplayPlaneAlphaFlagsKHR?
-    public let minSrcPosition: Offset2D
-    public let maxSrcPosition: Offset2D
-    public let minSrcExtent: Extent2D
-    public let maxSrcExtent: Extent2D
-    public let minDstPosition: Offset2D
-    public let maxDstPosition: Offset2D
-    public let minDstExtent: Extent2D
-    public let maxDstExtent: Extent2D
-}
-
-// Mapped from VkDisplayPlaneInfo2KHR
-public struct DisplayPlaneInfo2KHR {
-    public let mode: DisplayModeKHR
-    public let planeIndex: UInt32
-}
-
-// Mapped from VkDisplayPlaneProperties2KHR
-public struct DisplayPlaneProperties2KHR {
-    public let displayPlaneProperties: DisplayPlanePropertiesKHR
-}
-
-// Mapped from VkDisplayPlanePropertiesKHR
-public struct DisplayPlanePropertiesKHR {
-    public let currentDisplay: DisplayKHR
-    public let currentStackIndex: UInt32
-}
-
-// Mapped from VkDisplayPowerInfoEXT
-public struct DisplayPowerInfoEXT {
-    public let powerState: DisplayPowerStateEXT
-}
-
-// Mapped from VkDisplayPresentInfoKHR
-public struct DisplayPresentInfoKHR {
-    public let srcRect: Rect2D
-    public let dstRect: Rect2D
-    public let persistent: Bool
-}
-
-// Mapped from VkDisplayProperties2KHR
-public struct DisplayProperties2KHR {
-    public let displayProperties: DisplayPropertiesKHR
-}
-
-// Mapped from VkDisplayPropertiesKHR
-public struct DisplayPropertiesKHR {
-    public let display: DisplayKHR
-    public let displayName: String
-    public let physicalDimensions: Extent2D
-    public let physicalResolution: Extent2D
-    public let supportedTransforms: SurfaceTransformFlagsKHR?
-    public let planeReorderPossible: Bool
-    public let persistentContent: Bool
-}
-
-// Mapped from VkDisplaySurfaceCreateInfoKHR
-public struct DisplaySurfaceCreateInfoKHR {
-    public let flags: DisplaySurfaceCreateFlagsKHR?
-    public let displayMode: DisplayModeKHR
-    public let planeIndex: UInt32
-    public let planeStackIndex: UInt32
-    public let transform: SurfaceTransformFlagBitsKHR
-    public let globalAlpha: Float
-    public let alphaMode: DisplayPlaneAlphaFlagBitsKHR
-    public let imageExtent: Extent2D
-}
-
-// Mapped from VkDrawIndexedIndirectCommand
-public struct DrawIndexedIndirectCommand {
-    public let indexCount: UInt32
-    public let instanceCount: UInt32
-    public let firstIndex: UInt32
-    public let vertexOffset: Int32
-    public let firstInstance: UInt32
-}
-
-// Mapped from VkDrawIndirectCommand
-public struct DrawIndirectCommand {
-    public let vertexCount: UInt32
-    public let instanceCount: UInt32
-    public let firstVertex: UInt32
-    public let firstInstance: UInt32
-}
-
-// Mapped from VkDrawMeshTasksIndirectCommandNV
-public struct DrawMeshTasksIndirectCommandNV {
-    public let taskCount: UInt32
-    public let firstTask: UInt32
-}
-
-// Mapped from VkDrmFormatModifierPropertiesEXT
-public struct DrmFormatModifierPropertiesEXT {
-    public let drmFormatModifier: UInt64
-    public let drmFormatModifierPlaneCount: UInt32
-    public let drmFormatModifierTilingFeatures: FormatFeatureFlags
-}
-
-// Mapped from VkDrmFormatModifierPropertiesListEXT
-public struct DrmFormatModifierPropertiesListEXT {
-    public let drmFormatModifierProperties: [DrmFormatModifierPropertiesEXT]
-}
-
-// Mapped from VkEventCreateInfo
-public struct EventCreateInfo {
-    public let flags: EventCreateFlags?
-}
-
-// Mapped from VkExportFenceCreateInfo
-public struct ExportFenceCreateInfo {
-    public let handleTypes: ExternalFenceHandleTypeFlags?
-}
-public typealias ExportFenceCreateInfoKHR = ExportFenceCreateInfo
-
-// Mapped from VkExportMemoryAllocateInfo
-public struct ExportMemoryAllocateInfo {
-    public let handleTypes: ExternalMemoryHandleTypeFlags?
-}
-public typealias ExportMemoryAllocateInfoKHR = ExportMemoryAllocateInfo
-
-// Mapped from VkExportMemoryAllocateInfoNV
-public struct ExportMemoryAllocateInfoNV {
-    public let handleTypes: ExternalMemoryHandleTypeFlagsNV?
-}
-
-// Mapped from VkExportSemaphoreCreateInfo
-public struct ExportSemaphoreCreateInfo {
-    public let handleTypes: ExternalSemaphoreHandleTypeFlags?
-}
-public typealias ExportSemaphoreCreateInfoKHR = ExportSemaphoreCreateInfo
+//// Mapped from VkDisplayModeProperties2KHR
+//public struct DisplayModeProperties2KHR {
+//    public let displayModeProperties: DisplayModePropertiesKHR
+//}
+//
+//// Mapped from VkDisplayModePropertiesKHR
+//public struct DisplayModePropertiesKHR {
+//    public let displayMode: DisplayModeKHR
+//    public let parameters: DisplayModeParametersKHR
+//}
+//
+//// Mapped from VkDisplayNativeHdrSurfaceCapabilitiesAMD
+//public struct DisplayNativeHdrSurfaceCapabilitiesAMD {
+//    public let localDimmingSupport: Bool
+//}
+//
+//// Mapped from VkDisplayPlaneCapabilities2KHR
+//public struct DisplayPlaneCapabilities2KHR {
+//    public let capabilities: DisplayPlaneCapabilitiesKHR
+//}
+//
+//// Mapped from VkDisplayPlaneCapabilitiesKHR
+//public struct DisplayPlaneCapabilitiesKHR {
+//    public let supportedAlpha: DisplayPlaneAlphaFlagsKHR?
+//    public let minSrcPosition: Offset2D
+//    public let maxSrcPosition: Offset2D
+//    public let minSrcExtent: Extent2D
+//    public let maxSrcExtent: Extent2D
+//    public let minDstPosition: Offset2D
+//    public let maxDstPosition: Offset2D
+//    public let minDstExtent: Extent2D
+//    public let maxDstExtent: Extent2D
+//}
+//
+//// Mapped from VkDisplayPlaneInfo2KHR
+//public struct DisplayPlaneInfo2KHR {
+//    public let mode: DisplayModeKHR
+//    public let planeIndex: UInt32
+//}
+//
+//// Mapped from VkDisplayPlaneProperties2KHR
+//public struct DisplayPlaneProperties2KHR {
+//    public let displayPlaneProperties: DisplayPlanePropertiesKHR
+//}
+//
+//// Mapped from VkDisplayPlanePropertiesKHR
+//public struct DisplayPlanePropertiesKHR {
+//    public let currentDisplay: DisplayKHR
+//    public let currentStackIndex: UInt32
+//}
+//
+//// Mapped from VkDisplayPowerInfoEXT
+//public struct DisplayPowerInfoEXT {
+//    public let powerState: DisplayPowerStateEXT
+//}
+//
+//// Mapped from VkDisplayPresentInfoKHR
+//public struct DisplayPresentInfoKHR {
+//    public let srcRect: Rect2D
+//    public let dstRect: Rect2D
+//    public let persistent: Bool
+//}
+//
+//// Mapped from VkDisplayProperties2KHR
+//public struct DisplayProperties2KHR {
+//    public let displayProperties: DisplayPropertiesKHR
+//}
+//
+//// Mapped from VkDisplayPropertiesKHR
+//public struct DisplayPropertiesKHR {
+//    public let display: DisplayKHR
+//    public let displayName: String
+//    public let physicalDimensions: Extent2D
+//    public let physicalResolution: Extent2D
+//    public let supportedTransforms: SurfaceTransformFlagsKHR?
+//    public let planeReorderPossible: Bool
+//    public let persistentContent: Bool
+//}
+//
+//// Mapped from VkDisplaySurfaceCreateInfoKHR
+//public struct DisplaySurfaceCreateInfoKHR {
+//    public let flags: DisplaySurfaceCreateFlagsKHR?
+//    public let displayMode: DisplayModeKHR
+//    public let planeIndex: UInt32
+//    public let planeStackIndex: UInt32
+//    public let transform: SurfaceTransformFlagBitsKHR
+//    public let globalAlpha: Float
+//    public let alphaMode: DisplayPlaneAlphaFlagBitsKHR
+//    public let imageExtent: Extent2D
+//}
+//
+//// Mapped from VkDrawIndexedIndirectCommand
+//public struct DrawIndexedIndirectCommand {
+//    public let indexCount: UInt32
+//    public let instanceCount: UInt32
+//    public let firstIndex: UInt32
+//    public let vertexOffset: Int32
+//    public let firstInstance: UInt32
+//}
+//
+//// Mapped from VkDrawIndirectCommand
+//public struct DrawIndirectCommand {
+//    public let vertexCount: UInt32
+//    public let instanceCount: UInt32
+//    public let firstVertex: UInt32
+//    public let firstInstance: UInt32
+//}
+//
+//// Mapped from VkDrawMeshTasksIndirectCommandNV
+//public struct DrawMeshTasksIndirectCommandNV {
+//    public let taskCount: UInt32
+//    public let firstTask: UInt32
+//}
+//
+//// Mapped from VkDrmFormatModifierPropertiesEXT
+//public struct DrmFormatModifierPropertiesEXT {
+//    public let drmFormatModifier: UInt64
+//    public let drmFormatModifierPlaneCount: UInt32
+//    public let drmFormatModifierTilingFeatures: FormatFeatureFlags
+//}
+//
+//// Mapped from VkDrmFormatModifierPropertiesListEXT
+//public struct DrmFormatModifierPropertiesListEXT {
+//    public let drmFormatModifierProperties: [DrmFormatModifierPropertiesEXT]
+//}
+//
+//// Mapped from VkEventCreateInfo
+//public struct EventCreateInfo {
+//    public let flags: EventCreateFlags?
+//}
+//
+//// Mapped from VkExportFenceCreateInfo
+//public struct ExportFenceCreateInfo {
+//    public let handleTypes: ExternalFenceHandleTypeFlags?
+//}
+//public typealias ExportFenceCreateInfoKHR = ExportFenceCreateInfo
+//
+//// Mapped from VkExportMemoryAllocateInfo
+//public struct ExportMemoryAllocateInfo {
+//    public let handleTypes: ExternalMemoryHandleTypeFlags?
+//}
+//public typealias ExportMemoryAllocateInfoKHR = ExportMemoryAllocateInfo
+//
+//// Mapped from VkExportMemoryAllocateInfoNV
+//public struct ExportMemoryAllocateInfoNV {
+//    public let handleTypes: ExternalMemoryHandleTypeFlagsNV?
+//}
+//
+//// Mapped from VkExportSemaphoreCreateInfo
+//public struct ExportSemaphoreCreateInfo {
+//    public let handleTypes: ExternalSemaphoreHandleTypeFlags?
+//}
+//public typealias ExportSemaphoreCreateInfoKHR = ExportSemaphoreCreateInfo
 
 // Mapped from VkExtensionProperties
 public struct ExtensionProperties {
@@ -866,435 +828,435 @@ public struct Extent3D {
     public let depth: UInt32
 }
 
-// Mapped from VkExternalBufferProperties
-public struct ExternalBufferProperties {
-    public let externalMemoryProperties: ExternalMemoryProperties
-}
-public typealias ExternalBufferPropertiesKHR = ExternalBufferProperties
-
-// Mapped from VkExternalFenceProperties
-public struct ExternalFenceProperties {
-    public let exportFromImportedHandleTypes: ExternalFenceHandleTypeFlags
-    public let compatibleHandleTypes: ExternalFenceHandleTypeFlags
-    public let externalFenceFeatures: ExternalFenceFeatureFlags?
-}
-public typealias ExternalFencePropertiesKHR = ExternalFenceProperties
-
-// Mapped from VkExternalImageFormatProperties
-public struct ExternalImageFormatProperties {
-    public let externalMemoryProperties: ExternalMemoryProperties
-}
-public typealias ExternalImageFormatPropertiesKHR = ExternalImageFormatProperties
-
-// Mapped from VkExternalImageFormatPropertiesNV
-public struct ExternalImageFormatPropertiesNV {
-    public let imageFormatProperties: ImageFormatProperties
-    public let externalMemoryFeatures: ExternalMemoryFeatureFlagsNV?
-    public let exportFromImportedHandleTypes: ExternalMemoryHandleTypeFlagsNV?
-    public let compatibleHandleTypes: ExternalMemoryHandleTypeFlagsNV?
-}
-
-// Mapped from VkExternalMemoryBufferCreateInfo
-public struct ExternalMemoryBufferCreateInfo {
-    public let handleTypes: ExternalMemoryHandleTypeFlags?
-}
-public typealias ExternalMemoryBufferCreateInfoKHR = ExternalMemoryBufferCreateInfo
-
-// Mapped from VkExternalMemoryImageCreateInfo
-public struct ExternalMemoryImageCreateInfo {
-    public let handleTypes: ExternalMemoryHandleTypeFlags
-}
-public typealias ExternalMemoryImageCreateInfoKHR = ExternalMemoryImageCreateInfo
-
-// Mapped from VkExternalMemoryImageCreateInfoNV
-public struct ExternalMemoryImageCreateInfoNV {
-    public let handleTypes: ExternalMemoryHandleTypeFlagsNV?
-}
-
-// Mapped from VkExternalMemoryProperties
-public struct ExternalMemoryProperties {
-    public let externalMemoryFeatures: ExternalMemoryFeatureFlags
-    public let exportFromImportedHandleTypes: ExternalMemoryHandleTypeFlags?
-    public let compatibleHandleTypes: ExternalMemoryHandleTypeFlags
-}
-public typealias ExternalMemoryPropertiesKHR = ExternalMemoryProperties
-
-// Mapped from VkExternalSemaphoreProperties
-public struct ExternalSemaphoreProperties {
-    public let exportFromImportedHandleTypes: ExternalSemaphoreHandleTypeFlags
-    public let compatibleHandleTypes: ExternalSemaphoreHandleTypeFlags
-    public let externalSemaphoreFeatures: ExternalSemaphoreFeatureFlags?
-}
-public typealias ExternalSemaphorePropertiesKHR = ExternalSemaphoreProperties
-
-// Mapped from VkFenceCreateInfo
-public struct FenceCreateInfo {
-    public let flags: FenceCreateFlags?
-}
-
-// Mapped from VkFenceGetFdInfoKHR
-public struct FenceGetFdInfoKHR {
-    public let fence: Fence
-    public let handleType: ExternalFenceHandleTypeFlagBits
-}
-
-// Mapped from VkFilterCubicImageViewImageFormatPropertiesEXT
-public struct FilterCubicImageViewImageFormatPropertiesEXT {
-    public let filterCubic: Bool
-    public let filterCubicMinmax: Bool
-}
-
-// Mapped from VkFormatProperties
-public struct FormatProperties {
-    public let linearTilingFeatures: FormatFeatureFlags?
-    public let optimalTilingFeatures: FormatFeatureFlags?
-    public let bufferFeatures: FormatFeatureFlags?
-}
-
-// Mapped from VkFormatProperties2
-public struct FormatProperties2 {
-    public let formatProperties: FormatProperties
-}
-public typealias FormatProperties2KHR = FormatProperties2
-
-// Mapped from VkFramebufferAttachmentImageInfoKHR
-public struct FramebufferAttachmentImageInfoKHR {
-    public let flags: ImageCreateFlags?
-    public let usage: ImageUsageFlags
-    public let width: UInt32
-    public let height: UInt32
-    public let layerCount: UInt32
-    public let viewFormats: [Format]
-}
-
-// Mapped from VkFramebufferAttachmentsCreateInfoKHR
-public struct FramebufferAttachmentsCreateInfoKHR {
-    public let attachmentImageInfos: [FramebufferAttachmentImageInfoKHR]
-}
-
-// Mapped from VkFramebufferCreateInfo
-public struct FramebufferCreateInfo {
-    public let flags: FramebufferCreateFlags?
-    public let renderPass: RenderPass
-    public let attachments: [ImageView]
-    public let width: UInt32
-    public let height: UInt32
-    public let layers: UInt32
-}
-
-// Mapped from VkFramebufferMixedSamplesCombinationNV
-public struct FramebufferMixedSamplesCombinationNV {
-    public let coverageReductionMode: CoverageReductionModeNV
-    public let rasterizationSamples: SampleCountFlagBits
-    public let depthStencilSamples: SampleCountFlags
-    public let colorSamples: SampleCountFlags
-}
-
-// Mapped from VkGeometryAABBNV
-public struct GeometryAABBNV {
-    public let aabbData: Buffer?
-    public let numAABBs: UInt32
-    public let stride: UInt32
-    public let offset: DeviceSize
-}
-
-// Mapped from VkGeometryDataNV
-public struct GeometryDataNV {
-    public let triangles: GeometryTrianglesNV
-    public let aabbs: GeometryAABBNV
-}
-
-// Mapped from VkGeometryNV
-public struct GeometryNV {
-    public let geometryType: GeometryTypeNV
-    public let geometry: GeometryDataNV
-    public let flags: GeometryFlagsNV?
-}
-
-// Mapped from VkGeometryTrianglesNV
-public struct GeometryTrianglesNV {
-    public let vertexData: Buffer?
-    public let vertexOffset: DeviceSize
-    public let vertexStride: DeviceSize
-    public let vertexFormat: Format
-    public let indexData: Buffer?
-    public let indexOffset: DeviceSize
-    public let indexType: IndexType
-    public let transformData: Buffer?
-    public let transformOffset: DeviceSize
-}
-
-// Mapped from VkGraphicsPipelineCreateInfo
-public struct GraphicsPipelineCreateInfo {
-    public let flags: PipelineCreateFlags?
-    public let stages: [PipelineShaderStageCreateInfo]
-    public let vertexInputState: PipelineVertexInputStateCreateInfo?
-    public let inputAssemblyState: PipelineInputAssemblyStateCreateInfo?
-    public let tessellationState: PipelineTessellationStateCreateInfo?
-    public let viewportState: PipelineViewportStateCreateInfo?
-    public let rasterizationState: PipelineRasterizationStateCreateInfo
-    public let multisampleState: PipelineMultisampleStateCreateInfo?
-    public let depthStencilState: PipelineDepthStencilStateCreateInfo?
-    public let colorBlendState: PipelineColorBlendStateCreateInfo?
-    public let dynamicState: PipelineDynamicStateCreateInfo?
-    public let layout: PipelineLayout
-    public let renderPass: RenderPass
-    public let subpass: UInt32
-    public let basePipelineHandle: Pipeline?
-    public let basePipelineIndex: Int32
-}
-
-// Mapped from VkHdrMetadataEXT
-public struct HdrMetadataEXT {
-    public let displayPrimaryRed: XYColorEXT
-    public let displayPrimaryGreen: XYColorEXT
-    public let displayPrimaryBlue: XYColorEXT
-    public let whitePoint: XYColorEXT
-    public let maxLuminance: Float
-    public let minLuminance: Float
-    public let maxContentLightLevel: Float
-    public let maxFrameAverageLightLevel: Float
-}
-
-// Mapped from VkHeadlessSurfaceCreateInfoEXT
-public struct HeadlessSurfaceCreateInfoEXT {
-    public let flags: HeadlessSurfaceCreateFlagsEXT?
-}
-
-// Mapped from VkImageBlit
-public struct ImageBlit {
-    public let srcSubresource: ImageSubresourceLayers
-    public let srcOffsets: [Offset3D]
-    public let dstSubresource: ImageSubresourceLayers
-    public let dstOffsets: [Offset3D]
-}
-
-// Mapped from VkImageCopy
-public struct ImageCopy {
-    public let srcSubresource: ImageSubresourceLayers
-    public let srcOffset: Offset3D
-    public let dstSubresource: ImageSubresourceLayers
-    public let dstOffset: Offset3D
-    public let extent: Extent3D
-}
-
-// Mapped from VkImageCreateInfo
-public struct ImageCreateInfo {
-    public let flags: ImageCreateFlags?
-    public let imageType: ImageType
-    public let format: Format
-    public let extent: Extent3D
-    public let mipLevels: UInt32
-    public let arrayLayers: UInt32
-    public let samples: SampleCountFlagBits
-    public let tiling: ImageTiling
-    public let usage: ImageUsageFlags
-    public let sharingMode: SharingMode
-    public let queueFamilyIndexCount: UInt32?
-    public let queueFamilyIndices: [UInt32]
-    public let initialLayout: ImageLayout
-}
-
-// Mapped from VkImageDrmFormatModifierExplicitCreateInfoEXT
-public struct ImageDrmFormatModifierExplicitCreateInfoEXT {
-    public let drmFormatModifier: UInt64
-    public let drmFormatModifierPlaneCount: UInt32
-    public let planeLayouts: [SubresourceLayout]
-}
-
-// Mapped from VkImageDrmFormatModifierListCreateInfoEXT
-public struct ImageDrmFormatModifierListCreateInfoEXT {
-    public let drmFormatModifiers: [UInt64]
-}
-
-// Mapped from VkImageDrmFormatModifierPropertiesEXT
-public struct ImageDrmFormatModifierPropertiesEXT {
-    public let drmFormatModifier: UInt64
-}
-
-// Mapped from VkImageFormatListCreateInfoKHR
-public struct ImageFormatListCreateInfoKHR {
-    public let viewFormats: [Format]
-}
-
-// Mapped from VkImageFormatProperties
-public struct ImageFormatProperties {
-    public let maxExtent: Extent3D
-    public let maxMipLevels: UInt32
-    public let maxArrayLayers: UInt32
-    public let sampleCounts: SampleCountFlags?
-    public let maxResourceSize: DeviceSize
-}
-
-// Mapped from VkImageFormatProperties2
-public struct ImageFormatProperties2 {
-    public let imageFormatProperties: ImageFormatProperties
-}
-public typealias ImageFormatProperties2KHR = ImageFormatProperties2
-
-// Mapped from VkImageMemoryBarrier
-public struct ImageMemoryBarrier {
-    public let srcAccessMask: AccessFlags?
-    public let dstAccessMask: AccessFlags?
-    public let oldLayout: ImageLayout
-    public let newLayout: ImageLayout
-    public let srcQueueFamilyIndex: UInt32
-    public let dstQueueFamilyIndex: UInt32
-    public let image: Image
-    public let subresourceRange: ImageSubresourceRange
-}
-
-// Mapped from VkImageMemoryRequirementsInfo2
-public struct ImageMemoryRequirementsInfo2 {
-    public let image: Image
-}
-public typealias ImageMemoryRequirementsInfo2KHR = ImageMemoryRequirementsInfo2
-
-// Mapped from VkImagePlaneMemoryRequirementsInfo
-public struct ImagePlaneMemoryRequirementsInfo {
-    public let planeAspect: ImageAspectFlagBits
-}
-public typealias ImagePlaneMemoryRequirementsInfoKHR = ImagePlaneMemoryRequirementsInfo
-
-// Mapped from VkImageResolve
-public struct ImageResolve {
-    public let srcSubresource: ImageSubresourceLayers
-    public let srcOffset: Offset3D
-    public let dstSubresource: ImageSubresourceLayers
-    public let dstOffset: Offset3D
-    public let extent: Extent3D
-}
-
-// Mapped from VkImageSparseMemoryRequirementsInfo2
-public struct ImageSparseMemoryRequirementsInfo2 {
-    public let image: Image
-}
-public typealias ImageSparseMemoryRequirementsInfo2KHR = ImageSparseMemoryRequirementsInfo2
-
-// Mapped from VkImageStencilUsageCreateInfoEXT
-public struct ImageStencilUsageCreateInfoEXT {
-    public let stencilUsage: ImageUsageFlags
-}
-
-// Mapped from VkImageSubresource
-public struct ImageSubresource {
-    public let aspectMask: ImageAspectFlags
-    public let mipLevel: UInt32
-    public let arrayLayer: UInt32
-}
-
-// Mapped from VkImageSubresourceLayers
-public struct ImageSubresourceLayers {
-    public let aspectMask: ImageAspectFlags
-    public let mipLevel: UInt32
-    public let baseArrayLayer: UInt32
-    public let layerCount: UInt32
-}
-
-// Mapped from VkImageSubresourceRange
-public struct ImageSubresourceRange {
-    public let aspectMask: ImageAspectFlags
-    public let baseMipLevel: UInt32
-    public let levelCount: UInt32
-    public let baseArrayLayer: UInt32
-    public let layerCount: UInt32
-}
-
-// Mapped from VkImageSwapchainCreateInfoKHR
-public struct ImageSwapchainCreateInfoKHR {
-    public let swapchain: SwapchainKHR?
-}
-
-// Mapped from VkImageViewASTCDecodeModeEXT
-public struct ImageViewASTCDecodeModeEXT {
-    public let decodeMode: Format
-}
-
-// Mapped from VkImageViewCreateInfo
-public struct ImageViewCreateInfo {
-    public let flags: ImageViewCreateFlags?
-    public let image: Image
-    public let viewType: ImageViewType
-    public let format: Format
-    public let components: ComponentMapping
-    public let subresourceRange: ImageSubresourceRange
-}
-
-// Mapped from VkImageViewHandleInfoNVX
-public struct ImageViewHandleInfoNVX {
-    public let imageView: ImageView
-    public let descriptorType: DescriptorType
-    public let sampler: Sampler?
-}
-
-// Mapped from VkImageViewUsageCreateInfo
-public struct ImageViewUsageCreateInfo {
-    public let usage: ImageUsageFlags
-}
-public typealias ImageViewUsageCreateInfoKHR = ImageViewUsageCreateInfo
-
-// Mapped from VkImportFenceFdInfoKHR
-public struct ImportFenceFdInfoKHR {
-    public let fence: Fence
-    public let flags: FenceImportFlags?
-    public let handleType: ExternalFenceHandleTypeFlagBits
-    public let fd: Int32
-}
-
-// Mapped from VkImportMemoryFdInfoKHR
-public struct ImportMemoryFdInfoKHR {
-    public let handleType: ExternalMemoryHandleTypeFlagBits?
-    public let fd: Int32
-}
-
-// Mapped from VkImportMemoryHostPointerInfoEXT
-public struct ImportMemoryHostPointerInfoEXT {
-    public let handleType: ExternalMemoryHandleTypeFlagBits
-    public let hostPointer: UnsafeRawPointer
-}
-
-// Mapped from VkImportSemaphoreFdInfoKHR
-public struct ImportSemaphoreFdInfoKHR {
-    public let semaphore: Semaphore
-    public let flags: SemaphoreImportFlags?
-    public let handleType: ExternalSemaphoreHandleTypeFlagBits
-    public let fd: Int32
-}
-
-// Mapped from VkIndirectCommandsLayoutCreateInfoNVX
-public struct IndirectCommandsLayoutCreateInfoNVX {
-    public let pipelineBindPoint: PipelineBindPoint
-    public let flags: IndirectCommandsLayoutUsageFlagsNVX
-    public let tokens: [IndirectCommandsLayoutTokenNVX]
-}
-
-// Mapped from VkIndirectCommandsLayoutTokenNVX
-public struct IndirectCommandsLayoutTokenNVX {
-    public let tokenType: IndirectCommandsTokenTypeNVX
-    public let bindingUnit: UInt32
-    public let dynamicCount: UInt32
-    public let divisor: UInt32
-}
-
-// Mapped from VkIndirectCommandsTokenNVX
-public struct IndirectCommandsTokenNVX {
-    public let tokenType: IndirectCommandsTokenTypeNVX
-    public let buffer: Buffer
-    public let offset: DeviceSize
-}
-
-// Mapped from VkInitializePerformanceApiInfoINTEL
-public struct InitializePerformanceApiInfoINTEL {
-    public let userData: UnsafeRawPointer
-}
-
-// Mapped from VkInputAttachmentAspectReference
-public struct InputAttachmentAspectReference {
-    public let subpass: UInt32
-    public let inputAttachmentIndex: UInt32
-    public let aspectMask: ImageAspectFlags
-}
-public typealias InputAttachmentAspectReferenceKHR = InputAttachmentAspectReference
+//// Mapped from VkExternalBufferProperties
+//public struct ExternalBufferProperties {
+//    public let externalMemoryProperties: ExternalMemoryProperties
+//}
+//public typealias ExternalBufferPropertiesKHR = ExternalBufferProperties
+//
+//// Mapped from VkExternalFenceProperties
+//public struct ExternalFenceProperties {
+//    public let exportFromImportedHandleTypes: ExternalFenceHandleTypeFlags
+//    public let compatibleHandleTypes: ExternalFenceHandleTypeFlags
+//    public let externalFenceFeatures: ExternalFenceFeatureFlags?
+//}
+//public typealias ExternalFencePropertiesKHR = ExternalFenceProperties
+//
+//// Mapped from VkExternalImageFormatProperties
+//public struct ExternalImageFormatProperties {
+//    public let externalMemoryProperties: ExternalMemoryProperties
+//}
+//public typealias ExternalImageFormatPropertiesKHR = ExternalImageFormatProperties
+//
+//// Mapped from VkExternalImageFormatPropertiesNV
+//public struct ExternalImageFormatPropertiesNV {
+//    public let imageFormatProperties: ImageFormatProperties
+//    public let externalMemoryFeatures: ExternalMemoryFeatureFlagsNV?
+//    public let exportFromImportedHandleTypes: ExternalMemoryHandleTypeFlagsNV?
+//    public let compatibleHandleTypes: ExternalMemoryHandleTypeFlagsNV?
+//}
+//
+//// Mapped from VkExternalMemoryBufferCreateInfo
+//public struct ExternalMemoryBufferCreateInfo {
+//    public let handleTypes: ExternalMemoryHandleTypeFlags?
+//}
+//public typealias ExternalMemoryBufferCreateInfoKHR = ExternalMemoryBufferCreateInfo
+//
+//// Mapped from VkExternalMemoryImageCreateInfo
+//public struct ExternalMemoryImageCreateInfo {
+//    public let handleTypes: ExternalMemoryHandleTypeFlags
+//}
+//public typealias ExternalMemoryImageCreateInfoKHR = ExternalMemoryImageCreateInfo
+//
+//// Mapped from VkExternalMemoryImageCreateInfoNV
+//public struct ExternalMemoryImageCreateInfoNV {
+//    public let handleTypes: ExternalMemoryHandleTypeFlagsNV?
+//}
+//
+//// Mapped from VkExternalMemoryProperties
+//public struct ExternalMemoryProperties {
+//    public let externalMemoryFeatures: ExternalMemoryFeatureFlags
+//    public let exportFromImportedHandleTypes: ExternalMemoryHandleTypeFlags?
+//    public let compatibleHandleTypes: ExternalMemoryHandleTypeFlags
+//}
+//public typealias ExternalMemoryPropertiesKHR = ExternalMemoryProperties
+//
+//// Mapped from VkExternalSemaphoreProperties
+//public struct ExternalSemaphoreProperties {
+//    public let exportFromImportedHandleTypes: ExternalSemaphoreHandleTypeFlags
+//    public let compatibleHandleTypes: ExternalSemaphoreHandleTypeFlags
+//    public let externalSemaphoreFeatures: ExternalSemaphoreFeatureFlags?
+//}
+//public typealias ExternalSemaphorePropertiesKHR = ExternalSemaphoreProperties
+//
+//// Mapped from VkFenceCreateInfo
+//public struct FenceCreateInfo {
+//    public let flags: FenceCreateFlags?
+//}
+//
+//// Mapped from VkFenceGetFdInfoKHR
+//public struct FenceGetFdInfoKHR {
+//    public let fence: Fence
+//    public let handleType: ExternalFenceHandleTypeFlagBits
+//}
+//
+//// Mapped from VkFilterCubicImageViewImageFormatPropertiesEXT
+//public struct FilterCubicImageViewImageFormatPropertiesEXT {
+//    public let filterCubic: Bool
+//    public let filterCubicMinmax: Bool
+//}
+//
+//// Mapped from VkFormatProperties
+//public struct FormatProperties {
+//    public let linearTilingFeatures: FormatFeatureFlags?
+//    public let optimalTilingFeatures: FormatFeatureFlags?
+//    public let bufferFeatures: FormatFeatureFlags?
+//}
+//
+//// Mapped from VkFormatProperties2
+//public struct FormatProperties2 {
+//    public let formatProperties: FormatProperties
+//}
+//public typealias FormatProperties2KHR = FormatProperties2
+//
+//// Mapped from VkFramebufferAttachmentImageInfoKHR
+//public struct FramebufferAttachmentImageInfoKHR {
+//    public let flags: ImageCreateFlags?
+//    public let usage: ImageUsageFlags
+//    public let width: UInt32
+//    public let height: UInt32
+//    public let layerCount: UInt32
+//    public let viewFormats: [Format]
+//}
+//
+//// Mapped from VkFramebufferAttachmentsCreateInfoKHR
+//public struct FramebufferAttachmentsCreateInfoKHR {
+//    public let attachmentImageInfos: [FramebufferAttachmentImageInfoKHR]
+//}
+//
+//// Mapped from VkFramebufferCreateInfo
+//public struct FramebufferCreateInfo {
+//    public let flags: FramebufferCreateFlags?
+//    public let renderPass: RenderPass
+//    public let attachments: [ImageView]
+//    public let width: UInt32
+//    public let height: UInt32
+//    public let layers: UInt32
+//}
+//
+//// Mapped from VkFramebufferMixedSamplesCombinationNV
+//public struct FramebufferMixedSamplesCombinationNV {
+//    public let coverageReductionMode: CoverageReductionModeNV
+//    public let rasterizationSamples: SampleCountFlagBits
+//    public let depthStencilSamples: SampleCountFlags
+//    public let colorSamples: SampleCountFlags
+//}
+//
+//// Mapped from VkGeometryAABBNV
+//public struct GeometryAABBNV {
+//    public let aabbData: Buffer?
+//    public let numAABBs: UInt32
+//    public let stride: UInt32
+//    public let offset: DeviceSize
+//}
+//
+//// Mapped from VkGeometryDataNV
+//public struct GeometryDataNV {
+//    public let triangles: GeometryTrianglesNV
+//    public let aabbs: GeometryAABBNV
+//}
+//
+//// Mapped from VkGeometryNV
+//public struct GeometryNV {
+//    public let geometryType: GeometryTypeNV
+//    public let geometry: GeometryDataNV
+//    public let flags: GeometryFlagsNV?
+//}
+//
+//// Mapped from VkGeometryTrianglesNV
+//public struct GeometryTrianglesNV {
+//    public let vertexData: Buffer?
+//    public let vertexOffset: DeviceSize
+//    public let vertexStride: DeviceSize
+//    public let vertexFormat: Format
+//    public let indexData: Buffer?
+//    public let indexOffset: DeviceSize
+//    public let indexType: IndexType
+//    public let transformData: Buffer?
+//    public let transformOffset: DeviceSize
+//}
+//
+//// Mapped from VkGraphicsPipelineCreateInfo
+//public struct GraphicsPipelineCreateInfo {
+//    public let flags: PipelineCreateFlags?
+//    public let stages: [PipelineShaderStageCreateInfo]
+//    public let vertexInputState: PipelineVertexInputStateCreateInfo?
+//    public let inputAssemblyState: PipelineInputAssemblyStateCreateInfo?
+//    public let tessellationState: PipelineTessellationStateCreateInfo?
+//    public let viewportState: PipelineViewportStateCreateInfo?
+//    public let rasterizationState: PipelineRasterizationStateCreateInfo
+//    public let multisampleState: PipelineMultisampleStateCreateInfo?
+//    public let depthStencilState: PipelineDepthStencilStateCreateInfo?
+//    public let colorBlendState: PipelineColorBlendStateCreateInfo?
+//    public let dynamicState: PipelineDynamicStateCreateInfo?
+//    public let layout: PipelineLayout
+//    public let renderPass: RenderPass
+//    public let subpass: UInt32
+//    public let basePipelineHandle: Pipeline?
+//    public let basePipelineIndex: Int32
+//}
+//
+//// Mapped from VkHdrMetadataEXT
+//public struct HdrMetadataEXT {
+//    public let displayPrimaryRed: XYColorEXT
+//    public let displayPrimaryGreen: XYColorEXT
+//    public let displayPrimaryBlue: XYColorEXT
+//    public let whitePoint: XYColorEXT
+//    public let maxLuminance: Float
+//    public let minLuminance: Float
+//    public let maxContentLightLevel: Float
+//    public let maxFrameAverageLightLevel: Float
+//}
+//
+//// Mapped from VkHeadlessSurfaceCreateInfoEXT
+//public struct HeadlessSurfaceCreateInfoEXT {
+//    public let flags: HeadlessSurfaceCreateFlagsEXT?
+//}
+//
+//// Mapped from VkImageBlit
+//public struct ImageBlit {
+//    public let srcSubresource: ImageSubresourceLayers
+//    public let srcOffsets: [Offset3D]
+//    public let dstSubresource: ImageSubresourceLayers
+//    public let dstOffsets: [Offset3D]
+//}
+//
+//// Mapped from VkImageCopy
+//public struct ImageCopy {
+//    public let srcSubresource: ImageSubresourceLayers
+//    public let srcOffset: Offset3D
+//    public let dstSubresource: ImageSubresourceLayers
+//    public let dstOffset: Offset3D
+//    public let extent: Extent3D
+//}
+//
+//// Mapped from VkImageCreateInfo
+//public struct ImageCreateInfo {
+//    public let flags: ImageCreateFlags?
+//    public let imageType: ImageType
+//    public let format: Format
+//    public let extent: Extent3D
+//    public let mipLevels: UInt32
+//    public let arrayLayers: UInt32
+//    public let samples: SampleCountFlagBits
+//    public let tiling: ImageTiling
+//    public let usage: ImageUsageFlags
+//    public let sharingMode: SharingMode
+//    public let queueFamilyIndexCount: UInt32?
+//    public let queueFamilyIndices: [UInt32]
+//    public let initialLayout: ImageLayout
+//}
+//
+//// Mapped from VkImageDrmFormatModifierExplicitCreateInfoEXT
+//public struct ImageDrmFormatModifierExplicitCreateInfoEXT {
+//    public let drmFormatModifier: UInt64
+//    public let drmFormatModifierPlaneCount: UInt32
+//    public let planeLayouts: [SubresourceLayout]
+//}
+//
+//// Mapped from VkImageDrmFormatModifierListCreateInfoEXT
+//public struct ImageDrmFormatModifierListCreateInfoEXT {
+//    public let drmFormatModifiers: [UInt64]
+//}
+//
+//// Mapped from VkImageDrmFormatModifierPropertiesEXT
+//public struct ImageDrmFormatModifierPropertiesEXT {
+//    public let drmFormatModifier: UInt64
+//}
+//
+//// Mapped from VkImageFormatListCreateInfoKHR
+//public struct ImageFormatListCreateInfoKHR {
+//    public let viewFormats: [Format]
+//}
+//
+//// Mapped from VkImageFormatProperties
+//public struct ImageFormatProperties {
+//    public let maxExtent: Extent3D
+//    public let maxMipLevels: UInt32
+//    public let maxArrayLayers: UInt32
+//    public let sampleCounts: SampleCountFlags?
+//    public let maxResourceSize: DeviceSize
+//}
+//
+//// Mapped from VkImageFormatProperties2
+//public struct ImageFormatProperties2 {
+//    public let imageFormatProperties: ImageFormatProperties
+//}
+//public typealias ImageFormatProperties2KHR = ImageFormatProperties2
+//
+//// Mapped from VkImageMemoryBarrier
+//public struct ImageMemoryBarrier {
+//    public let srcAccessMask: AccessFlags?
+//    public let dstAccessMask: AccessFlags?
+//    public let oldLayout: ImageLayout
+//    public let newLayout: ImageLayout
+//    public let srcQueueFamilyIndex: UInt32
+//    public let dstQueueFamilyIndex: UInt32
+//    public let image: Image
+//    public let subresourceRange: ImageSubresourceRange
+//}
+//
+//// Mapped from VkImageMemoryRequirementsInfo2
+//public struct ImageMemoryRequirementsInfo2 {
+//    public let image: Image
+//}
+//public typealias ImageMemoryRequirementsInfo2KHR = ImageMemoryRequirementsInfo2
+//
+//// Mapped from VkImagePlaneMemoryRequirementsInfo
+//public struct ImagePlaneMemoryRequirementsInfo {
+//    public let planeAspect: ImageAspectFlagBits
+//}
+//public typealias ImagePlaneMemoryRequirementsInfoKHR = ImagePlaneMemoryRequirementsInfo
+//
+//// Mapped from VkImageResolve
+//public struct ImageResolve {
+//    public let srcSubresource: ImageSubresourceLayers
+//    public let srcOffset: Offset3D
+//    public let dstSubresource: ImageSubresourceLayers
+//    public let dstOffset: Offset3D
+//    public let extent: Extent3D
+//}
+//
+//// Mapped from VkImageSparseMemoryRequirementsInfo2
+//public struct ImageSparseMemoryRequirementsInfo2 {
+//    public let image: Image
+//}
+//public typealias ImageSparseMemoryRequirementsInfo2KHR = ImageSparseMemoryRequirementsInfo2
+//
+//// Mapped from VkImageStencilUsageCreateInfoEXT
+//public struct ImageStencilUsageCreateInfoEXT {
+//    public let stencilUsage: ImageUsageFlags
+//}
+//
+//// Mapped from VkImageSubresource
+//public struct ImageSubresource {
+//    public let aspectMask: ImageAspectFlags
+//    public let mipLevel: UInt32
+//    public let arrayLayer: UInt32
+//}
+//
+//// Mapped from VkImageSubresourceLayers
+//public struct ImageSubresourceLayers {
+//    public let aspectMask: ImageAspectFlags
+//    public let mipLevel: UInt32
+//    public let baseArrayLayer: UInt32
+//    public let layerCount: UInt32
+//}
+//
+//// Mapped from VkImageSubresourceRange
+//public struct ImageSubresourceRange {
+//    public let aspectMask: ImageAspectFlags
+//    public let baseMipLevel: UInt32
+//    public let levelCount: UInt32
+//    public let baseArrayLayer: UInt32
+//    public let layerCount: UInt32
+//}
+//
+//// Mapped from VkImageSwapchainCreateInfoKHR
+//public struct ImageSwapchainCreateInfoKHR {
+//    public let swapchain: SwapchainKHR?
+//}
+//
+//// Mapped from VkImageViewASTCDecodeModeEXT
+//public struct ImageViewASTCDecodeModeEXT {
+//    public let decodeMode: Format
+//}
+//
+//// Mapped from VkImageViewCreateInfo
+//public struct ImageViewCreateInfo {
+//    public let flags: ImageViewCreateFlags?
+//    public let image: Image
+//    public let viewType: ImageViewType
+//    public let format: Format
+//    public let components: ComponentMapping
+//    public let subresourceRange: ImageSubresourceRange
+//}
+//
+//// Mapped from VkImageViewHandleInfoNVX
+//public struct ImageViewHandleInfoNVX {
+//    public let imageView: ImageView
+//    public let descriptorType: DescriptorType
+//    public let sampler: Sampler?
+//}
+//
+//// Mapped from VkImageViewUsageCreateInfo
+//public struct ImageViewUsageCreateInfo {
+//    public let usage: ImageUsageFlags
+//}
+//public typealias ImageViewUsageCreateInfoKHR = ImageViewUsageCreateInfo
+//
+//// Mapped from VkImportFenceFdInfoKHR
+//public struct ImportFenceFdInfoKHR {
+//    public let fence: Fence
+//    public let flags: FenceImportFlags?
+//    public let handleType: ExternalFenceHandleTypeFlagBits
+//    public let fd: Int32
+//}
+//
+//// Mapped from VkImportMemoryFdInfoKHR
+//public struct ImportMemoryFdInfoKHR {
+//    public let handleType: ExternalMemoryHandleTypeFlagBits?
+//    public let fd: Int32
+//}
+//
+//// Mapped from VkImportMemoryHostPointerInfoEXT
+//public struct ImportMemoryHostPointerInfoEXT {
+//    public let handleType: ExternalMemoryHandleTypeFlagBits
+//    public let hostPointer: UnsafeRawPointer
+//}
+//
+//// Mapped from VkImportSemaphoreFdInfoKHR
+//public struct ImportSemaphoreFdInfoKHR {
+//    public let semaphore: Semaphore
+//    public let flags: SemaphoreImportFlags?
+//    public let handleType: ExternalSemaphoreHandleTypeFlagBits
+//    public let fd: Int32
+//}
+//
+//// Mapped from VkIndirectCommandsLayoutCreateInfoNVX
+//public struct IndirectCommandsLayoutCreateInfoNVX {
+//    public let pipelineBindPoint: PipelineBindPoint
+//    public let flags: IndirectCommandsLayoutUsageFlagsNVX
+//    public let tokens: [IndirectCommandsLayoutTokenNVX]
+//}
+//
+//// Mapped from VkIndirectCommandsLayoutTokenNVX
+//public struct IndirectCommandsLayoutTokenNVX {
+//    public let tokenType: IndirectCommandsTokenTypeNVX
+//    public let bindingUnit: UInt32
+//    public let dynamicCount: UInt32
+//    public let divisor: UInt32
+//}
+//
+//// Mapped from VkIndirectCommandsTokenNVX
+//public struct IndirectCommandsTokenNVX {
+//    public let tokenType: IndirectCommandsTokenTypeNVX
+//    public let buffer: Buffer
+//    public let offset: DeviceSize
+//}
+//
+//// Mapped from VkInitializePerformanceApiInfoINTEL
+//public struct InitializePerformanceApiInfoINTEL {
+//    public let userData: UnsafeRawPointer
+//}
+//
+//// Mapped from VkInputAttachmentAspectReference
+//public struct InputAttachmentAspectReference {
+//    public let subpass: UInt32
+//    public let inputAttachmentIndex: UInt32
+//    public let aspectMask: ImageAspectFlags
+//}
+//public typealias InputAttachmentAspectReferenceKHR = InputAttachmentAspectReference
 
 // Mapped from VkInstanceCreateInfo
 public struct InstanceCreateInfo {
@@ -1312,598 +1274,598 @@ public struct LayerProperties {
     public let description: String
 }
 
-// Mapped from VkMappedMemoryRange
-public struct MappedMemoryRange {
-    public let memory: DeviceMemory
-    public let offset: DeviceSize
-    public let size: DeviceSize
-}
-
-// Mapped from VkMemoryAllocateFlagsInfo
-public struct MemoryAllocateFlagsInfo {
-    public let flags: MemoryAllocateFlags?
-    public let deviceMask: UInt32
-}
-public typealias MemoryAllocateFlagsInfoKHR = MemoryAllocateFlagsInfo
-
-// Mapped from VkMemoryAllocateInfo
-public struct MemoryAllocateInfo {
-    public let allocationSize: DeviceSize
-    public let memoryTypeIndex: UInt32
-}
-
-// Mapped from VkMemoryBarrier
-public struct MemoryBarrier {
-    public let srcAccessMask: AccessFlags?
-    public let dstAccessMask: AccessFlags?
-}
-
-// Mapped from VkMemoryDedicatedAllocateInfo
-public struct MemoryDedicatedAllocateInfo {
-    public let image: Image?
-    public let buffer: Buffer?
-}
-public typealias MemoryDedicatedAllocateInfoKHR = MemoryDedicatedAllocateInfo
-
-// Mapped from VkMemoryDedicatedRequirements
-public struct MemoryDedicatedRequirements {
-    public let prefersDedicatedAllocation: Bool
-    public let requiresDedicatedAllocation: Bool
-}
-public typealias MemoryDedicatedRequirementsKHR = MemoryDedicatedRequirements
-
-// Mapped from VkMemoryFdPropertiesKHR
-public struct MemoryFdPropertiesKHR {
-    public let memoryTypeBits: UInt32
-}
-
-// Mapped from VkMemoryGetFdInfoKHR
-public struct MemoryGetFdInfoKHR {
-    public let memory: DeviceMemory
-    public let handleType: ExternalMemoryHandleTypeFlagBits
-}
-
-// Mapped from VkMemoryHeap
-public struct MemoryHeap {
-    public let size: DeviceSize
-    public let flags: MemoryHeapFlags?
-}
-
-// Mapped from VkMemoryHostPointerPropertiesEXT
-public struct MemoryHostPointerPropertiesEXT {
-    public let memoryTypeBits: UInt32
-}
-
-// Mapped from VkMemoryPriorityAllocateInfoEXT
-public struct MemoryPriorityAllocateInfoEXT {
-    public let priority: Float
-}
-
-// Mapped from VkMemoryRequirements
-public struct MemoryRequirements {
-    public let size: DeviceSize
-    public let alignment: DeviceSize
-    public let memoryTypeBits: [UInt32]
-}
-
-// Mapped from VkMemoryRequirements2
-public struct MemoryRequirements2 {
-    public let memoryRequirements: MemoryRequirements
-}
-public typealias MemoryRequirements2KHR = MemoryRequirements2
-
-// Mapped from VkMemoryType
-public struct MemoryType {
-    public let propertyFlags: MemoryPropertyFlags?
-    public let heapIndex: UInt32
-}
-
-// Mapped from VkMultisamplePropertiesEXT
-public struct MultisamplePropertiesEXT {
-    public let maxSampleLocationGridSize: Extent2D
-}
-
-// Mapped from VkObjectTableCreateInfoNVX
-public struct ObjectTableCreateInfoNVX {
-    public let objectEntryTypes: [ObjectEntryTypeNVX]
-    public let objectEntryCounts: [UInt32]
-    public let objectEntryUsageFlags: [ObjectEntryUsageFlagsNVX]
-    public let maxUniformBuffersPerDescriptor: UInt32
-    public let maxStorageBuffersPerDescriptor: UInt32
-    public let maxStorageImagesPerDescriptor: UInt32
-    public let maxSampledImagesPerDescriptor: UInt32
-    public let maxPipelineLayouts: UInt32
-}
-
-// Mapped from VkObjectTableDescriptorSetEntryNVX
-public struct ObjectTableDescriptorSetEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-    public let pipelineLayout: PipelineLayout
-    public let descriptorSet: DescriptorSet
-}
-
-// Mapped from VkObjectTableEntryNVX
-public struct ObjectTableEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-}
-
-// Mapped from VkObjectTableIndexBufferEntryNVX
-public struct ObjectTableIndexBufferEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-    public let buffer: Buffer
-    public let indexType: IndexType
-}
-
-// Mapped from VkObjectTablePipelineEntryNVX
-public struct ObjectTablePipelineEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-    public let pipeline: Pipeline
-}
-
-// Mapped from VkObjectTablePushConstantEntryNVX
-public struct ObjectTablePushConstantEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-    public let pipelineLayout: PipelineLayout
-    public let stageFlags: ShaderStageFlags
-}
-
-// Mapped from VkObjectTableVertexBufferEntryNVX
-public struct ObjectTableVertexBufferEntryNVX {
-    public let type: ObjectEntryTypeNVX
-    public let flags: ObjectEntryUsageFlagsNVX
-    public let buffer: Buffer
-}
-
-// Mapped from VkOffset2D
-public struct Offset2D {
-    public let x: Int32
-    public let y: Int32
-}
-
-// Mapped from VkOffset3D
-public struct Offset3D {
-    public let x: Int32
-    public let y: Int32
-    public let z: Int32
-}
-
-// Mapped from VkPastPresentationTimingGOOGLE
-public struct PastPresentationTimingGOOGLE {
-    public let presentID: UInt32
-    public let desiredPresentTime: UInt64
-    public let actualPresentTime: UInt64
-    public let earliestPresentTime: UInt64
-    public let presentMargin: UInt64
-}
-
-// Mapped from VkPerformanceConfigurationAcquireInfoINTEL
-public struct PerformanceConfigurationAcquireInfoINTEL {
-    public let type: PerformanceConfigurationTypeINTEL
-}
-
-// Mapped from VkPerformanceMarkerInfoINTEL
-public struct PerformanceMarkerInfoINTEL {
-    public let marker: UInt64
-}
-
-// Mapped from VkPerformanceOverrideInfoINTEL
-public struct PerformanceOverrideInfoINTEL {
-    public let type: PerformanceOverrideTypeINTEL
-    public let enable: Bool
-    public let parameter: UInt64
-}
-
-// Mapped from VkPerformanceStreamMarkerInfoINTEL
-public struct PerformanceStreamMarkerInfoINTEL {
-    public let marker: UInt32
-}
-
-// Mapped from VkPerformanceValueINTEL
-public struct PerformanceValueINTEL {
-    public let type: PerformanceValueTypeINTEL
-    public let data: PerformanceValueDataINTEL
-}
-
-// Mapped from VkPhysicalDevice16BitStorageFeatures
-public struct PhysicalDevice16BitStorageFeatures {
-    public let storageBuffer16BitAccess: Bool
-    public let uniformAndStorageBuffer16BitAccess: Bool
-    public let storagePushConstant16: Bool
-    public let storageInputOutput16: Bool
-}
-public typealias PhysicalDevice16BitStorageFeaturesKHR = PhysicalDevice16BitStorageFeatures
-
-// Mapped from VkPhysicalDevice8BitStorageFeaturesKHR
-public struct PhysicalDevice8BitStorageFeaturesKHR {
-    public let storageBuffer8BitAccess: Bool
-    public let uniformAndStorageBuffer8BitAccess: Bool
-    public let storagePushConstant8: Bool
-}
-
-// Mapped from VkPhysicalDeviceASTCDecodeFeaturesEXT
-public struct PhysicalDeviceASTCDecodeFeaturesEXT {
-    public let decodeModeSharedExponent: Bool
-}
-
-// Mapped from VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT
-public struct PhysicalDeviceBlendOperationAdvancedFeaturesEXT {
-    public let advancedBlendCoherentOperations: Bool
-}
-
-// Mapped from VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT
-public struct PhysicalDeviceBlendOperationAdvancedPropertiesEXT {
-    public let advancedBlendMaxColorAttachments: UInt32
-    public let advancedBlendIndependentBlend: Bool
-    public let advancedBlendNonPremultipliedSrcColor: Bool
-    public let advancedBlendNonPremultipliedDstColor: Bool
-    public let advancedBlendCorrelatedOverlap: Bool
-    public let advancedBlendAllOperations: Bool
-}
-public typealias PhysicalDeviceBufferAddressFeaturesEXT = PhysicalDeviceBufferDeviceAddressFeaturesEXT
-
-// Mapped from VkPhysicalDeviceBufferDeviceAddressFeaturesEXT
-public struct PhysicalDeviceBufferDeviceAddressFeaturesEXT {
-    public let bufferDeviceAddress: Bool
-    public let bufferDeviceAddressCaptureReplay: Bool
-    public let bufferDeviceAddressMultiDevice: Bool
-}
-
-// Mapped from VkPhysicalDeviceCoherentMemoryFeaturesAMD
-public struct PhysicalDeviceCoherentMemoryFeaturesAMD {
-    public let deviceCoherentMemory: Bool
-}
-
-// Mapped from VkPhysicalDeviceComputeShaderDerivativesFeaturesNV
-public struct PhysicalDeviceComputeShaderDerivativesFeaturesNV {
-    public let computeDerivativeGroupQuads: Bool
-    public let computeDerivativeGroupLinear: Bool
-}
-
-// Mapped from VkPhysicalDeviceConditionalRenderingFeaturesEXT
-public struct PhysicalDeviceConditionalRenderingFeaturesEXT {
-    public let conditionalRendering: Bool
-    public let inheritedConditionalRendering: Bool
-}
-
-// Mapped from VkPhysicalDeviceConservativeRasterizationPropertiesEXT
-public struct PhysicalDeviceConservativeRasterizationPropertiesEXT {
-    public let primitiveOverestimationSize: Float
-    public let maxExtraPrimitiveOverestimationSize: Float
-    public let extraPrimitiveOverestimationSizeGranularity: Float
-    public let primitiveUnderestimation: Bool
-    public let conservativePointAndLineRasterization: Bool
-    public let degenerateTrianglesRasterized: Bool
-    public let degenerateLinesRasterized: Bool
-    public let fullyCoveredFragmentShaderInputVariable: Bool
-    public let conservativeRasterizationPostDepthCoverage: Bool
-}
-
-// Mapped from VkPhysicalDeviceCooperativeMatrixFeaturesNV
-public struct PhysicalDeviceCooperativeMatrixFeaturesNV {
-    public let cooperativeMatrix: Bool
-    public let cooperativeMatrixRobustBufferAccess: Bool
-}
-
-// Mapped from VkPhysicalDeviceCooperativeMatrixPropertiesNV
-public struct PhysicalDeviceCooperativeMatrixPropertiesNV {
-    public let cooperativeMatrixSupportedStages: ShaderStageFlags
-}
-
-// Mapped from VkPhysicalDeviceCornerSampledImageFeaturesNV
-public struct PhysicalDeviceCornerSampledImageFeaturesNV {
-    public let cornerSampledImage: Bool
-}
-
-// Mapped from VkPhysicalDeviceCoverageReductionModeFeaturesNV
-public struct PhysicalDeviceCoverageReductionModeFeaturesNV {
-    public let coverageReductionMode: Bool
-}
-
-// Mapped from VkPhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV
-public struct PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV {
-    public let dedicatedAllocationImageAliasing: Bool
-}
-
-// Mapped from VkPhysicalDeviceDepthClipEnableFeaturesEXT
-public struct PhysicalDeviceDepthClipEnableFeaturesEXT {
-    public let depthClipEnable: Bool
-}
-
-// Mapped from VkPhysicalDeviceDepthStencilResolvePropertiesKHR
-public struct PhysicalDeviceDepthStencilResolvePropertiesKHR {
-    public let supportedDepthResolveModes: ResolveModeFlagsKHR
-    public let supportedStencilResolveModes: ResolveModeFlagsKHR
-    public let independentResolveNone: Bool
-    public let independentResolve: Bool
-}
-
-// Mapped from VkPhysicalDeviceDescriptorIndexingFeaturesEXT
-public struct PhysicalDeviceDescriptorIndexingFeaturesEXT {
-    public let shaderInputAttachmentArrayDynamicIndexing: Bool
-    public let shaderUniformTexelBufferArrayDynamicIndexing: Bool
-    public let shaderStorageTexelBufferArrayDynamicIndexing: Bool
-    public let shaderUniformBufferArrayNonUniformIndexing: Bool
-    public let shaderSampledImageArrayNonUniformIndexing: Bool
-    public let shaderStorageBufferArrayNonUniformIndexing: Bool
-    public let shaderStorageImageArrayNonUniformIndexing: Bool
-    public let shaderInputAttachmentArrayNonUniformIndexing: Bool
-    public let shaderUniformTexelBufferArrayNonUniformIndexing: Bool
-    public let shaderStorageTexelBufferArrayNonUniformIndexing: Bool
-    public let descriptorBindingUniformBufferUpdateAfterBind: Bool
-    public let descriptorBindingSampledImageUpdateAfterBind: Bool
-    public let descriptorBindingStorageImageUpdateAfterBind: Bool
-    public let descriptorBindingStorageBufferUpdateAfterBind: Bool
-    public let descriptorBindingUniformTexelBufferUpdateAfterBind: Bool
-    public let descriptorBindingStorageTexelBufferUpdateAfterBind: Bool
-    public let descriptorBindingUpdateUnusedWhilePending: Bool
-    public let descriptorBindingPartiallyBound: Bool
-    public let descriptorBindingVariableDescriptorCount: Bool
-    public let runtimeDescriptorArray: Bool
-}
-
-// Mapped from VkPhysicalDeviceDescriptorIndexingPropertiesEXT
-public struct PhysicalDeviceDescriptorIndexingPropertiesEXT {
-    public let maxUpdateAfterBindDescriptorsInAllPools: UInt32
-    public let shaderUniformBufferArrayNonUniformIndexingNative: Bool
-    public let shaderSampledImageArrayNonUniformIndexingNative: Bool
-    public let shaderStorageBufferArrayNonUniformIndexingNative: Bool
-    public let shaderStorageImageArrayNonUniformIndexingNative: Bool
-    public let shaderInputAttachmentArrayNonUniformIndexingNative: Bool
-    public let robustBufferAccessUpdateAfterBind: Bool
-    public let quadDivergentImplicitLod: Bool
-    public let maxPerStageDescriptorUpdateAfterBindSamplers: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindUniformBuffers: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindStorageBuffers: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindSampledImages: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindStorageImages: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindInputAttachments: UInt32
-    public let maxPerStageUpdateAfterBindResources: UInt32
-    public let maxDescriptorSetUpdateAfterBindSamplers: UInt32
-    public let maxDescriptorSetUpdateAfterBindUniformBuffers: UInt32
-    public let maxDescriptorSetUpdateAfterBindUniformBuffersDynamic: UInt32
-    public let maxDescriptorSetUpdateAfterBindStorageBuffers: UInt32
-    public let maxDescriptorSetUpdateAfterBindStorageBuffersDynamic: UInt32
-    public let maxDescriptorSetUpdateAfterBindSampledImages: UInt32
-    public let maxDescriptorSetUpdateAfterBindStorageImages: UInt32
-    public let maxDescriptorSetUpdateAfterBindInputAttachments: UInt32
-}
-
-// Mapped from VkPhysicalDeviceDiscardRectanglePropertiesEXT
-public struct PhysicalDeviceDiscardRectanglePropertiesEXT {
-    public let maxDiscardRectangles: UInt32
-}
-
-// Mapped from VkPhysicalDeviceDriverPropertiesKHR
-public struct PhysicalDeviceDriverPropertiesKHR {
-    public let driverID: DriverIdKHR
-    public let driverName: String
-    public let driverInfo: String
-    public let conformanceVersion: ConformanceVersionKHR
-}
-
-// Mapped from VkPhysicalDeviceExclusiveScissorFeaturesNV
-public struct PhysicalDeviceExclusiveScissorFeaturesNV {
-    public let exclusiveScissor: Bool
-}
-
-// Mapped from VkPhysicalDeviceExternalBufferInfo
-public struct PhysicalDeviceExternalBufferInfo {
-    public let flags: BufferCreateFlags?
-    public let usage: BufferUsageFlags
-    public let handleType: ExternalMemoryHandleTypeFlagBits
-}
-public typealias PhysicalDeviceExternalBufferInfoKHR = PhysicalDeviceExternalBufferInfo
-
-// Mapped from VkPhysicalDeviceExternalFenceInfo
-public struct PhysicalDeviceExternalFenceInfo {
-    public let handleType: ExternalFenceHandleTypeFlagBits
-}
-public typealias PhysicalDeviceExternalFenceInfoKHR = PhysicalDeviceExternalFenceInfo
-
-// Mapped from VkPhysicalDeviceExternalImageFormatInfo
-public struct PhysicalDeviceExternalImageFormatInfo {
-    public let handleType: ExternalMemoryHandleTypeFlagBits?
-}
-public typealias PhysicalDeviceExternalImageFormatInfoKHR = PhysicalDeviceExternalImageFormatInfo
-
-// Mapped from VkPhysicalDeviceExternalMemoryHostPropertiesEXT
-public struct PhysicalDeviceExternalMemoryHostPropertiesEXT {
-    public let minImportedHostPointerAlignment: DeviceSize
-}
-
-// Mapped from VkPhysicalDeviceExternalSemaphoreInfo
-public struct PhysicalDeviceExternalSemaphoreInfo {
-    public let handleType: ExternalSemaphoreHandleTypeFlagBits
-}
-public typealias PhysicalDeviceExternalSemaphoreInfoKHR = PhysicalDeviceExternalSemaphoreInfo
-
-// Mapped from VkPhysicalDeviceFeatures
-public struct PhysicalDeviceFeatures {
-    public let robustBufferAccess: Bool
-    public let fullDrawIndexUint32: Bool
-    public let imageCubeArray: Bool
-    public let independentBlend: Bool
-    public let geometryShader: Bool
-    public let tessellationShader: Bool
-    public let sampleRateShading: Bool
-    public let dualSrcBlend: Bool
-    public let logicOp: Bool
-    public let multiDrawIndirect: Bool
-    public let drawIndirectFirstInstance: Bool
-    public let depthClamp: Bool
-    public let depthBiasClamp: Bool
-    public let fillModeNonSolid: Bool
-    public let depthBounds: Bool
-    public let wideLines: Bool
-    public let largePoints: Bool
-    public let alphaToOne: Bool
-    public let multiViewport: Bool
-    public let samplerAnisotropy: Bool
-    public let textureCompressionETC2: Bool
-    public let textureCompressionASTC_LDR: Bool
-    public let textureCompressionBC: Bool
-    public let occlusionQueryPrecise: Bool
-    public let pipelineStatisticsQuery: Bool
-    public let vertexPipelineStoresAndAtomics: Bool
-    public let fragmentStoresAndAtomics: Bool
-    public let shaderTessellationAndGeometryPointSize: Bool
-    public let shaderImageGatherExtended: Bool
-    public let shaderStorageImageExtendedFormats: Bool
-    public let shaderStorageImageMultisample: Bool
-    public let shaderStorageImageReadWithoutFormat: Bool
-    public let shaderStorageImageWriteWithoutFormat: Bool
-    public let shaderUniformBufferArrayDynamicIndexing: Bool
-    public let shaderSampledImageArrayDynamicIndexing: Bool
-    public let shaderStorageBufferArrayDynamicIndexing: Bool
-    public let shaderStorageImageArrayDynamicIndexing: Bool
-    public let shaderClipDistance: Bool
-    public let shaderCullDistance: Bool
-    public let shaderFloat64: Bool
-    public let shaderInt64: Bool
-    public let shaderInt16: Bool
-    public let shaderResourceResidency: Bool
-    public let shaderResourceMinLod: Bool
-    public let sparseBinding: Bool
-    public let sparseResidencyBuffer: Bool
-    public let sparseResidencyImage2D: Bool
-    public let sparseResidencyImage3D: Bool
-    public let sparseResidency2Samples: Bool
-    public let sparseResidency4Samples: Bool
-    public let sparseResidency8Samples: Bool
-    public let sparseResidency16Samples: Bool
-    public let sparseResidencyAliased: Bool
-    public let variableMultisampleRate: Bool
-    public let inheritedQueries: Bool
-}
-
-// Mapped from VkPhysicalDeviceFeatures2
-public struct PhysicalDeviceFeatures2 {
-    public let features: PhysicalDeviceFeatures
-}
-public typealias PhysicalDeviceFeatures2KHR = PhysicalDeviceFeatures2
-public typealias PhysicalDeviceFloat16Int8FeaturesKHR = PhysicalDeviceShaderFloat16Int8FeaturesKHR
-
-// Mapped from VkPhysicalDeviceFloatControlsPropertiesKHR
-public struct PhysicalDeviceFloatControlsPropertiesKHR {
-    public let denormBehaviorIndependence: ShaderFloatControlsIndependenceKHR
-    public let roundingModeIndependence: ShaderFloatControlsIndependenceKHR
-    public let shaderSignedZeroInfNanPreserveFloat16: Bool
-    public let shaderSignedZeroInfNanPreserveFloat32: Bool
-    public let shaderSignedZeroInfNanPreserveFloat64: Bool
-    public let shaderDenormPreserveFloat16: Bool
-    public let shaderDenormPreserveFloat32: Bool
-    public let shaderDenormPreserveFloat64: Bool
-    public let shaderDenormFlushToZeroFloat16: Bool
-    public let shaderDenormFlushToZeroFloat32: Bool
-    public let shaderDenormFlushToZeroFloat64: Bool
-    public let shaderRoundingModeRTEFloat16: Bool
-    public let shaderRoundingModeRTEFloat32: Bool
-    public let shaderRoundingModeRTEFloat64: Bool
-    public let shaderRoundingModeRTZFloat16: Bool
-    public let shaderRoundingModeRTZFloat32: Bool
-    public let shaderRoundingModeRTZFloat64: Bool
-}
-
-// Mapped from VkPhysicalDeviceFragmentDensityMapFeaturesEXT
-public struct PhysicalDeviceFragmentDensityMapFeaturesEXT {
-    public let fragmentDensityMap: Bool
-    public let fragmentDensityMapDynamic: Bool
-    public let fragmentDensityMapNonSubsampledImages: Bool
-}
-
-// Mapped from VkPhysicalDeviceFragmentDensityMapPropertiesEXT
-public struct PhysicalDeviceFragmentDensityMapPropertiesEXT {
-    public let minFragmentDensityTexelSize: Extent2D
-    public let maxFragmentDensityTexelSize: Extent2D
-    public let fragmentDensityInvocations: Bool
-}
-
-// Mapped from VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV
-public struct PhysicalDeviceFragmentShaderBarycentricFeaturesNV {
-    public let fragmentShaderBarycentric: Bool
-}
-
-// Mapped from VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT
-public struct PhysicalDeviceFragmentShaderInterlockFeaturesEXT {
-    public let fragmentShaderSampleInterlock: Bool
-    public let fragmentShaderPixelInterlock: Bool
-    public let fragmentShaderShadingRateInterlock: Bool
-}
-
-// Mapped from VkPhysicalDeviceGroupProperties
-public struct PhysicalDeviceGroupProperties {
-    public let physicalDevices: [PhysicalDevice]
-    public let subsetAllocation: Bool
-}
-public typealias PhysicalDeviceGroupPropertiesKHR = PhysicalDeviceGroupProperties
-
-// Mapped from VkPhysicalDeviceHostQueryResetFeaturesEXT
-public struct PhysicalDeviceHostQueryResetFeaturesEXT {
-    public let hostQueryReset: Bool
-}
-
-// Mapped from VkPhysicalDeviceIDProperties
-public struct PhysicalDeviceIDProperties {
-    public let deviceUUID: [UInt8]
-    public let driverUUID: [UInt8]
-    public let deviceLUID: [UInt8]
-    public let deviceNodeMask: UInt32
-    public let deviceLUIDValid: Bool
-}
-public typealias PhysicalDeviceIDPropertiesKHR = PhysicalDeviceIDProperties
-
-// Mapped from VkPhysicalDeviceImageDrmFormatModifierInfoEXT
-public struct PhysicalDeviceImageDrmFormatModifierInfoEXT {
-    public let drmFormatModifier: UInt64
-    public let sharingMode: SharingMode
-    public let queueFamilyIndexCount: UInt32?
-    public let queueFamilyIndices: [UInt32]
-}
-
-// Mapped from VkPhysicalDeviceImageFormatInfo2
-public struct PhysicalDeviceImageFormatInfo2 {
-    public let format: Format
-    public let type: ImageType
-    public let tiling: ImageTiling
-    public let usage: ImageUsageFlags
-    public let flags: ImageCreateFlags?
-}
-public typealias PhysicalDeviceImageFormatInfo2KHR = PhysicalDeviceImageFormatInfo2
-
-// Mapped from VkPhysicalDeviceImageViewImageFormatInfoEXT
-public struct PhysicalDeviceImageViewImageFormatInfoEXT {
-    public let imageViewType: ImageViewType
-}
-
-// Mapped from VkPhysicalDeviceImagelessFramebufferFeaturesKHR
-public struct PhysicalDeviceImagelessFramebufferFeaturesKHR {
-    public let imagelessFramebuffer: Bool
-}
-
-// Mapped from VkPhysicalDeviceIndexTypeUint8FeaturesEXT
-public struct PhysicalDeviceIndexTypeUint8FeaturesEXT {
-    public let indexTypeUint8: Bool
-}
-
-// Mapped from VkPhysicalDeviceInlineUniformBlockFeaturesEXT
-public struct PhysicalDeviceInlineUniformBlockFeaturesEXT {
-    public let inlineUniformBlock: Bool
-    public let descriptorBindingInlineUniformBlockUpdateAfterBind: Bool
-}
-
-// Mapped from VkPhysicalDeviceInlineUniformBlockPropertiesEXT
-public struct PhysicalDeviceInlineUniformBlockPropertiesEXT {
-    public let maxInlineUniformBlockSize: UInt32
-    public let maxPerStageDescriptorInlineUniformBlocks: UInt32
-    public let maxPerStageDescriptorUpdateAfterBindInlineUniformBlocks: UInt32
-    public let maxDescriptorSetInlineUniformBlocks: UInt32
-    public let maxDescriptorSetUpdateAfterBindInlineUniformBlocks: UInt32
-}
+//// Mapped from VkMappedMemoryRange
+//public struct MappedMemoryRange {
+//    public let memory: DeviceMemory
+//    public let offset: DeviceSize
+//    public let size: DeviceSize
+//}
+//
+//// Mapped from VkMemoryAllocateFlagsInfo
+//public struct MemoryAllocateFlagsInfo {
+//    public let flags: MemoryAllocateFlags?
+//    public let deviceMask: UInt32
+//}
+//public typealias MemoryAllocateFlagsInfoKHR = MemoryAllocateFlagsInfo
+//
+//// Mapped from VkMemoryAllocateInfo
+//public struct MemoryAllocateInfo {
+//    public let allocationSize: DeviceSize
+//    public let memoryTypeIndex: UInt32
+//}
+//
+//// Mapped from VkMemoryBarrier
+//public struct MemoryBarrier {
+//    public let srcAccessMask: AccessFlags?
+//    public let dstAccessMask: AccessFlags?
+//}
+//
+//// Mapped from VkMemoryDedicatedAllocateInfo
+//public struct MemoryDedicatedAllocateInfo {
+//    public let image: Image?
+//    public let buffer: Buffer?
+//}
+//public typealias MemoryDedicatedAllocateInfoKHR = MemoryDedicatedAllocateInfo
+//
+//// Mapped from VkMemoryDedicatedRequirements
+//public struct MemoryDedicatedRequirements {
+//    public let prefersDedicatedAllocation: Bool
+//    public let requiresDedicatedAllocation: Bool
+//}
+//public typealias MemoryDedicatedRequirementsKHR = MemoryDedicatedRequirements
+//
+//// Mapped from VkMemoryFdPropertiesKHR
+//public struct MemoryFdPropertiesKHR {
+//    public let memoryTypeBits: UInt32
+//}
+//
+//// Mapped from VkMemoryGetFdInfoKHR
+//public struct MemoryGetFdInfoKHR {
+//    public let memory: DeviceMemory
+//    public let handleType: ExternalMemoryHandleTypeFlagBits
+//}
+//
+//// Mapped from VkMemoryHeap
+//public struct MemoryHeap {
+//    public let size: DeviceSize
+//    public let flags: MemoryHeapFlags?
+//}
+//
+//// Mapped from VkMemoryHostPointerPropertiesEXT
+//public struct MemoryHostPointerPropertiesEXT {
+//    public let memoryTypeBits: UInt32
+//}
+//
+//// Mapped from VkMemoryPriorityAllocateInfoEXT
+//public struct MemoryPriorityAllocateInfoEXT {
+//    public let priority: Float
+//}
+//
+//// Mapped from VkMemoryRequirements
+//public struct MemoryRequirements {
+//    public let size: DeviceSize
+//    public let alignment: DeviceSize
+//    public let memoryTypeBits: [UInt32]
+//}
+//
+//// Mapped from VkMemoryRequirements2
+//public struct MemoryRequirements2 {
+//    public let memoryRequirements: MemoryRequirements
+//}
+//public typealias MemoryRequirements2KHR = MemoryRequirements2
+//
+//// Mapped from VkMemoryType
+//public struct MemoryType {
+//    public let propertyFlags: MemoryPropertyFlags?
+//    public let heapIndex: UInt32
+//}
+//
+//// Mapped from VkMultisamplePropertiesEXT
+//public struct MultisamplePropertiesEXT {
+//    public let maxSampleLocationGridSize: Extent2D
+//}
+//
+//// Mapped from VkObjectTableCreateInfoNVX
+//public struct ObjectTableCreateInfoNVX {
+//    public let objectEntryTypes: [ObjectEntryTypeNVX]
+//    public let objectEntryCounts: [UInt32]
+//    public let objectEntryUsageFlags: [ObjectEntryUsageFlagsNVX]
+//    public let maxUniformBuffersPerDescriptor: UInt32
+//    public let maxStorageBuffersPerDescriptor: UInt32
+//    public let maxStorageImagesPerDescriptor: UInt32
+//    public let maxSampledImagesPerDescriptor: UInt32
+//    public let maxPipelineLayouts: UInt32
+//}
+//
+//// Mapped from VkObjectTableDescriptorSetEntryNVX
+//public struct ObjectTableDescriptorSetEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//    public let pipelineLayout: PipelineLayout
+//    public let descriptorSet: DescriptorSet
+//}
+//
+//// Mapped from VkObjectTableEntryNVX
+//public struct ObjectTableEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//}
+//
+//// Mapped from VkObjectTableIndexBufferEntryNVX
+//public struct ObjectTableIndexBufferEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//    public let buffer: Buffer
+//    public let indexType: IndexType
+//}
+//
+//// Mapped from VkObjectTablePipelineEntryNVX
+//public struct ObjectTablePipelineEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//    public let pipeline: Pipeline
+//}
+//
+//// Mapped from VkObjectTablePushConstantEntryNVX
+//public struct ObjectTablePushConstantEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//    public let pipelineLayout: PipelineLayout
+//    public let stageFlags: ShaderStageFlags
+//}
+//
+//// Mapped from VkObjectTableVertexBufferEntryNVX
+//public struct ObjectTableVertexBufferEntryNVX {
+//    public let type: ObjectEntryTypeNVX
+//    public let flags: ObjectEntryUsageFlagsNVX
+//    public let buffer: Buffer
+//}
+//
+//// Mapped from VkOffset2D
+//public struct Offset2D {
+//    public let x: Int32
+//    public let y: Int32
+//}
+//
+//// Mapped from VkOffset3D
+//public struct Offset3D {
+//    public let x: Int32
+//    public let y: Int32
+//    public let z: Int32
+//}
+//
+//// Mapped from VkPastPresentationTimingGOOGLE
+//public struct PastPresentationTimingGOOGLE {
+//    public let presentID: UInt32
+//    public let desiredPresentTime: UInt64
+//    public let actualPresentTime: UInt64
+//    public let earliestPresentTime: UInt64
+//    public let presentMargin: UInt64
+//}
+//
+//// Mapped from VkPerformanceConfigurationAcquireInfoINTEL
+//public struct PerformanceConfigurationAcquireInfoINTEL {
+//    public let type: PerformanceConfigurationTypeINTEL
+//}
+//
+//// Mapped from VkPerformanceMarkerInfoINTEL
+//public struct PerformanceMarkerInfoINTEL {
+//    public let marker: UInt64
+//}
+//
+//// Mapped from VkPerformanceOverrideInfoINTEL
+//public struct PerformanceOverrideInfoINTEL {
+//    public let type: PerformanceOverrideTypeINTEL
+//    public let enable: Bool
+//    public let parameter: UInt64
+//}
+//
+//// Mapped from VkPerformanceStreamMarkerInfoINTEL
+//public struct PerformanceStreamMarkerInfoINTEL {
+//    public let marker: UInt32
+//}
+//
+//// Mapped from VkPerformanceValueINTEL
+//public struct PerformanceValueINTEL {
+//    public let type: PerformanceValueTypeINTEL
+//    public let data: PerformanceValueDataINTEL
+//}
+//
+//// Mapped from VkPhysicalDevice16BitStorageFeatures
+//public struct PhysicalDevice16BitStorageFeatures {
+//    public let storageBuffer16BitAccess: Bool
+//    public let uniformAndStorageBuffer16BitAccess: Bool
+//    public let storagePushConstant16: Bool
+//    public let storageInputOutput16: Bool
+//}
+//public typealias PhysicalDevice16BitStorageFeaturesKHR = PhysicalDevice16BitStorageFeatures
+//
+//// Mapped from VkPhysicalDevice8BitStorageFeaturesKHR
+//public struct PhysicalDevice8BitStorageFeaturesKHR {
+//    public let storageBuffer8BitAccess: Bool
+//    public let uniformAndStorageBuffer8BitAccess: Bool
+//    public let storagePushConstant8: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceASTCDecodeFeaturesEXT
+//public struct PhysicalDeviceASTCDecodeFeaturesEXT {
+//    public let decodeModeSharedExponent: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT
+//public struct PhysicalDeviceBlendOperationAdvancedFeaturesEXT {
+//    public let advancedBlendCoherentOperations: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT
+//public struct PhysicalDeviceBlendOperationAdvancedPropertiesEXT {
+//    public let advancedBlendMaxColorAttachments: UInt32
+//    public let advancedBlendIndependentBlend: Bool
+//    public let advancedBlendNonPremultipliedSrcColor: Bool
+//    public let advancedBlendNonPremultipliedDstColor: Bool
+//    public let advancedBlendCorrelatedOverlap: Bool
+//    public let advancedBlendAllOperations: Bool
+//}
+//public typealias PhysicalDeviceBufferAddressFeaturesEXT = PhysicalDeviceBufferDeviceAddressFeaturesEXT
+//
+//// Mapped from VkPhysicalDeviceBufferDeviceAddressFeaturesEXT
+//public struct PhysicalDeviceBufferDeviceAddressFeaturesEXT {
+//    public let bufferDeviceAddress: Bool
+//    public let bufferDeviceAddressCaptureReplay: Bool
+//    public let bufferDeviceAddressMultiDevice: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceCoherentMemoryFeaturesAMD
+//public struct PhysicalDeviceCoherentMemoryFeaturesAMD {
+//    public let deviceCoherentMemory: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceComputeShaderDerivativesFeaturesNV
+//public struct PhysicalDeviceComputeShaderDerivativesFeaturesNV {
+//    public let computeDerivativeGroupQuads: Bool
+//    public let computeDerivativeGroupLinear: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceConditionalRenderingFeaturesEXT
+//public struct PhysicalDeviceConditionalRenderingFeaturesEXT {
+//    public let conditionalRendering: Bool
+//    public let inheritedConditionalRendering: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceConservativeRasterizationPropertiesEXT
+//public struct PhysicalDeviceConservativeRasterizationPropertiesEXT {
+//    public let primitiveOverestimationSize: Float
+//    public let maxExtraPrimitiveOverestimationSize: Float
+//    public let extraPrimitiveOverestimationSizeGranularity: Float
+//    public let primitiveUnderestimation: Bool
+//    public let conservativePointAndLineRasterization: Bool
+//    public let degenerateTrianglesRasterized: Bool
+//    public let degenerateLinesRasterized: Bool
+//    public let fullyCoveredFragmentShaderInputVariable: Bool
+//    public let conservativeRasterizationPostDepthCoverage: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceCooperativeMatrixFeaturesNV
+//public struct PhysicalDeviceCooperativeMatrixFeaturesNV {
+//    public let cooperativeMatrix: Bool
+//    public let cooperativeMatrixRobustBufferAccess: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceCooperativeMatrixPropertiesNV
+//public struct PhysicalDeviceCooperativeMatrixPropertiesNV {
+//    public let cooperativeMatrixSupportedStages: ShaderStageFlags
+//}
+//
+//// Mapped from VkPhysicalDeviceCornerSampledImageFeaturesNV
+//public struct PhysicalDeviceCornerSampledImageFeaturesNV {
+//    public let cornerSampledImage: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceCoverageReductionModeFeaturesNV
+//public struct PhysicalDeviceCoverageReductionModeFeaturesNV {
+//    public let coverageReductionMode: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV
+//public struct PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV {
+//    public let dedicatedAllocationImageAliasing: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceDepthClipEnableFeaturesEXT
+//public struct PhysicalDeviceDepthClipEnableFeaturesEXT {
+//    public let depthClipEnable: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceDepthStencilResolvePropertiesKHR
+//public struct PhysicalDeviceDepthStencilResolvePropertiesKHR {
+//    public let supportedDepthResolveModes: ResolveModeFlagsKHR
+//    public let supportedStencilResolveModes: ResolveModeFlagsKHR
+//    public let independentResolveNone: Bool
+//    public let independentResolve: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceDescriptorIndexingFeaturesEXT
+//public struct PhysicalDeviceDescriptorIndexingFeaturesEXT {
+//    public let shaderInputAttachmentArrayDynamicIndexing: Bool
+//    public let shaderUniformTexelBufferArrayDynamicIndexing: Bool
+//    public let shaderStorageTexelBufferArrayDynamicIndexing: Bool
+//    public let shaderUniformBufferArrayNonUniformIndexing: Bool
+//    public let shaderSampledImageArrayNonUniformIndexing: Bool
+//    public let shaderStorageBufferArrayNonUniformIndexing: Bool
+//    public let shaderStorageImageArrayNonUniformIndexing: Bool
+//    public let shaderInputAttachmentArrayNonUniformIndexing: Bool
+//    public let shaderUniformTexelBufferArrayNonUniformIndexing: Bool
+//    public let shaderStorageTexelBufferArrayNonUniformIndexing: Bool
+//    public let descriptorBindingUniformBufferUpdateAfterBind: Bool
+//    public let descriptorBindingSampledImageUpdateAfterBind: Bool
+//    public let descriptorBindingStorageImageUpdateAfterBind: Bool
+//    public let descriptorBindingStorageBufferUpdateAfterBind: Bool
+//    public let descriptorBindingUniformTexelBufferUpdateAfterBind: Bool
+//    public let descriptorBindingStorageTexelBufferUpdateAfterBind: Bool
+//    public let descriptorBindingUpdateUnusedWhilePending: Bool
+//    public let descriptorBindingPartiallyBound: Bool
+//    public let descriptorBindingVariableDescriptorCount: Bool
+//    public let runtimeDescriptorArray: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceDescriptorIndexingPropertiesEXT
+//public struct PhysicalDeviceDescriptorIndexingPropertiesEXT {
+//    public let maxUpdateAfterBindDescriptorsInAllPools: UInt32
+//    public let shaderUniformBufferArrayNonUniformIndexingNative: Bool
+//    public let shaderSampledImageArrayNonUniformIndexingNative: Bool
+//    public let shaderStorageBufferArrayNonUniformIndexingNative: Bool
+//    public let shaderStorageImageArrayNonUniformIndexingNative: Bool
+//    public let shaderInputAttachmentArrayNonUniformIndexingNative: Bool
+//    public let robustBufferAccessUpdateAfterBind: Bool
+//    public let quadDivergentImplicitLod: Bool
+//    public let maxPerStageDescriptorUpdateAfterBindSamplers: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindUniformBuffers: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindStorageBuffers: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindSampledImages: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindStorageImages: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindInputAttachments: UInt32
+//    public let maxPerStageUpdateAfterBindResources: UInt32
+//    public let maxDescriptorSetUpdateAfterBindSamplers: UInt32
+//    public let maxDescriptorSetUpdateAfterBindUniformBuffers: UInt32
+//    public let maxDescriptorSetUpdateAfterBindUniformBuffersDynamic: UInt32
+//    public let maxDescriptorSetUpdateAfterBindStorageBuffers: UInt32
+//    public let maxDescriptorSetUpdateAfterBindStorageBuffersDynamic: UInt32
+//    public let maxDescriptorSetUpdateAfterBindSampledImages: UInt32
+//    public let maxDescriptorSetUpdateAfterBindStorageImages: UInt32
+//    public let maxDescriptorSetUpdateAfterBindInputAttachments: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceDiscardRectanglePropertiesEXT
+//public struct PhysicalDeviceDiscardRectanglePropertiesEXT {
+//    public let maxDiscardRectangles: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceDriverPropertiesKHR
+//public struct PhysicalDeviceDriverPropertiesKHR {
+//    public let driverID: DriverIdKHR
+//    public let driverName: String
+//    public let driverInfo: String
+//    public let conformanceVersion: ConformanceVersionKHR
+//}
+//
+//// Mapped from VkPhysicalDeviceExclusiveScissorFeaturesNV
+//public struct PhysicalDeviceExclusiveScissorFeaturesNV {
+//    public let exclusiveScissor: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceExternalBufferInfo
+//public struct PhysicalDeviceExternalBufferInfo {
+//    public let flags: BufferCreateFlags?
+//    public let usage: BufferUsageFlags
+//    public let handleType: ExternalMemoryHandleTypeFlagBits
+//}
+//public typealias PhysicalDeviceExternalBufferInfoKHR = PhysicalDeviceExternalBufferInfo
+//
+//// Mapped from VkPhysicalDeviceExternalFenceInfo
+//public struct PhysicalDeviceExternalFenceInfo {
+//    public let handleType: ExternalFenceHandleTypeFlagBits
+//}
+//public typealias PhysicalDeviceExternalFenceInfoKHR = PhysicalDeviceExternalFenceInfo
+//
+//// Mapped from VkPhysicalDeviceExternalImageFormatInfo
+//public struct PhysicalDeviceExternalImageFormatInfo {
+//    public let handleType: ExternalMemoryHandleTypeFlagBits?
+//}
+//public typealias PhysicalDeviceExternalImageFormatInfoKHR = PhysicalDeviceExternalImageFormatInfo
+//
+//// Mapped from VkPhysicalDeviceExternalMemoryHostPropertiesEXT
+//public struct PhysicalDeviceExternalMemoryHostPropertiesEXT {
+//    public let minImportedHostPointerAlignment: DeviceSize
+//}
+//
+//// Mapped from VkPhysicalDeviceExternalSemaphoreInfo
+//public struct PhysicalDeviceExternalSemaphoreInfo {
+//    public let handleType: ExternalSemaphoreHandleTypeFlagBits
+//}
+//public typealias PhysicalDeviceExternalSemaphoreInfoKHR = PhysicalDeviceExternalSemaphoreInfo
+//
+//// Mapped from VkPhysicalDeviceFeatures
+//public struct PhysicalDeviceFeatures {
+//    public let robustBufferAccess: Bool
+//    public let fullDrawIndexUint32: Bool
+//    public let imageCubeArray: Bool
+//    public let independentBlend: Bool
+//    public let geometryShader: Bool
+//    public let tessellationShader: Bool
+//    public let sampleRateShading: Bool
+//    public let dualSrcBlend: Bool
+//    public let logicOp: Bool
+//    public let multiDrawIndirect: Bool
+//    public let drawIndirectFirstInstance: Bool
+//    public let depthClamp: Bool
+//    public let depthBiasClamp: Bool
+//    public let fillModeNonSolid: Bool
+//    public let depthBounds: Bool
+//    public let wideLines: Bool
+//    public let largePoints: Bool
+//    public let alphaToOne: Bool
+//    public let multiViewport: Bool
+//    public let samplerAnisotropy: Bool
+//    public let textureCompressionETC2: Bool
+//    public let textureCompressionASTC_LDR: Bool
+//    public let textureCompressionBC: Bool
+//    public let occlusionQueryPrecise: Bool
+//    public let pipelineStatisticsQuery: Bool
+//    public let vertexPipelineStoresAndAtomics: Bool
+//    public let fragmentStoresAndAtomics: Bool
+//    public let shaderTessellationAndGeometryPointSize: Bool
+//    public let shaderImageGatherExtended: Bool
+//    public let shaderStorageImageExtendedFormats: Bool
+//    public let shaderStorageImageMultisample: Bool
+//    public let shaderStorageImageReadWithoutFormat: Bool
+//    public let shaderStorageImageWriteWithoutFormat: Bool
+//    public let shaderUniformBufferArrayDynamicIndexing: Bool
+//    public let shaderSampledImageArrayDynamicIndexing: Bool
+//    public let shaderStorageBufferArrayDynamicIndexing: Bool
+//    public let shaderStorageImageArrayDynamicIndexing: Bool
+//    public let shaderClipDistance: Bool
+//    public let shaderCullDistance: Bool
+//    public let shaderFloat64: Bool
+//    public let shaderInt64: Bool
+//    public let shaderInt16: Bool
+//    public let shaderResourceResidency: Bool
+//    public let shaderResourceMinLod: Bool
+//    public let sparseBinding: Bool
+//    public let sparseResidencyBuffer: Bool
+//    public let sparseResidencyImage2D: Bool
+//    public let sparseResidencyImage3D: Bool
+//    public let sparseResidency2Samples: Bool
+//    public let sparseResidency4Samples: Bool
+//    public let sparseResidency8Samples: Bool
+//    public let sparseResidency16Samples: Bool
+//    public let sparseResidencyAliased: Bool
+//    public let variableMultisampleRate: Bool
+//    public let inheritedQueries: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceFeatures2
+//public struct PhysicalDeviceFeatures2 {
+//    public let features: PhysicalDeviceFeatures
+//}
+//public typealias PhysicalDeviceFeatures2KHR = PhysicalDeviceFeatures2
+//public typealias PhysicalDeviceFloat16Int8FeaturesKHR = PhysicalDeviceShaderFloat16Int8FeaturesKHR
+//
+//// Mapped from VkPhysicalDeviceFloatControlsPropertiesKHR
+//public struct PhysicalDeviceFloatControlsPropertiesKHR {
+//    public let denormBehaviorIndependence: ShaderFloatControlsIndependenceKHR
+//    public let roundingModeIndependence: ShaderFloatControlsIndependenceKHR
+//    public let shaderSignedZeroInfNanPreserveFloat16: Bool
+//    public let shaderSignedZeroInfNanPreserveFloat32: Bool
+//    public let shaderSignedZeroInfNanPreserveFloat64: Bool
+//    public let shaderDenormPreserveFloat16: Bool
+//    public let shaderDenormPreserveFloat32: Bool
+//    public let shaderDenormPreserveFloat64: Bool
+//    public let shaderDenormFlushToZeroFloat16: Bool
+//    public let shaderDenormFlushToZeroFloat32: Bool
+//    public let shaderDenormFlushToZeroFloat64: Bool
+//    public let shaderRoundingModeRTEFloat16: Bool
+//    public let shaderRoundingModeRTEFloat32: Bool
+//    public let shaderRoundingModeRTEFloat64: Bool
+//    public let shaderRoundingModeRTZFloat16: Bool
+//    public let shaderRoundingModeRTZFloat32: Bool
+//    public let shaderRoundingModeRTZFloat64: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceFragmentDensityMapFeaturesEXT
+//public struct PhysicalDeviceFragmentDensityMapFeaturesEXT {
+//    public let fragmentDensityMap: Bool
+//    public let fragmentDensityMapDynamic: Bool
+//    public let fragmentDensityMapNonSubsampledImages: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceFragmentDensityMapPropertiesEXT
+//public struct PhysicalDeviceFragmentDensityMapPropertiesEXT {
+//    public let minFragmentDensityTexelSize: Extent2D
+//    public let maxFragmentDensityTexelSize: Extent2D
+//    public let fragmentDensityInvocations: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV
+//public struct PhysicalDeviceFragmentShaderBarycentricFeaturesNV {
+//    public let fragmentShaderBarycentric: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT
+//public struct PhysicalDeviceFragmentShaderInterlockFeaturesEXT {
+//    public let fragmentShaderSampleInterlock: Bool
+//    public let fragmentShaderPixelInterlock: Bool
+//    public let fragmentShaderShadingRateInterlock: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceGroupProperties
+//public struct PhysicalDeviceGroupProperties {
+//    public let physicalDevices: [PhysicalDevice]
+//    public let subsetAllocation: Bool
+//}
+//public typealias PhysicalDeviceGroupPropertiesKHR = PhysicalDeviceGroupProperties
+//
+//// Mapped from VkPhysicalDeviceHostQueryResetFeaturesEXT
+//public struct PhysicalDeviceHostQueryResetFeaturesEXT {
+//    public let hostQueryReset: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceIDProperties
+//public struct PhysicalDeviceIDProperties {
+//    public let deviceUUID: [UInt8]
+//    public let driverUUID: [UInt8]
+//    public let deviceLUID: [UInt8]
+//    public let deviceNodeMask: UInt32
+//    public let deviceLUIDValid: Bool
+//}
+//public typealias PhysicalDeviceIDPropertiesKHR = PhysicalDeviceIDProperties
+//
+//// Mapped from VkPhysicalDeviceImageDrmFormatModifierInfoEXT
+//public struct PhysicalDeviceImageDrmFormatModifierInfoEXT {
+//    public let drmFormatModifier: UInt64
+//    public let sharingMode: SharingMode
+//    public let queueFamilyIndexCount: UInt32?
+//    public let queueFamilyIndices: [UInt32]
+//}
+//
+//// Mapped from VkPhysicalDeviceImageFormatInfo2
+//public struct PhysicalDeviceImageFormatInfo2 {
+//    public let format: Format
+//    public let type: ImageType
+//    public let tiling: ImageTiling
+//    public let usage: ImageUsageFlags
+//    public let flags: ImageCreateFlags?
+//}
+//public typealias PhysicalDeviceImageFormatInfo2KHR = PhysicalDeviceImageFormatInfo2
+//
+//// Mapped from VkPhysicalDeviceImageViewImageFormatInfoEXT
+//public struct PhysicalDeviceImageViewImageFormatInfoEXT {
+//    public let imageViewType: ImageViewType
+//}
+//
+//// Mapped from VkPhysicalDeviceImagelessFramebufferFeaturesKHR
+//public struct PhysicalDeviceImagelessFramebufferFeaturesKHR {
+//    public let imagelessFramebuffer: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceIndexTypeUint8FeaturesEXT
+//public struct PhysicalDeviceIndexTypeUint8FeaturesEXT {
+//    public let indexTypeUint8: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceInlineUniformBlockFeaturesEXT
+//public struct PhysicalDeviceInlineUniformBlockFeaturesEXT {
+//    public let inlineUniformBlock: Bool
+//    public let descriptorBindingInlineUniformBlockUpdateAfterBind: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceInlineUniformBlockPropertiesEXT
+//public struct PhysicalDeviceInlineUniformBlockPropertiesEXT {
+//    public let maxInlineUniformBlockSize: UInt32
+//    public let maxPerStageDescriptorInlineUniformBlocks: UInt32
+//    public let maxPerStageDescriptorUpdateAfterBindInlineUniformBlocks: UInt32
+//    public let maxDescriptorSetInlineUniformBlocks: UInt32
+//    public let maxDescriptorSetUpdateAfterBindInlineUniformBlocks: UInt32
+//}
 
 // Mapped from VkPhysicalDeviceLimits
 public struct PhysicalDeviceLimits {
@@ -2014,112 +1976,112 @@ public struct PhysicalDeviceLimits {
     public let nonCoherentAtomSize: DeviceSize
 }
 
-// Mapped from VkPhysicalDeviceLineRasterizationFeaturesEXT
-public struct PhysicalDeviceLineRasterizationFeaturesEXT {
-    public let rectangularLines: Bool
-    public let bresenhamLines: Bool
-    public let smoothLines: Bool
-    public let stippledRectangularLines: Bool
-    public let stippledBresenhamLines: Bool
-    public let stippledSmoothLines: Bool
-}
-
-// Mapped from VkPhysicalDeviceLineRasterizationPropertiesEXT
-public struct PhysicalDeviceLineRasterizationPropertiesEXT {
-    public let lineSubPixelPrecisionBits: UInt32
-}
-
-// Mapped from VkPhysicalDeviceMaintenance3Properties
-public struct PhysicalDeviceMaintenance3Properties {
-    public let maxPerSetDescriptors: UInt32
-    public let maxMemoryAllocationSize: DeviceSize
-}
-public typealias PhysicalDeviceMaintenance3PropertiesKHR = PhysicalDeviceMaintenance3Properties
-
-// Mapped from VkPhysicalDeviceMemoryBudgetPropertiesEXT
-public struct PhysicalDeviceMemoryBudgetPropertiesEXT {
-    public let heapBudget: [DeviceSize]
-    public let heapUsage: [DeviceSize]
-}
-
-// Mapped from VkPhysicalDeviceMemoryPriorityFeaturesEXT
-public struct PhysicalDeviceMemoryPriorityFeaturesEXT {
-    public let memoryPriority: Bool
-}
-
-// Mapped from VkPhysicalDeviceMemoryProperties
-public struct PhysicalDeviceMemoryProperties {
-    public let memoryTypes: [MemoryType]
-    public let memoryHeaps: [MemoryHeap]
-}
-
-// Mapped from VkPhysicalDeviceMemoryProperties2
-public struct PhysicalDeviceMemoryProperties2 {
-    public let memoryProperties: PhysicalDeviceMemoryProperties
-}
-public typealias PhysicalDeviceMemoryProperties2KHR = PhysicalDeviceMemoryProperties2
-
-// Mapped from VkPhysicalDeviceMeshShaderFeaturesNV
-public struct PhysicalDeviceMeshShaderFeaturesNV {
-    public let taskShader: Bool
-    public let meshShader: Bool
-}
-
-// Mapped from VkPhysicalDeviceMeshShaderPropertiesNV
-public struct PhysicalDeviceMeshShaderPropertiesNV {
-    public let maxDrawMeshTasksCount: UInt32
-    public let maxTaskWorkGroupInvocations: UInt32
-    public let maxTaskWorkGroupSize: [UInt32]
-    public let maxTaskTotalMemorySize: UInt32
-    public let maxTaskOutputCount: UInt32
-    public let maxMeshWorkGroupInvocations: UInt32
-    public let maxMeshWorkGroupSize: [UInt32]
-    public let maxMeshTotalMemorySize: UInt32
-    public let maxMeshOutputVertices: UInt32
-    public let maxMeshOutputPrimitives: UInt32
-    public let maxMeshMultiviewViewCount: UInt32
-    public let meshOutputPerVertexGranularity: UInt32
-    public let meshOutputPerPrimitiveGranularity: UInt32
-}
-
-// Mapped from VkPhysicalDeviceMultiviewFeatures
-public struct PhysicalDeviceMultiviewFeatures {
-    public let multiview: Bool
-    public let multiviewGeometryShader: Bool
-    public let multiviewTessellationShader: Bool
-}
-public typealias PhysicalDeviceMultiviewFeaturesKHR = PhysicalDeviceMultiviewFeatures
-
-// Mapped from VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX
-public struct PhysicalDeviceMultiviewPerViewAttributesPropertiesNVX {
-    public let perViewPositionAllComponents: Bool
-}
-
-// Mapped from VkPhysicalDeviceMultiviewProperties
-public struct PhysicalDeviceMultiviewProperties {
-    public let maxMultiviewViewCount: UInt32
-    public let maxMultiviewInstanceIndex: UInt32
-}
-public typealias PhysicalDeviceMultiviewPropertiesKHR = PhysicalDeviceMultiviewProperties
-
-// Mapped from VkPhysicalDevicePCIBusInfoPropertiesEXT
-public struct PhysicalDevicePCIBusInfoPropertiesEXT {
-    public let pciDomain: UInt32
-    public let pciBus: UInt32
-    public let pciDevice: UInt32
-    public let pciFunction: UInt32
-}
-
-// Mapped from VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR
-public struct PhysicalDevicePipelineExecutablePropertiesFeaturesKHR {
-    public let pipelineExecutableInfo: Bool
-}
-
-// Mapped from VkPhysicalDevicePointClippingProperties
-public struct PhysicalDevicePointClippingProperties {
-    public let pointClippingBehavior: PointClippingBehavior
-}
-public typealias PhysicalDevicePointClippingPropertiesKHR = PhysicalDevicePointClippingProperties
+//// Mapped from VkPhysicalDeviceLineRasterizationFeaturesEXT
+//public struct PhysicalDeviceLineRasterizationFeaturesEXT {
+//    public let rectangularLines: Bool
+//    public let bresenhamLines: Bool
+//    public let smoothLines: Bool
+//    public let stippledRectangularLines: Bool
+//    public let stippledBresenhamLines: Bool
+//    public let stippledSmoothLines: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceLineRasterizationPropertiesEXT
+//public struct PhysicalDeviceLineRasterizationPropertiesEXT {
+//    public let lineSubPixelPrecisionBits: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceMaintenance3Properties
+//public struct PhysicalDeviceMaintenance3Properties {
+//    public let maxPerSetDescriptors: UInt32
+//    public let maxMemoryAllocationSize: DeviceSize
+//}
+//public typealias PhysicalDeviceMaintenance3PropertiesKHR = PhysicalDeviceMaintenance3Properties
+//
+//// Mapped from VkPhysicalDeviceMemoryBudgetPropertiesEXT
+//public struct PhysicalDeviceMemoryBudgetPropertiesEXT {
+//    public let heapBudget: [DeviceSize]
+//    public let heapUsage: [DeviceSize]
+//}
+//
+//// Mapped from VkPhysicalDeviceMemoryPriorityFeaturesEXT
+//public struct PhysicalDeviceMemoryPriorityFeaturesEXT {
+//    public let memoryPriority: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceMemoryProperties
+//public struct PhysicalDeviceMemoryProperties {
+//    public let memoryTypes: [MemoryType]
+//    public let memoryHeaps: [MemoryHeap]
+//}
+//
+//// Mapped from VkPhysicalDeviceMemoryProperties2
+//public struct PhysicalDeviceMemoryProperties2 {
+//    public let memoryProperties: PhysicalDeviceMemoryProperties
+//}
+//public typealias PhysicalDeviceMemoryProperties2KHR = PhysicalDeviceMemoryProperties2
+//
+//// Mapped from VkPhysicalDeviceMeshShaderFeaturesNV
+//public struct PhysicalDeviceMeshShaderFeaturesNV {
+//    public let taskShader: Bool
+//    public let meshShader: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceMeshShaderPropertiesNV
+//public struct PhysicalDeviceMeshShaderPropertiesNV {
+//    public let maxDrawMeshTasksCount: UInt32
+//    public let maxTaskWorkGroupInvocations: UInt32
+//    public let maxTaskWorkGroupSize: [UInt32]
+//    public let maxTaskTotalMemorySize: UInt32
+//    public let maxTaskOutputCount: UInt32
+//    public let maxMeshWorkGroupInvocations: UInt32
+//    public let maxMeshWorkGroupSize: [UInt32]
+//    public let maxMeshTotalMemorySize: UInt32
+//    public let maxMeshOutputVertices: UInt32
+//    public let maxMeshOutputPrimitives: UInt32
+//    public let maxMeshMultiviewViewCount: UInt32
+//    public let meshOutputPerVertexGranularity: UInt32
+//    public let meshOutputPerPrimitiveGranularity: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceMultiviewFeatures
+//public struct PhysicalDeviceMultiviewFeatures {
+//    public let multiview: Bool
+//    public let multiviewGeometryShader: Bool
+//    public let multiviewTessellationShader: Bool
+//}
+//public typealias PhysicalDeviceMultiviewFeaturesKHR = PhysicalDeviceMultiviewFeatures
+//
+//// Mapped from VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX
+//public struct PhysicalDeviceMultiviewPerViewAttributesPropertiesNVX {
+//    public let perViewPositionAllComponents: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceMultiviewProperties
+//public struct PhysicalDeviceMultiviewProperties {
+//    public let maxMultiviewViewCount: UInt32
+//    public let maxMultiviewInstanceIndex: UInt32
+//}
+//public typealias PhysicalDeviceMultiviewPropertiesKHR = PhysicalDeviceMultiviewProperties
+//
+//// Mapped from VkPhysicalDevicePCIBusInfoPropertiesEXT
+//public struct PhysicalDevicePCIBusInfoPropertiesEXT {
+//    public let pciDomain: UInt32
+//    public let pciBus: UInt32
+//    public let pciDevice: UInt32
+//    public let pciFunction: UInt32
+//}
+//
+//// Mapped from VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR
+//public struct PhysicalDevicePipelineExecutablePropertiesFeaturesKHR {
+//    public let pipelineExecutableInfo: Bool
+//}
+//
+//// Mapped from VkPhysicalDevicePointClippingProperties
+//public struct PhysicalDevicePointClippingProperties {
+//    public let pointClippingBehavior: PointClippingBehavior
+//}
+//public typealias PhysicalDevicePointClippingPropertiesKHR = PhysicalDevicePointClippingProperties
 
 // Mapped from VkPhysicalDeviceProperties
 public struct PhysicalDeviceProperties {
@@ -2130,8 +2092,8 @@ public struct PhysicalDeviceProperties {
     public let deviceType: PhysicalDeviceType
     public let deviceName: String
     public let pipelineCacheUUID: [UInt8]
-    public let limits: PhysicalDeviceLimits
-    public let sparseProperties: PhysicalDeviceSparseProperties
+//    public let limits: PhysicalDeviceLimits
+//    public let sparseProperties: PhysicalDeviceSparseProperties
 }
 
 // Mapped from VkPhysicalDeviceProperties2
@@ -2140,159 +2102,159 @@ public struct PhysicalDeviceProperties2 {
 }
 public typealias PhysicalDeviceProperties2KHR = PhysicalDeviceProperties2
 
-// Mapped from VkPhysicalDeviceProtectedMemoryFeatures
-public struct PhysicalDeviceProtectedMemoryFeatures {
-    public let protectedMemory: Bool
-}
-
-// Mapped from VkPhysicalDeviceProtectedMemoryProperties
-public struct PhysicalDeviceProtectedMemoryProperties {
-    public let protectedNoFault: Bool
-}
-
-// Mapped from VkPhysicalDevicePushDescriptorPropertiesKHR
-public struct PhysicalDevicePushDescriptorPropertiesKHR {
-    public let maxPushDescriptors: UInt32
-}
-
-// Mapped from VkPhysicalDeviceRayTracingPropertiesNV
-public struct PhysicalDeviceRayTracingPropertiesNV {
-    public let shaderGroupHandleSize: UInt32
-    public let maxRecursionDepth: UInt32
-    public let maxShaderGroupStride: UInt32
-    public let shaderGroupBaseAlignment: UInt32
-    public let maxGeometryCount: UInt64
-    public let maxInstanceCount: UInt64
-    public let maxTriangleCount: UInt64
-    public let maxDescriptorSetAccelerationStructures: UInt32
-}
-
-// Mapped from VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV
-public struct PhysicalDeviceRepresentativeFragmentTestFeaturesNV {
-    public let representativeFragmentTest: Bool
-}
-
-// Mapped from VkPhysicalDeviceSampleLocationsPropertiesEXT
-public struct PhysicalDeviceSampleLocationsPropertiesEXT {
-    public let sampleLocationSampleCounts: SampleCountFlags
-    public let maxSampleLocationGridSize: Extent2D
-    public let sampleLocationCoordinateRange: [Float]
-    public let sampleLocationSubPixelBits: UInt32
-    public let variableSampleLocations: Bool
-}
-
-// Mapped from VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT
-public struct PhysicalDeviceSamplerFilterMinmaxPropertiesEXT {
-    public let filterMinmaxSingleComponentFormats: Bool
-    public let filterMinmaxImageComponentMapping: Bool
-}
-
-// Mapped from VkPhysicalDeviceSamplerYcbcrConversionFeatures
-public struct PhysicalDeviceSamplerYcbcrConversionFeatures {
-    public let samplerYcbcrConversion: Bool
-}
-public typealias PhysicalDeviceSamplerYcbcrConversionFeaturesKHR = PhysicalDeviceSamplerYcbcrConversionFeatures
-
-// Mapped from VkPhysicalDeviceScalarBlockLayoutFeaturesEXT
-public struct PhysicalDeviceScalarBlockLayoutFeaturesEXT {
-    public let scalarBlockLayout: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderAtomicInt64FeaturesKHR
-public struct PhysicalDeviceShaderAtomicInt64FeaturesKHR {
-    public let shaderBufferInt64Atomics: Bool
-    public let shaderSharedInt64Atomics: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderCoreProperties2AMD
-public struct PhysicalDeviceShaderCoreProperties2AMD {
-    public let shaderCoreFeatures: ShaderCorePropertiesFlagsAMD
-    public let activeComputeUnitCount: UInt32
-}
-
-// Mapped from VkPhysicalDeviceShaderCorePropertiesAMD
-public struct PhysicalDeviceShaderCorePropertiesAMD {
-    public let shaderEngineCount: UInt32
-    public let shaderArraysPerEngineCount: UInt32
-    public let computeUnitsPerShaderArray: UInt32
-    public let simdPerComputeUnit: UInt32
-    public let wavefrontsPerSimd: UInt32
-    public let wavefrontSize: UInt32
-    public let sgprsPerSimd: UInt32
-    public let minSgprAllocation: UInt32
-    public let maxSgprAllocation: UInt32
-    public let sgprAllocationGranularity: UInt32
-    public let vgprsPerSimd: UInt32
-    public let minVgprAllocation: UInt32
-    public let maxVgprAllocation: UInt32
-    public let vgprAllocationGranularity: UInt32
-}
-
-// Mapped from VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT
-public struct PhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT {
-    public let shaderDemoteToHelperInvocation: Bool
-}
-public typealias PhysicalDeviceShaderDrawParameterFeatures = PhysicalDeviceShaderDrawParametersFeatures
-
-// Mapped from VkPhysicalDeviceShaderDrawParametersFeatures
-public struct PhysicalDeviceShaderDrawParametersFeatures {
-    public let shaderDrawParameters: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderFloat16Int8FeaturesKHR
-public struct PhysicalDeviceShaderFloat16Int8FeaturesKHR {
-    public let shaderFloat16: Bool
-    public let shaderInt8: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderImageFootprintFeaturesNV
-public struct PhysicalDeviceShaderImageFootprintFeaturesNV {
-    public let imageFootprint: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL
-public struct PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL {
-    public let shaderIntegerFunctions2: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderSMBuiltinsFeaturesNV
-public struct PhysicalDeviceShaderSMBuiltinsFeaturesNV {
-    public let shaderSMBuiltins: Bool
-}
-
-// Mapped from VkPhysicalDeviceShaderSMBuiltinsPropertiesNV
-public struct PhysicalDeviceShaderSMBuiltinsPropertiesNV {
-    public let shaderSMCount: UInt32
-    public let shaderWarpsPerSM: UInt32
-}
-
-// Mapped from VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR
-public struct PhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR {
-    public let shaderSubgroupExtendedTypes: Bool
-}
-
-// Mapped from VkPhysicalDeviceShadingRateImageFeaturesNV
-public struct PhysicalDeviceShadingRateImageFeaturesNV {
-    public let shadingRateImage: Bool
-    public let shadingRateCoarseSampleOrder: Bool
-}
-
-// Mapped from VkPhysicalDeviceShadingRateImagePropertiesNV
-public struct PhysicalDeviceShadingRateImagePropertiesNV {
-    public let shadingRateTexelSize: Extent2D
-    public let shadingRatePaletteSize: UInt32
-    public let shadingRateMaxCoarseSamples: UInt32
-}
-
-// Mapped from VkPhysicalDeviceSparseImageFormatInfo2
-public struct PhysicalDeviceSparseImageFormatInfo2 {
-    public let format: Format
-    public let type: ImageType
-    public let samples: SampleCountFlagBits
-    public let usage: ImageUsageFlags
-    public let tiling: ImageTiling
-}
-public typealias PhysicalDeviceSparseImageFormatInfo2KHR = PhysicalDeviceSparseImageFormatInfo2
+//// Mapped from VkPhysicalDeviceProtectedMemoryFeatures
+//public struct PhysicalDeviceProtectedMemoryFeatures {
+//    public let protectedMemory: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceProtectedMemoryProperties
+//public struct PhysicalDeviceProtectedMemoryProperties {
+//    public let protectedNoFault: Bool
+//}
+//
+//// Mapped from VkPhysicalDevicePushDescriptorPropertiesKHR
+//public struct PhysicalDevicePushDescriptorPropertiesKHR {
+//    public let maxPushDescriptors: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceRayTracingPropertiesNV
+//public struct PhysicalDeviceRayTracingPropertiesNV {
+//    public let shaderGroupHandleSize: UInt32
+//    public let maxRecursionDepth: UInt32
+//    public let maxShaderGroupStride: UInt32
+//    public let shaderGroupBaseAlignment: UInt32
+//    public let maxGeometryCount: UInt64
+//    public let maxInstanceCount: UInt64
+//    public let maxTriangleCount: UInt64
+//    public let maxDescriptorSetAccelerationStructures: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV
+//public struct PhysicalDeviceRepresentativeFragmentTestFeaturesNV {
+//    public let representativeFragmentTest: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceSampleLocationsPropertiesEXT
+//public struct PhysicalDeviceSampleLocationsPropertiesEXT {
+//    public let sampleLocationSampleCounts: SampleCountFlags
+//    public let maxSampleLocationGridSize: Extent2D
+//    public let sampleLocationCoordinateRange: [Float]
+//    public let sampleLocationSubPixelBits: UInt32
+//    public let variableSampleLocations: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT
+//public struct PhysicalDeviceSamplerFilterMinmaxPropertiesEXT {
+//    public let filterMinmaxSingleComponentFormats: Bool
+//    public let filterMinmaxImageComponentMapping: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceSamplerYcbcrConversionFeatures
+//public struct PhysicalDeviceSamplerYcbcrConversionFeatures {
+//    public let samplerYcbcrConversion: Bool
+//}
+//public typealias PhysicalDeviceSamplerYcbcrConversionFeaturesKHR = PhysicalDeviceSamplerYcbcrConversionFeatures
+//
+//// Mapped from VkPhysicalDeviceScalarBlockLayoutFeaturesEXT
+//public struct PhysicalDeviceScalarBlockLayoutFeaturesEXT {
+//    public let scalarBlockLayout: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderAtomicInt64FeaturesKHR
+//public struct PhysicalDeviceShaderAtomicInt64FeaturesKHR {
+//    public let shaderBufferInt64Atomics: Bool
+//    public let shaderSharedInt64Atomics: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderCoreProperties2AMD
+//public struct PhysicalDeviceShaderCoreProperties2AMD {
+//    public let shaderCoreFeatures: ShaderCorePropertiesFlagsAMD
+//    public let activeComputeUnitCount: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderCorePropertiesAMD
+//public struct PhysicalDeviceShaderCorePropertiesAMD {
+//    public let shaderEngineCount: UInt32
+//    public let shaderArraysPerEngineCount: UInt32
+//    public let computeUnitsPerShaderArray: UInt32
+//    public let simdPerComputeUnit: UInt32
+//    public let wavefrontsPerSimd: UInt32
+//    public let wavefrontSize: UInt32
+//    public let sgprsPerSimd: UInt32
+//    public let minSgprAllocation: UInt32
+//    public let maxSgprAllocation: UInt32
+//    public let sgprAllocationGranularity: UInt32
+//    public let vgprsPerSimd: UInt32
+//    public let minVgprAllocation: UInt32
+//    public let maxVgprAllocation: UInt32
+//    public let vgprAllocationGranularity: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT
+//public struct PhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT {
+//    public let shaderDemoteToHelperInvocation: Bool
+//}
+//public typealias PhysicalDeviceShaderDrawParameterFeatures = PhysicalDeviceShaderDrawParametersFeatures
+//
+//// Mapped from VkPhysicalDeviceShaderDrawParametersFeatures
+//public struct PhysicalDeviceShaderDrawParametersFeatures {
+//    public let shaderDrawParameters: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderFloat16Int8FeaturesKHR
+//public struct PhysicalDeviceShaderFloat16Int8FeaturesKHR {
+//    public let shaderFloat16: Bool
+//    public let shaderInt8: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderImageFootprintFeaturesNV
+//public struct PhysicalDeviceShaderImageFootprintFeaturesNV {
+//    public let imageFootprint: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL
+//public struct PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL {
+//    public let shaderIntegerFunctions2: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderSMBuiltinsFeaturesNV
+//public struct PhysicalDeviceShaderSMBuiltinsFeaturesNV {
+//    public let shaderSMBuiltins: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderSMBuiltinsPropertiesNV
+//public struct PhysicalDeviceShaderSMBuiltinsPropertiesNV {
+//    public let shaderSMCount: UInt32
+//    public let shaderWarpsPerSM: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR
+//public struct PhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR {
+//    public let shaderSubgroupExtendedTypes: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShadingRateImageFeaturesNV
+//public struct PhysicalDeviceShadingRateImageFeaturesNV {
+//    public let shadingRateImage: Bool
+//    public let shadingRateCoarseSampleOrder: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceShadingRateImagePropertiesNV
+//public struct PhysicalDeviceShadingRateImagePropertiesNV {
+//    public let shadingRateTexelSize: Extent2D
+//    public let shadingRatePaletteSize: UInt32
+//    public let shadingRateMaxCoarseSamples: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceSparseImageFormatInfo2
+//public struct PhysicalDeviceSparseImageFormatInfo2 {
+//    public let format: Format
+//    public let type: ImageType
+//    public let samples: SampleCountFlagBits
+//    public let usage: ImageUsageFlags
+//    public let tiling: ImageTiling
+//}
+//public typealias PhysicalDeviceSparseImageFormatInfo2KHR = PhysicalDeviceSparseImageFormatInfo2
 
 // Mapped from VkPhysicalDeviceSparseProperties
 public struct PhysicalDeviceSparseProperties {
@@ -2303,461 +2265,461 @@ public struct PhysicalDeviceSparseProperties {
     public let residencyNonResidentStrict: Bool
 }
 
-// Mapped from VkPhysicalDeviceSubgroupProperties
-public struct PhysicalDeviceSubgroupProperties {
-    public let subgroupSize: UInt32
-    public let supportedStages: ShaderStageFlags
-    public let supportedOperations: SubgroupFeatureFlags
-    public let quadOperationsInAllStages: Bool
-}
-
-// Mapped from VkPhysicalDeviceSubgroupSizeControlFeaturesEXT
-public struct PhysicalDeviceSubgroupSizeControlFeaturesEXT {
-    public let subgroupSizeControl: Bool
-    public let computeFullSubgroups: Bool
-}
-
-// Mapped from VkPhysicalDeviceSubgroupSizeControlPropertiesEXT
-public struct PhysicalDeviceSubgroupSizeControlPropertiesEXT {
-    public let minSubgroupSize: UInt32
-    public let maxSubgroupSize: UInt32
-    public let maxComputeWorkgroupSubgroups: UInt32
-    public let requiredSubgroupSizeStages: ShaderStageFlags
-}
-
-// Mapped from VkPhysicalDeviceSurfaceInfo2KHR
-public struct PhysicalDeviceSurfaceInfo2KHR {
-    public let surface: SurfaceKHR
-}
-
-// Mapped from VkPhysicalDeviceTexelBufferAlignmentFeaturesEXT
-public struct PhysicalDeviceTexelBufferAlignmentFeaturesEXT {
-    public let texelBufferAlignment: Bool
-}
-
-// Mapped from VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT
-public struct PhysicalDeviceTexelBufferAlignmentPropertiesEXT {
-    public let storageTexelBufferOffsetAlignmentBytes: DeviceSize
-    public let storageTexelBufferOffsetSingleTexelAlignment: Bool
-    public let uniformTexelBufferOffsetAlignmentBytes: DeviceSize
-    public let uniformTexelBufferOffsetSingleTexelAlignment: Bool
-}
-
-// Mapped from VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT
-public struct PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT {
-    public let textureCompressionASTC_HDR: Bool
-}
-
-// Mapped from VkPhysicalDeviceTransformFeedbackFeaturesEXT
-public struct PhysicalDeviceTransformFeedbackFeaturesEXT {
-    public let transformFeedback: Bool
-    public let geometryStreams: Bool
-}
-
-// Mapped from VkPhysicalDeviceTransformFeedbackPropertiesEXT
-public struct PhysicalDeviceTransformFeedbackPropertiesEXT {
-    public let maxTransformFeedbackStreams: UInt32
-    public let maxTransformFeedbackBuffers: UInt32
-    public let maxTransformFeedbackBufferSize: DeviceSize
-    public let maxTransformFeedbackStreamDataSize: UInt32
-    public let maxTransformFeedbackBufferDataSize: UInt32
-    public let maxTransformFeedbackBufferDataStride: UInt32
-    public let transformFeedbackQueries: Bool
-    public let transformFeedbackStreamsLinesTriangles: Bool
-    public let transformFeedbackRasterizationStreamSelect: Bool
-    public let transformFeedbackDraw: Bool
-}
-
-// Mapped from VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR
-public struct PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR {
-    public let uniformBufferStandardLayout: Bool
-}
-public typealias PhysicalDeviceVariablePointerFeatures = PhysicalDeviceVariablePointersFeatures
-public typealias PhysicalDeviceVariablePointerFeaturesKHR = PhysicalDeviceVariablePointersFeatures
-
-// Mapped from VkPhysicalDeviceVariablePointersFeatures
-public struct PhysicalDeviceVariablePointersFeatures {
-    public let variablePointersStorageBuffer: Bool
-    public let variablePointers: Bool
-}
-public typealias PhysicalDeviceVariablePointersFeaturesKHR = PhysicalDeviceVariablePointersFeatures
-
-// Mapped from VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT
-public struct PhysicalDeviceVertexAttributeDivisorFeaturesEXT {
-    public let vertexAttributeInstanceRateDivisor: Bool
-    public let vertexAttributeInstanceRateZeroDivisor: Bool
-}
-
-// Mapped from VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT
-public struct PhysicalDeviceVertexAttributeDivisorPropertiesEXT {
-    public let maxVertexAttribDivisor: UInt32
-}
-
-// Mapped from VkPhysicalDeviceVulkanMemoryModelFeaturesKHR
-public struct PhysicalDeviceVulkanMemoryModelFeaturesKHR {
-    public let vulkanMemoryModel: Bool
-    public let vulkanMemoryModelDeviceScope: Bool
-    public let vulkanMemoryModelAvailabilityVisibilityChains: Bool
-}
-
-// Mapped from VkPhysicalDeviceYcbcrImageArraysFeaturesEXT
-public struct PhysicalDeviceYcbcrImageArraysFeaturesEXT {
-    public let ycbcrImageArrays: Bool
-}
-
-// Mapped from VkPipelineCacheCreateInfo
-public struct PipelineCacheCreateInfo {
-    public let flags: PipelineCacheCreateFlags?
-    public let initialDataSize: Int?
-    public let initialData: UnsafeRawPointer
-}
-
-// Mapped from VkPipelineColorBlendAdvancedStateCreateInfoEXT
-public struct PipelineColorBlendAdvancedStateCreateInfoEXT {
-    public let srcPremultiplied: Bool
-    public let dstPremultiplied: Bool
-    public let blendOverlap: BlendOverlapEXT
-}
-
-// Mapped from VkPipelineColorBlendAttachmentState
-public struct PipelineColorBlendAttachmentState {
-    public let blendEnable: Bool
-    public let srcColorBlendFactor: BlendFactor
-    public let dstColorBlendFactor: BlendFactor
-    public let colorBlendOp: BlendOp
-    public let srcAlphaBlendFactor: BlendFactor
-    public let dstAlphaBlendFactor: BlendFactor
-    public let alphaBlendOp: BlendOp
-    public let colorWriteMask: ColorComponentFlags?
-}
-
-// Mapped from VkPipelineColorBlendStateCreateInfo
-public struct PipelineColorBlendStateCreateInfo {
-    public let flags: PipelineColorBlendStateCreateFlags?
-    public let logicOpEnable: Bool
-    public let logicOp: LogicOp
-    public let attachments: [PipelineColorBlendAttachmentState]
-    public let blendConstants: [Float]
-}
-
-// Mapped from VkPipelineCompilerControlCreateInfoAMD
-public struct PipelineCompilerControlCreateInfoAMD {
-    public let compilerControlFlags: PipelineCompilerControlFlagsAMD?
-}
-
-// Mapped from VkPipelineCoverageModulationStateCreateInfoNV
-public struct PipelineCoverageModulationStateCreateInfoNV {
-    public let flags: PipelineCoverageModulationStateCreateFlagsNV?
-    public let coverageModulationMode: CoverageModulationModeNV
-    public let coverageModulationTableEnable: Bool
-    public let coverageModulationTable: [Float]?
-}
-
-// Mapped from VkPipelineCoverageReductionStateCreateInfoNV
-public struct PipelineCoverageReductionStateCreateInfoNV {
-    public let flags: PipelineCoverageReductionStateCreateFlagsNV?
-    public let coverageReductionMode: CoverageReductionModeNV
-}
-
-// Mapped from VkPipelineCoverageToColorStateCreateInfoNV
-public struct PipelineCoverageToColorStateCreateInfoNV {
-    public let flags: PipelineCoverageToColorStateCreateFlagsNV?
-    public let coverageToColorEnable: Bool
-    public let coverageToColorLocation: UInt32?
-}
-
-// Mapped from VkPipelineCreationFeedbackCreateInfoEXT
-public struct PipelineCreationFeedbackCreateInfoEXT {
-    public let pipelineCreationFeedback: PipelineCreationFeedbackEXT
-    public let pipelineStageCreationFeedbacks: [PipelineCreationFeedbackEXT]
-}
-
-// Mapped from VkPipelineCreationFeedbackEXT
-public struct PipelineCreationFeedbackEXT {
-    public let flags: PipelineCreationFeedbackFlagsEXT
-    public let duration: UInt64
-}
-
-// Mapped from VkPipelineDepthStencilStateCreateInfo
-public struct PipelineDepthStencilStateCreateInfo {
-    public let flags: PipelineDepthStencilStateCreateFlags?
-    public let depthTestEnable: Bool
-    public let depthWriteEnable: Bool
-    public let depthCompareOp: CompareOp
-    public let depthBoundsTestEnable: Bool
-    public let stencilTestEnable: Bool
-    public let front: StencilOpState
-    public let back: StencilOpState
-    public let minDepthBounds: Float
-    public let maxDepthBounds: Float
-}
-
-// Mapped from VkPipelineDiscardRectangleStateCreateInfoEXT
-public struct PipelineDiscardRectangleStateCreateInfoEXT {
-    public let flags: PipelineDiscardRectangleStateCreateFlagsEXT?
-    public let discardRectangleMode: DiscardRectangleModeEXT
-    public let discardRectangles: [Rect2D]?
-}
-
-// Mapped from VkPipelineDynamicStateCreateInfo
-public struct PipelineDynamicStateCreateInfo {
-    public let flags: PipelineDynamicStateCreateFlags?
-    public let dynamicStates: [DynamicState]
-}
-
-// Mapped from VkPipelineExecutableInfoKHR
-public struct PipelineExecutableInfoKHR {
-    public let pipeline: Pipeline
-    public let executableIndex: UInt32
-}
-
-// Mapped from VkPipelineExecutableInternalRepresentationKHR
-public struct PipelineExecutableInternalRepresentationKHR {
-    public let name: String
-    public let description: String
-    public let isText: Bool
-    public let dataSize: Int?
-    public let data: UnsafeRawPointer?
-}
-
-// Mapped from VkPipelineExecutablePropertiesKHR
-public struct PipelineExecutablePropertiesKHR {
-    public let stages: ShaderStageFlags
-    public let name: String
-    public let description: String
-    public let subgroupSize: UInt32
-}
-
-// Mapped from VkPipelineExecutableStatisticKHR
-public struct PipelineExecutableStatisticKHR {
-    public let name: String
-    public let description: String
-    public let format: PipelineExecutableStatisticFormatKHR
-    public let value: PipelineExecutableStatisticValueKHR
-}
-
-// Mapped from VkPipelineInfoKHR
-public struct PipelineInfoKHR {
-    public let pipeline: Pipeline
-}
-
-// Mapped from VkPipelineInputAssemblyStateCreateInfo
-public struct PipelineInputAssemblyStateCreateInfo {
-    public let flags: PipelineInputAssemblyStateCreateFlags?
-    public let topology: PrimitiveTopology
-    public let primitiveRestartEnable: Bool
-}
-
-// Mapped from VkPipelineLayoutCreateInfo
-public struct PipelineLayoutCreateInfo {
-    public let flags: PipelineLayoutCreateFlags?
-    public let setLayouts: [DescriptorSetLayout]
-    public let pushConstantRanges: [PushConstantRange]
-}
-
-// Mapped from VkPipelineMultisampleStateCreateInfo
-public struct PipelineMultisampleStateCreateInfo {
-    public let flags: PipelineMultisampleStateCreateFlags?
-    public let rasterizationSamples: SampleCountFlagBits
-    public let sampleShadingEnable: Bool
-    public let minSampleShading: Float
-    public let sampleMask: [SampleMask]?
-    public let alphaToCoverageEnable: Bool
-    public let alphaToOneEnable: Bool
-}
-
-// Mapped from VkPipelineRasterizationConservativeStateCreateInfoEXT
-public struct PipelineRasterizationConservativeStateCreateInfoEXT {
-    public let flags: PipelineRasterizationConservativeStateCreateFlagsEXT?
-    public let conservativeRasterizationMode: ConservativeRasterizationModeEXT
-    public let extraPrimitiveOverestimationSize: Float
-}
-
-// Mapped from VkPipelineRasterizationDepthClipStateCreateInfoEXT
-public struct PipelineRasterizationDepthClipStateCreateInfoEXT {
-    public let flags: PipelineRasterizationDepthClipStateCreateFlagsEXT?
-    public let depthClipEnable: Bool
-}
-
-// Mapped from VkPipelineRasterizationLineStateCreateInfoEXT
-public struct PipelineRasterizationLineStateCreateInfoEXT {
-    public let lineRasterizationMode: LineRasterizationModeEXT
-    public let stippledLineEnable: Bool
-    public let lineStippleFactor: UInt32?
-    public let lineStipplePattern: UInt16?
-}
-
-// Mapped from VkPipelineRasterizationStateCreateInfo
-public struct PipelineRasterizationStateCreateInfo {
-    public let flags: PipelineRasterizationStateCreateFlags?
-    public let depthClampEnable: Bool
-    public let rasterizerDiscardEnable: Bool
-    public let polygonMode: PolygonMode
-    public let cullMode: CullModeFlags?
-    public let frontFace: FrontFace
-    public let depthBiasEnable: Bool
-    public let depthBiasConstantFactor: Float
-    public let depthBiasClamp: Float
-    public let depthBiasSlopeFactor: Float
-    public let lineWidth: Float
-}
-
-// Mapped from VkPipelineRasterizationStateRasterizationOrderAMD
-public struct PipelineRasterizationStateRasterizationOrderAMD {
-    public let rasterizationOrder: RasterizationOrderAMD
-}
-
-// Mapped from VkPipelineRasterizationStateStreamCreateInfoEXT
-public struct PipelineRasterizationStateStreamCreateInfoEXT {
-    public let flags: PipelineRasterizationStateStreamCreateFlagsEXT?
-    public let rasterizationStream: UInt32
-}
-
-// Mapped from VkPipelineRepresentativeFragmentTestStateCreateInfoNV
-public struct PipelineRepresentativeFragmentTestStateCreateInfoNV {
-    public let representativeFragmentTestEnable: Bool
-}
-
-// Mapped from VkPipelineSampleLocationsStateCreateInfoEXT
-public struct PipelineSampleLocationsStateCreateInfoEXT {
-    public let sampleLocationsEnable: Bool
-    public let sampleLocationsInfo: SampleLocationsInfoEXT
-}
-
-// Mapped from VkPipelineShaderStageCreateInfo
-public struct PipelineShaderStageCreateInfo {
-    public let flags: PipelineShaderStageCreateFlags?
-    public let stage: ShaderStageFlagBits
-    public let module: ShaderModule
-    public let name: String
-    public let specializationInfo: SpecializationInfo?
-}
-
-// Mapped from VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT
-public struct PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT {
-    public let requiredSubgroupSize: UInt32
-}
-
-// Mapped from VkPipelineTessellationDomainOriginStateCreateInfo
-public struct PipelineTessellationDomainOriginStateCreateInfo {
-    public let domainOrigin: TessellationDomainOrigin
-}
-public typealias PipelineTessellationDomainOriginStateCreateInfoKHR = PipelineTessellationDomainOriginStateCreateInfo
-
-// Mapped from VkPipelineTessellationStateCreateInfo
-public struct PipelineTessellationStateCreateInfo {
-    public let flags: PipelineTessellationStateCreateFlags?
-    public let patchControlPoints: UInt32
-}
-
-// Mapped from VkPipelineVertexInputDivisorStateCreateInfoEXT
-public struct PipelineVertexInputDivisorStateCreateInfoEXT {
-    public let vertexBindingDivisors: [VertexInputBindingDivisorDescriptionEXT]
-}
-
-// Mapped from VkPipelineVertexInputStateCreateInfo
-public struct PipelineVertexInputStateCreateInfo {
-    public let flags: PipelineVertexInputStateCreateFlags?
-    public let vertexBindingDescriptions: [VertexInputBindingDescription]
-    public let vertexAttributeDescriptions: [VertexInputAttributeDescription]
-}
-
-// Mapped from VkPipelineViewportCoarseSampleOrderStateCreateInfoNV
-public struct PipelineViewportCoarseSampleOrderStateCreateInfoNV {
-    public let sampleOrderType: CoarseSampleOrderTypeNV
-    public let customSampleOrders: [CoarseSampleOrderCustomNV]
-}
-
-// Mapped from VkPipelineViewportExclusiveScissorStateCreateInfoNV
-public struct PipelineViewportExclusiveScissorStateCreateInfoNV {
-    public let exclusiveScissors: [Rect2D]?
-}
-
-// Mapped from VkPipelineViewportShadingRateImageStateCreateInfoNV
-public struct PipelineViewportShadingRateImageStateCreateInfoNV {
-    public let shadingRateImageEnable: Bool
-    public let viewportCount: UInt32?
-    public let shadingRatePalettes: [ShadingRatePaletteNV]?
-}
-
-// Mapped from VkPipelineViewportStateCreateInfo
-public struct PipelineViewportStateCreateInfo {
-    public let flags: PipelineViewportStateCreateFlags?
-    public let viewports: [Viewport]?
-    public let scissors: [Rect2D]?
-}
-
-// Mapped from VkPipelineViewportSwizzleStateCreateInfoNV
-public struct PipelineViewportSwizzleStateCreateInfoNV {
-    public let flags: PipelineViewportSwizzleStateCreateFlagsNV?
-    public let viewportSwizzles: [ViewportSwizzleNV]
-}
-
-// Mapped from VkPipelineViewportWScalingStateCreateInfoNV
-public struct PipelineViewportWScalingStateCreateInfoNV {
-    public let viewportWScalingEnable: Bool
-    public let viewportWScalings: [ViewportWScalingNV]?
-}
-
-// Mapped from VkPresentInfoKHR
-public struct PresentInfoKHR {
-    public let waitSemaphores: [Semaphore]
-    public let swapchains: [SwapchainKHR]
-    public let imageIndices: [UInt32]
-    public let results: [VulkanResult]?
-}
-
-// Mapped from VkPresentRegionKHR
-public struct PresentRegionKHR {
-    public let rectangles: [RectLayerKHR]?
-}
-
-// Mapped from VkPresentRegionsKHR
-public struct PresentRegionsKHR {
-    public let swapchainCount: UInt32
-    public let regions: [PresentRegionKHR]?
-}
-
-// Mapped from VkPresentTimeGOOGLE
-public struct PresentTimeGOOGLE {
-    public let presentID: UInt32
-    public let desiredPresentTime: UInt64
-}
-
-// Mapped from VkPresentTimesInfoGOOGLE
-public struct PresentTimesInfoGOOGLE {
-    public let swapchainCount: UInt32
-    public let times: [PresentTimeGOOGLE]?
-}
-
-// Mapped from VkProtectedSubmitInfo
-public struct ProtectedSubmitInfo {
-    public let protectedSubmit: Bool
-}
-
-// Mapped from VkPushConstantRange
-public struct PushConstantRange {
-    public let stageFlags: ShaderStageFlags
-    public let offset: UInt32
-    public let size: UInt32
-}
-
-// Mapped from VkQueryPoolCreateInfo
-public struct QueryPoolCreateInfo {
-    public let flags: QueryPoolCreateFlags?
-    public let queryType: QueryType
-    public let pipelineStatistics: QueryPipelineStatisticFlags?
-}
-
-// Mapped from VkQueryPoolCreateInfoINTEL
-public struct QueryPoolCreateInfoINTEL {
-    public let performanceCountersSampling: QueryPoolSamplingModeINTEL
-}
-
-// Mapped from VkQueueFamilyCheckpointPropertiesNV
-public struct QueueFamilyCheckpointPropertiesNV {
-    public let checkpointExecutionStageMask: PipelineStageFlags
-}
+//// Mapped from VkPhysicalDeviceSubgroupProperties
+//public struct PhysicalDeviceSubgroupProperties {
+//    public let subgroupSize: UInt32
+//    public let supportedStages: ShaderStageFlags
+//    public let supportedOperations: SubgroupFeatureFlags
+//    public let quadOperationsInAllStages: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceSubgroupSizeControlFeaturesEXT
+//public struct PhysicalDeviceSubgroupSizeControlFeaturesEXT {
+//    public let subgroupSizeControl: Bool
+//    public let computeFullSubgroups: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceSubgroupSizeControlPropertiesEXT
+//public struct PhysicalDeviceSubgroupSizeControlPropertiesEXT {
+//    public let minSubgroupSize: UInt32
+//    public let maxSubgroupSize: UInt32
+//    public let maxComputeWorkgroupSubgroups: UInt32
+//    public let requiredSubgroupSizeStages: ShaderStageFlags
+//}
+//
+//// Mapped from VkPhysicalDeviceSurfaceInfo2KHR
+//public struct PhysicalDeviceSurfaceInfo2KHR {
+//    public let surface: SurfaceKHR
+//}
+//
+//// Mapped from VkPhysicalDeviceTexelBufferAlignmentFeaturesEXT
+//public struct PhysicalDeviceTexelBufferAlignmentFeaturesEXT {
+//    public let texelBufferAlignment: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT
+//public struct PhysicalDeviceTexelBufferAlignmentPropertiesEXT {
+//    public let storageTexelBufferOffsetAlignmentBytes: DeviceSize
+//    public let storageTexelBufferOffsetSingleTexelAlignment: Bool
+//    public let uniformTexelBufferOffsetAlignmentBytes: DeviceSize
+//    public let uniformTexelBufferOffsetSingleTexelAlignment: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT
+//public struct PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT {
+//    public let textureCompressionASTC_HDR: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceTransformFeedbackFeaturesEXT
+//public struct PhysicalDeviceTransformFeedbackFeaturesEXT {
+//    public let transformFeedback: Bool
+//    public let geometryStreams: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceTransformFeedbackPropertiesEXT
+//public struct PhysicalDeviceTransformFeedbackPropertiesEXT {
+//    public let maxTransformFeedbackStreams: UInt32
+//    public let maxTransformFeedbackBuffers: UInt32
+//    public let maxTransformFeedbackBufferSize: DeviceSize
+//    public let maxTransformFeedbackStreamDataSize: UInt32
+//    public let maxTransformFeedbackBufferDataSize: UInt32
+//    public let maxTransformFeedbackBufferDataStride: UInt32
+//    public let transformFeedbackQueries: Bool
+//    public let transformFeedbackStreamsLinesTriangles: Bool
+//    public let transformFeedbackRasterizationStreamSelect: Bool
+//    public let transformFeedbackDraw: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR
+//public struct PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR {
+//    public let uniformBufferStandardLayout: Bool
+//}
+//public typealias PhysicalDeviceVariablePointerFeatures = PhysicalDeviceVariablePointersFeatures
+//public typealias PhysicalDeviceVariablePointerFeaturesKHR = PhysicalDeviceVariablePointersFeatures
+//
+//// Mapped from VkPhysicalDeviceVariablePointersFeatures
+//public struct PhysicalDeviceVariablePointersFeatures {
+//    public let variablePointersStorageBuffer: Bool
+//    public let variablePointers: Bool
+//}
+//public typealias PhysicalDeviceVariablePointersFeaturesKHR = PhysicalDeviceVariablePointersFeatures
+//
+//// Mapped from VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT
+//public struct PhysicalDeviceVertexAttributeDivisorFeaturesEXT {
+//    public let vertexAttributeInstanceRateDivisor: Bool
+//    public let vertexAttributeInstanceRateZeroDivisor: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT
+//public struct PhysicalDeviceVertexAttributeDivisorPropertiesEXT {
+//    public let maxVertexAttribDivisor: UInt32
+//}
+//
+//// Mapped from VkPhysicalDeviceVulkanMemoryModelFeaturesKHR
+//public struct PhysicalDeviceVulkanMemoryModelFeaturesKHR {
+//    public let vulkanMemoryModel: Bool
+//    public let vulkanMemoryModelDeviceScope: Bool
+//    public let vulkanMemoryModelAvailabilityVisibilityChains: Bool
+//}
+//
+//// Mapped from VkPhysicalDeviceYcbcrImageArraysFeaturesEXT
+//public struct PhysicalDeviceYcbcrImageArraysFeaturesEXT {
+//    public let ycbcrImageArrays: Bool
+//}
+//
+//// Mapped from VkPipelineCacheCreateInfo
+//public struct PipelineCacheCreateInfo {
+//    public let flags: PipelineCacheCreateFlags?
+//    public let initialDataSize: Int?
+//    public let initialData: UnsafeRawPointer
+//}
+//
+//// Mapped from VkPipelineColorBlendAdvancedStateCreateInfoEXT
+//public struct PipelineColorBlendAdvancedStateCreateInfoEXT {
+//    public let srcPremultiplied: Bool
+//    public let dstPremultiplied: Bool
+//    public let blendOverlap: BlendOverlapEXT
+//}
+//
+//// Mapped from VkPipelineColorBlendAttachmentState
+//public struct PipelineColorBlendAttachmentState {
+//    public let blendEnable: Bool
+//    public let srcColorBlendFactor: BlendFactor
+//    public let dstColorBlendFactor: BlendFactor
+//    public let colorBlendOp: BlendOp
+//    public let srcAlphaBlendFactor: BlendFactor
+//    public let dstAlphaBlendFactor: BlendFactor
+//    public let alphaBlendOp: BlendOp
+//    public let colorWriteMask: ColorComponentFlags?
+//}
+//
+//// Mapped from VkPipelineColorBlendStateCreateInfo
+//public struct PipelineColorBlendStateCreateInfo {
+//    public let flags: PipelineColorBlendStateCreateFlags?
+//    public let logicOpEnable: Bool
+//    public let logicOp: LogicOp
+//    public let attachments: [PipelineColorBlendAttachmentState]
+//    public let blendConstants: [Float]
+//}
+//
+//// Mapped from VkPipelineCompilerControlCreateInfoAMD
+//public struct PipelineCompilerControlCreateInfoAMD {
+//    public let compilerControlFlags: PipelineCompilerControlFlagsAMD?
+//}
+//
+//// Mapped from VkPipelineCoverageModulationStateCreateInfoNV
+//public struct PipelineCoverageModulationStateCreateInfoNV {
+//    public let flags: PipelineCoverageModulationStateCreateFlagsNV?
+//    public let coverageModulationMode: CoverageModulationModeNV
+//    public let coverageModulationTableEnable: Bool
+//    public let coverageModulationTable: [Float]?
+//}
+//
+//// Mapped from VkPipelineCoverageReductionStateCreateInfoNV
+//public struct PipelineCoverageReductionStateCreateInfoNV {
+//    public let flags: PipelineCoverageReductionStateCreateFlagsNV?
+//    public let coverageReductionMode: CoverageReductionModeNV
+//}
+//
+//// Mapped from VkPipelineCoverageToColorStateCreateInfoNV
+//public struct PipelineCoverageToColorStateCreateInfoNV {
+//    public let flags: PipelineCoverageToColorStateCreateFlagsNV?
+//    public let coverageToColorEnable: Bool
+//    public let coverageToColorLocation: UInt32?
+//}
+//
+//// Mapped from VkPipelineCreationFeedbackCreateInfoEXT
+//public struct PipelineCreationFeedbackCreateInfoEXT {
+//    public let pipelineCreationFeedback: PipelineCreationFeedbackEXT
+//    public let pipelineStageCreationFeedbacks: [PipelineCreationFeedbackEXT]
+//}
+//
+//// Mapped from VkPipelineCreationFeedbackEXT
+//public struct PipelineCreationFeedbackEXT {
+//    public let flags: PipelineCreationFeedbackFlagsEXT
+//    public let duration: UInt64
+//}
+//
+//// Mapped from VkPipelineDepthStencilStateCreateInfo
+//public struct PipelineDepthStencilStateCreateInfo {
+//    public let flags: PipelineDepthStencilStateCreateFlags?
+//    public let depthTestEnable: Bool
+//    public let depthWriteEnable: Bool
+//    public let depthCompareOp: CompareOp
+//    public let depthBoundsTestEnable: Bool
+//    public let stencilTestEnable: Bool
+//    public let front: StencilOpState
+//    public let back: StencilOpState
+//    public let minDepthBounds: Float
+//    public let maxDepthBounds: Float
+//}
+//
+//// Mapped from VkPipelineDiscardRectangleStateCreateInfoEXT
+//public struct PipelineDiscardRectangleStateCreateInfoEXT {
+//    public let flags: PipelineDiscardRectangleStateCreateFlagsEXT?
+//    public let discardRectangleMode: DiscardRectangleModeEXT
+//    public let discardRectangles: [Rect2D]?
+//}
+//
+//// Mapped from VkPipelineDynamicStateCreateInfo
+//public struct PipelineDynamicStateCreateInfo {
+//    public let flags: PipelineDynamicStateCreateFlags?
+//    public let dynamicStates: [DynamicState]
+//}
+//
+//// Mapped from VkPipelineExecutableInfoKHR
+//public struct PipelineExecutableInfoKHR {
+//    public let pipeline: Pipeline
+//    public let executableIndex: UInt32
+//}
+//
+//// Mapped from VkPipelineExecutableInternalRepresentationKHR
+//public struct PipelineExecutableInternalRepresentationKHR {
+//    public let name: String
+//    public let description: String
+//    public let isText: Bool
+//    public let dataSize: Int?
+//    public let data: UnsafeRawPointer?
+//}
+//
+//// Mapped from VkPipelineExecutablePropertiesKHR
+//public struct PipelineExecutablePropertiesKHR {
+//    public let stages: ShaderStageFlags
+//    public let name: String
+//    public let description: String
+//    public let subgroupSize: UInt32
+//}
+//
+//// Mapped from VkPipelineExecutableStatisticKHR
+//public struct PipelineExecutableStatisticKHR {
+//    public let name: String
+//    public let description: String
+//    public let format: PipelineExecutableStatisticFormatKHR
+//    public let value: PipelineExecutableStatisticValueKHR
+//}
+//
+//// Mapped from VkPipelineInfoKHR
+//public struct PipelineInfoKHR {
+//    public let pipeline: Pipeline
+//}
+//
+//// Mapped from VkPipelineInputAssemblyStateCreateInfo
+//public struct PipelineInputAssemblyStateCreateInfo {
+//    public let flags: PipelineInputAssemblyStateCreateFlags?
+//    public let topology: PrimitiveTopology
+//    public let primitiveRestartEnable: Bool
+//}
+//
+//// Mapped from VkPipelineLayoutCreateInfo
+//public struct PipelineLayoutCreateInfo {
+//    public let flags: PipelineLayoutCreateFlags?
+//    public let setLayouts: [DescriptorSetLayout]
+//    public let pushConstantRanges: [PushConstantRange]
+//}
+//
+//// Mapped from VkPipelineMultisampleStateCreateInfo
+//public struct PipelineMultisampleStateCreateInfo {
+//    public let flags: PipelineMultisampleStateCreateFlags?
+//    public let rasterizationSamples: SampleCountFlagBits
+//    public let sampleShadingEnable: Bool
+//    public let minSampleShading: Float
+//    public let sampleMask: [SampleMask]?
+//    public let alphaToCoverageEnable: Bool
+//    public let alphaToOneEnable: Bool
+//}
+//
+//// Mapped from VkPipelineRasterizationConservativeStateCreateInfoEXT
+//public struct PipelineRasterizationConservativeStateCreateInfoEXT {
+//    public let flags: PipelineRasterizationConservativeStateCreateFlagsEXT?
+//    public let conservativeRasterizationMode: ConservativeRasterizationModeEXT
+//    public let extraPrimitiveOverestimationSize: Float
+//}
+//
+//// Mapped from VkPipelineRasterizationDepthClipStateCreateInfoEXT
+//public struct PipelineRasterizationDepthClipStateCreateInfoEXT {
+//    public let flags: PipelineRasterizationDepthClipStateCreateFlagsEXT?
+//    public let depthClipEnable: Bool
+//}
+//
+//// Mapped from VkPipelineRasterizationLineStateCreateInfoEXT
+//public struct PipelineRasterizationLineStateCreateInfoEXT {
+//    public let lineRasterizationMode: LineRasterizationModeEXT
+//    public let stippledLineEnable: Bool
+//    public let lineStippleFactor: UInt32?
+//    public let lineStipplePattern: UInt16?
+//}
+//
+//// Mapped from VkPipelineRasterizationStateCreateInfo
+//public struct PipelineRasterizationStateCreateInfo {
+//    public let flags: PipelineRasterizationStateCreateFlags?
+//    public let depthClampEnable: Bool
+//    public let rasterizerDiscardEnable: Bool
+//    public let polygonMode: PolygonMode
+//    public let cullMode: CullModeFlags?
+//    public let frontFace: FrontFace
+//    public let depthBiasEnable: Bool
+//    public let depthBiasConstantFactor: Float
+//    public let depthBiasClamp: Float
+//    public let depthBiasSlopeFactor: Float
+//    public let lineWidth: Float
+//}
+//
+//// Mapped from VkPipelineRasterizationStateRasterizationOrderAMD
+//public struct PipelineRasterizationStateRasterizationOrderAMD {
+//    public let rasterizationOrder: RasterizationOrderAMD
+//}
+//
+//// Mapped from VkPipelineRasterizationStateStreamCreateInfoEXT
+//public struct PipelineRasterizationStateStreamCreateInfoEXT {
+//    public let flags: PipelineRasterizationStateStreamCreateFlagsEXT?
+//    public let rasterizationStream: UInt32
+//}
+//
+//// Mapped from VkPipelineRepresentativeFragmentTestStateCreateInfoNV
+//public struct PipelineRepresentativeFragmentTestStateCreateInfoNV {
+//    public let representativeFragmentTestEnable: Bool
+//}
+//
+//// Mapped from VkPipelineSampleLocationsStateCreateInfoEXT
+//public struct PipelineSampleLocationsStateCreateInfoEXT {
+//    public let sampleLocationsEnable: Bool
+//    public let sampleLocationsInfo: SampleLocationsInfoEXT
+//}
+//
+//// Mapped from VkPipelineShaderStageCreateInfo
+//public struct PipelineShaderStageCreateInfo {
+//    public let flags: PipelineShaderStageCreateFlags?
+//    public let stage: ShaderStageFlagBits
+//    public let module: ShaderModule
+//    public let name: String
+//    public let specializationInfo: SpecializationInfo?
+//}
+//
+//// Mapped from VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT
+//public struct PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT {
+//    public let requiredSubgroupSize: UInt32
+//}
+//
+//// Mapped from VkPipelineTessellationDomainOriginStateCreateInfo
+//public struct PipelineTessellationDomainOriginStateCreateInfo {
+//    public let domainOrigin: TessellationDomainOrigin
+//}
+//public typealias PipelineTessellationDomainOriginStateCreateInfoKHR = PipelineTessellationDomainOriginStateCreateInfo
+//
+//// Mapped from VkPipelineTessellationStateCreateInfo
+//public struct PipelineTessellationStateCreateInfo {
+//    public let flags: PipelineTessellationStateCreateFlags?
+//    public let patchControlPoints: UInt32
+//}
+//
+//// Mapped from VkPipelineVertexInputDivisorStateCreateInfoEXT
+//public struct PipelineVertexInputDivisorStateCreateInfoEXT {
+//    public let vertexBindingDivisors: [VertexInputBindingDivisorDescriptionEXT]
+//}
+//
+//// Mapped from VkPipelineVertexInputStateCreateInfo
+//public struct PipelineVertexInputStateCreateInfo {
+//    public let flags: PipelineVertexInputStateCreateFlags?
+//    public let vertexBindingDescriptions: [VertexInputBindingDescription]
+//    public let vertexAttributeDescriptions: [VertexInputAttributeDescription]
+//}
+//
+//// Mapped from VkPipelineViewportCoarseSampleOrderStateCreateInfoNV
+//public struct PipelineViewportCoarseSampleOrderStateCreateInfoNV {
+//    public let sampleOrderType: CoarseSampleOrderTypeNV
+//    public let customSampleOrders: [CoarseSampleOrderCustomNV]
+//}
+//
+//// Mapped from VkPipelineViewportExclusiveScissorStateCreateInfoNV
+//public struct PipelineViewportExclusiveScissorStateCreateInfoNV {
+//    public let exclusiveScissors: [Rect2D]?
+//}
+//
+//// Mapped from VkPipelineViewportShadingRateImageStateCreateInfoNV
+//public struct PipelineViewportShadingRateImageStateCreateInfoNV {
+//    public let shadingRateImageEnable: Bool
+//    public let viewportCount: UInt32?
+//    public let shadingRatePalettes: [ShadingRatePaletteNV]?
+//}
+//
+//// Mapped from VkPipelineViewportStateCreateInfo
+//public struct PipelineViewportStateCreateInfo {
+//    public let flags: PipelineViewportStateCreateFlags?
+//    public let viewports: [Viewport]?
+//    public let scissors: [Rect2D]?
+//}
+//
+//// Mapped from VkPipelineViewportSwizzleStateCreateInfoNV
+//public struct PipelineViewportSwizzleStateCreateInfoNV {
+//    public let flags: PipelineViewportSwizzleStateCreateFlagsNV?
+//    public let viewportSwizzles: [ViewportSwizzleNV]
+//}
+//
+//// Mapped from VkPipelineViewportWScalingStateCreateInfoNV
+//public struct PipelineViewportWScalingStateCreateInfoNV {
+//    public let viewportWScalingEnable: Bool
+//    public let viewportWScalings: [ViewportWScalingNV]?
+//}
+//
+//// Mapped from VkPresentInfoKHR
+//public struct PresentInfoKHR {
+//    public let waitSemaphores: [Semaphore]
+//    public let swapchains: [SwapchainKHR]
+//    public let imageIndices: [UInt32]
+//    public let results: [VulkanResult]?
+//}
+//
+//// Mapped from VkPresentRegionKHR
+//public struct PresentRegionKHR {
+//    public let rectangles: [RectLayerKHR]?
+//}
+//
+//// Mapped from VkPresentRegionsKHR
+//public struct PresentRegionsKHR {
+//    public let swapchainCount: UInt32
+//    public let regions: [PresentRegionKHR]?
+//}
+//
+//// Mapped from VkPresentTimeGOOGLE
+//public struct PresentTimeGOOGLE {
+//    public let presentID: UInt32
+//    public let desiredPresentTime: UInt64
+//}
+//
+//// Mapped from VkPresentTimesInfoGOOGLE
+//public struct PresentTimesInfoGOOGLE {
+//    public let swapchainCount: UInt32
+//    public let times: [PresentTimeGOOGLE]?
+//}
+//
+//// Mapped from VkProtectedSubmitInfo
+//public struct ProtectedSubmitInfo {
+//    public let protectedSubmit: Bool
+//}
+//
+//// Mapped from VkPushConstantRange
+//public struct PushConstantRange {
+//    public let stageFlags: ShaderStageFlags
+//    public let offset: UInt32
+//    public let size: UInt32
+//}
+//
+//// Mapped from VkQueryPoolCreateInfo
+//public struct QueryPoolCreateInfo {
+//    public let flags: QueryPoolCreateFlags?
+//    public let queryType: QueryType
+//    public let pipelineStatistics: QueryPipelineStatisticFlags?
+//}
+//
+//// Mapped from VkQueryPoolCreateInfoINTEL
+//public struct QueryPoolCreateInfoINTEL {
+//    public let performanceCountersSampling: QueryPoolSamplingModeINTEL
+//}
+//
+//// Mapped from VkQueueFamilyCheckpointPropertiesNV
+//public struct QueueFamilyCheckpointPropertiesNV {
+//    public let checkpointExecutionStageMask: PipelineStageFlags
+//}
 
 // Mapped from VkQueueFamilyProperties
 public struct QueueFamilyProperties {
@@ -2766,455 +2728,455 @@ public struct QueueFamilyProperties {
     public let minImageTransferGranularity: Extent3D
 }
 
-// Mapped from VkQueueFamilyProperties2
-public struct QueueFamilyProperties2 {
-    public let queueFamilyProperties: QueueFamilyProperties
-}
-public typealias QueueFamilyProperties2KHR = QueueFamilyProperties2
+//// Mapped from VkQueueFamilyProperties2
+//public struct QueueFamilyProperties2 {
+//    public let queueFamilyProperties: QueueFamilyProperties
+//}
+//public typealias QueueFamilyProperties2KHR = QueueFamilyProperties2
+//
+//// Mapped from VkRayTracingPipelineCreateInfoNV
+//public struct RayTracingPipelineCreateInfoNV {
+//    public let flags: PipelineCreateFlags?
+//    public let stages: [PipelineShaderStageCreateInfo]
+//    public let groups: [RayTracingShaderGroupCreateInfoNV]
+//    public let maxRecursionDepth: UInt32
+//    public let layout: PipelineLayout
+//    public let basePipelineHandle: Pipeline?
+//    public let basePipelineIndex: Int32
+//}
+//
+//// Mapped from VkRayTracingShaderGroupCreateInfoNV
+//public struct RayTracingShaderGroupCreateInfoNV {
+//    public let type: RayTracingShaderGroupTypeNV
+//    public let generalShader: UInt32
+//    public let closestHitShader: UInt32
+//    public let anyHitShader: UInt32
+//    public let intersectionShader: UInt32
+//}
+//
+//// Mapped from VkRect2D
+//public struct Rect2D {
+//    public let offset: Offset2D
+//    public let extent: Extent2D
+//}
+//
+//// Mapped from VkRectLayerKHR
+//public struct RectLayerKHR {
+//    public let offset: Offset2D
+//    public let extent: Extent2D
+//    public let layer: UInt32
+//}
+//
+//// Mapped from VkRefreshCycleDurationGOOGLE
+//public struct RefreshCycleDurationGOOGLE {
+//    public let refreshDuration: UInt64
+//}
+//
+//// Mapped from VkRenderPassAttachmentBeginInfoKHR
+//public struct RenderPassAttachmentBeginInfoKHR {
+//    public let attachments: [ImageView]
+//}
+//
+//// Mapped from VkRenderPassBeginInfo
+//public struct RenderPassBeginInfo {
+//    public let renderPass: RenderPass
+//    public let framebuffer: Framebuffer
+//    public let renderArea: Rect2D
+//    public let clearValues: [ClearValue]
+//}
+//
+//// Mapped from VkRenderPassCreateInfo
+//public struct RenderPassCreateInfo {
+//    public let flags: RenderPassCreateFlags?
+//    public let attachments: [AttachmentDescription]
+//    public let subpasses: [SubpassDescription]
+//    public let dependencyCount: UInt32?
+//    public let dependencies: [SubpassDependency]
+//}
+//
+//// Mapped from VkRenderPassCreateInfo2KHR
+//public struct RenderPassCreateInfo2KHR {
+//    public let flags: RenderPassCreateFlags?
+//    public let attachments: [AttachmentDescription2KHR]
+//    public let subpasses: [SubpassDescription2KHR]
+//    public let dependencyCount: UInt32?
+//    public let dependencies: [SubpassDependency2KHR]
+//    public let correlatedViewMasks: [UInt32]
+//}
+//
+//// Mapped from VkRenderPassFragmentDensityMapCreateInfoEXT
+//public struct RenderPassFragmentDensityMapCreateInfoEXT {
+//    public let fragmentDensityMapAttachment: AttachmentReference
+//}
+//
+//// Mapped from VkRenderPassInputAttachmentAspectCreateInfo
+//public struct RenderPassInputAttachmentAspectCreateInfo {
+//    public let aspectReferences: [InputAttachmentAspectReference]
+//}
+//public typealias RenderPassInputAttachmentAspectCreateInfoKHR = RenderPassInputAttachmentAspectCreateInfo
+//
+//// Mapped from VkRenderPassMultiviewCreateInfo
+//public struct RenderPassMultiviewCreateInfo {
+//    public let subpassCount: UInt32?
+//    public let viewMasks: [UInt32]
+//    public let dependencyCount: UInt32?
+//    public let viewOffsets: [Int32]
+//    public let correlationMasks: [UInt32]
+//}
+//public typealias RenderPassMultiviewCreateInfoKHR = RenderPassMultiviewCreateInfo
+//
+//// Mapped from VkRenderPassSampleLocationsBeginInfoEXT
+//public struct RenderPassSampleLocationsBeginInfoEXT {
+//    public let attachmentInitialSampleLocations: [AttachmentSampleLocationsEXT]
+//    public let postSubpassSampleLocations: [SubpassSampleLocationsEXT]
+//}
+//
+//// Mapped from VkSampleLocationEXT
+//public struct SampleLocationEXT {
+//    public let x: Float
+//    public let y: Float
+//}
+//
+//// Mapped from VkSampleLocationsInfoEXT
+//public struct SampleLocationsInfoEXT {
+//    public let sampleLocationsPerPixel: SampleCountFlagBits?
+//    public let sampleLocationGridSize: Extent2D
+//    public let sampleLocations: [SampleLocationEXT]
+//}
+//
+//// Mapped from VkSamplerCreateInfo
+//public struct SamplerCreateInfo {
+//    public let flags: SamplerCreateFlags?
+//    public let magFilter: Filter
+//    public let minFilter: Filter
+//    public let mipmapMode: SamplerMipmapMode
+//    public let addressModeU: SamplerAddressMode
+//    public let addressModeV: SamplerAddressMode
+//    public let addressModeW: SamplerAddressMode
+//    public let mipLodBias: Float
+//    public let anisotropyEnable: Bool
+//    public let maxAnisotropy: Float
+//    public let compareEnable: Bool
+//    public let compareOp: CompareOp
+//    public let minLod: Float
+//    public let maxLod: Float
+//    public let borderColor: BorderColor
+//    public let unnormalizedCoordinates: Bool
+//}
+//
+//// Mapped from VkSamplerReductionModeCreateInfoEXT
+//public struct SamplerReductionModeCreateInfoEXT {
+//    public let reductionMode: SamplerReductionModeEXT
+//}
+//
+//// Mapped from VkSamplerYcbcrConversionCreateInfo
+//public struct SamplerYcbcrConversionCreateInfo {
+//    public let format: Format
+//    public let ycbcrModel: SamplerYcbcrModelConversion
+//    public let ycbcrRange: SamplerYcbcrRange
+//    public let components: ComponentMapping
+//    public let xChromaOffset: ChromaLocation
+//    public let yChromaOffset: ChromaLocation
+//    public let chromaFilter: Filter
+//    public let forceExplicitReconstruction: Bool
+//}
+//public typealias SamplerYcbcrConversionCreateInfoKHR = SamplerYcbcrConversionCreateInfo
+//
+//// Mapped from VkSamplerYcbcrConversionImageFormatProperties
+//public struct SamplerYcbcrConversionImageFormatProperties {
+//    public let combinedImageSamplerDescriptorCount: UInt32
+//}
+//public typealias SamplerYcbcrConversionImageFormatPropertiesKHR = SamplerYcbcrConversionImageFormatProperties
+//
+//// Mapped from VkSamplerYcbcrConversionInfo
+//public struct SamplerYcbcrConversionInfo {
+//    public let conversion: SamplerYcbcrConversion
+//}
+//public typealias SamplerYcbcrConversionInfoKHR = SamplerYcbcrConversionInfo
+//
+//// Mapped from VkSemaphoreCreateInfo
+//public struct SemaphoreCreateInfo {
+//    public let flags: SemaphoreCreateFlags?
+//}
+//
+//// Mapped from VkSemaphoreGetFdInfoKHR
+//public struct SemaphoreGetFdInfoKHR {
+//    public let semaphore: Semaphore
+//    public let handleType: ExternalSemaphoreHandleTypeFlagBits
+//}
+//
+//// Mapped from VkShaderModuleCreateInfo
+//public struct ShaderModuleCreateInfo {
+//    public let flags: ShaderModuleCreateFlags?
+//    public let codeSize: Int
+//    public let code: [UInt32]
+//}
+//
+//// Mapped from VkShaderModuleValidationCacheCreateInfoEXT
+//public struct ShaderModuleValidationCacheCreateInfoEXT {
+//    public let validationCache: ValidationCacheEXT
+//}
+//
+//// Mapped from VkShaderResourceUsageAMD
+//public struct ShaderResourceUsageAMD {
+//    public let numUsedVgprs: UInt32
+//    public let numUsedSgprs: UInt32
+//    public let ldsSizePerLocalWorkGroup: UInt32
+//    public let ldsUsageSizeInBytes: Int
+//    public let scratchMemUsageInBytes: Int
+//}
+//
+//// Mapped from VkShaderStatisticsInfoAMD
+//public struct ShaderStatisticsInfoAMD {
+//    public let shaderStageMask: ShaderStageFlags
+//    public let resourceUsage: ShaderResourceUsageAMD
+//    public let numPhysicalVgprs: UInt32
+//    public let numPhysicalSgprs: UInt32
+//    public let numAvailableVgprs: UInt32
+//    public let numAvailableSgprs: UInt32
+//    public let computeWorkGroupSize: [UInt32]
+//}
+//
+//// Mapped from VkShadingRatePaletteNV
+//public struct ShadingRatePaletteNV {
+//    public let shadingRatePaletteEntryCount: UInt32
+//    public let shadingRatePaletteEntries: [ShadingRatePaletteEntryNV]
+//}
+//
+//// Mapped from VkSharedPresentSurfaceCapabilitiesKHR
+//public struct SharedPresentSurfaceCapabilitiesKHR {
+//    public let sharedPresentSupportedUsageFlags: ImageUsageFlags?
+//}
+//
+//// Mapped from VkSparseBufferMemoryBindInfo
+//public struct SparseBufferMemoryBindInfo {
+//    public let buffer: Buffer
+//    public let binds: [SparseMemoryBind]
+//}
+//
+//// Mapped from VkSparseImageFormatProperties
+//public struct SparseImageFormatProperties {
+//    public let aspectMask: ImageAspectFlags?
+//    public let imageGranularity: Extent3D
+//    public let flags: SparseImageFormatFlags?
+//}
+//
+//// Mapped from VkSparseImageFormatProperties2
+//public struct SparseImageFormatProperties2 {
+//    public let properties: SparseImageFormatProperties
+//}
+//public typealias SparseImageFormatProperties2KHR = SparseImageFormatProperties2
+//
+//// Mapped from VkSparseImageMemoryBind
+//public struct SparseImageMemoryBind {
+//    public let subresource: ImageSubresource
+//    public let offset: Offset3D
+//    public let extent: Extent3D
+//    public let memory: DeviceMemory?
+//    public let memoryOffset: DeviceSize
+//    public let flags: SparseMemoryBindFlags?
+//}
+//
+//// Mapped from VkSparseImageMemoryBindInfo
+//public struct SparseImageMemoryBindInfo {
+//    public let image: Image
+//    public let binds: [SparseImageMemoryBind]
+//}
+//
+//// Mapped from VkSparseImageMemoryRequirements
+//public struct SparseImageMemoryRequirements {
+//    public let formatProperties: SparseImageFormatProperties
+//    public let imageMipTailFirstLod: UInt32
+//    public let imageMipTailSize: DeviceSize
+//    public let imageMipTailOffset: DeviceSize
+//    public let imageMipTailStride: DeviceSize
+//}
+//
+//// Mapped from VkSparseImageMemoryRequirements2
+//public struct SparseImageMemoryRequirements2 {
+//    public let memoryRequirements: SparseImageMemoryRequirements
+//}
+//public typealias SparseImageMemoryRequirements2KHR = SparseImageMemoryRequirements2
+//
+//// Mapped from VkSparseImageOpaqueMemoryBindInfo
+//public struct SparseImageOpaqueMemoryBindInfo {
+//    public let image: Image
+//    public let binds: [SparseMemoryBind]
+//}
+//
+//// Mapped from VkSparseMemoryBind
+//public struct SparseMemoryBind {
+//    public let resourceOffset: DeviceSize
+//    public let size: DeviceSize
+//    public let memory: DeviceMemory?
+//    public let memoryOffset: DeviceSize
+//    public let flags: SparseMemoryBindFlags?
+//}
+//
+//// Mapped from VkSpecializationInfo
+//public struct SpecializationInfo {
+//    public let mapEntryCount: UInt32?
+//    public let mapEntries: [SpecializationMapEntry]
+//    public let dataSize: Int?
+//    public let data: UnsafeRawPointer
+//}
+//
+//// Mapped from VkSpecializationMapEntry
+//public struct SpecializationMapEntry {
+//    public let constantID: UInt32
+//    public let offset: UInt32
+//    public let size: Int
+//}
+//
+//// Mapped from VkStencilOpState
+//public struct StencilOpState {
+//    public let failOp: StencilOp
+//    public let passOp: StencilOp
+//    public let depthFailOp: StencilOp
+//    public let compareOp: CompareOp
+//    public let compareMask: UInt32
+//    public let writeMask: UInt32
+//    public let reference: UInt32
+//}
+//
+//// Mapped from VkSubmitInfo
+//public struct SubmitInfo {
+//    public let waitSemaphores: [Semaphore]
+//    public let waitDstStageMask: [PipelineStageFlags]
+//    public let commandBuffers: [CommandBuffer]
+//    public let signalSemaphores: [Semaphore]
+//}
+//
+//// Mapped from VkSubpassBeginInfoKHR
+//public struct SubpassBeginInfoKHR {
+//    public let contents: SubpassContents
+//}
+//
+//// Mapped from VkSubpassDependency
+//public struct SubpassDependency {
+//    public let srcSubpass: UInt32
+//    public let dstSubpass: UInt32
+//    public let srcStageMask: PipelineStageFlags
+//    public let dstStageMask: PipelineStageFlags
+//    public let srcAccessMask: AccessFlags?
+//    public let dstAccessMask: AccessFlags?
+//    public let dependencyFlags: DependencyFlags?
+//}
+//
+//// Mapped from VkSubpassDependency2KHR
+//public struct SubpassDependency2KHR {
+//    public let srcSubpass: UInt32
+//    public let dstSubpass: UInt32
+//    public let srcStageMask: PipelineStageFlags
+//    public let dstStageMask: PipelineStageFlags
+//    public let srcAccessMask: AccessFlags?
+//    public let dstAccessMask: AccessFlags?
+//    public let dependencyFlags: DependencyFlags?
+//    public let viewOffset: Int32?
+//}
+//
+//// Mapped from VkSubpassDescription
+//public struct SubpassDescription {
+//    public let flags: SubpassDescriptionFlags?
+//    public let pipelineBindPoint: PipelineBindPoint
+//    public let inputAttachments: [AttachmentReference]
+//    public let colorAttachments: [AttachmentReference]
+//    public let resolveAttachments: [AttachmentReference]?
+//    public let depthStencilAttachment: AttachmentReference?
+//    public let preserveAttachments: [UInt32]
+//}
+//
+//// Mapped from VkSubpassDescription2KHR
+//public struct SubpassDescription2KHR {
+//    public let flags: SubpassDescriptionFlags?
+//    public let pipelineBindPoint: PipelineBindPoint
+//    public let viewMask: UInt32
+//    public let inputAttachments: [AttachmentReference2KHR]
+//    public let colorAttachments: [AttachmentReference2KHR]
+//    public let resolveAttachments: [AttachmentReference2KHR]?
+//    public let depthStencilAttachment: AttachmentReference2KHR?
+//    public let preserveAttachments: [UInt32]
+//}
+//
+//// Mapped from VkSubpassDescriptionDepthStencilResolveKHR
+//public struct SubpassDescriptionDepthStencilResolveKHR {
+//    public let depthResolveMode: ResolveModeFlagBitsKHR
+//    public let stencilResolveMode: ResolveModeFlagBitsKHR
+//    public let depthStencilResolveAttachment: AttachmentReference2KHR?
+//}
+//
+//// Mapped from VkSubpassEndInfoKHR
+//public struct SubpassEndInfoKHR {
+//}
+//
+//// Mapped from VkSubpassSampleLocationsEXT
+//public struct SubpassSampleLocationsEXT {
+//    public let subpassIndex: UInt32
+//    public let sampleLocationsInfo: SampleLocationsInfoEXT
+//}
+//
+//// Mapped from VkSubresourceLayout
+//public struct SubresourceLayout {
+//    public let offset: DeviceSize
+//    public let size: DeviceSize
+//    public let rowPitch: DeviceSize
+//    public let arrayPitch: DeviceSize
+//    public let depthPitch: DeviceSize
+//}
+//
+//// Mapped from VkSurfaceCapabilities2EXT
+//public struct SurfaceCapabilities2EXT {
+//    public let currentExtent: Extent2D
+//    public let minImageExtent: Extent2D
+//    public let maxImageExtent: Extent2D
+//    public let maxImageArrayLayers: UInt32
+//    public let supportedTransforms: SurfaceTransformFlagsKHR?
+//    public let currentTransform: SurfaceTransformFlagBitsKHR
+//    public let supportedCompositeAlpha: CompositeAlphaFlagsKHR?
+//    public let supportedUsageFlags: ImageUsageFlags?
+//    public let supportedSurfaceCounters: SurfaceCounterFlagsEXT?
+//}
+//
+//// Mapped from VkSurfaceCapabilities2KHR
+//public struct SurfaceCapabilities2KHR {
+//    public let surfaceCapabilities: SurfaceCapabilitiesKHR
+//}
+//
+//// Mapped from VkSurfaceCapabilitiesKHR
+//public struct SurfaceCapabilitiesKHR {
+//    public let currentExtent: Extent2D
+//    public let minImageExtent: Extent2D
+//    public let maxImageExtent: Extent2D
+//    public let maxImageArrayLayers: UInt32
+//    public let supportedTransforms: SurfaceTransformFlagsKHR?
+//    public let currentTransform: SurfaceTransformFlagBitsKHR
+//    public let supportedCompositeAlpha: CompositeAlphaFlagsKHR?
+//    public let supportedUsageFlags: ImageUsageFlags?
+//}
+//
+//// Mapped from VkSurfaceFormat2KHR
+//public struct SurfaceFormat2KHR {
+//    public let surfaceFormat: SurfaceFormatKHR
+//}
+//
+//// Mapped from VkSurfaceFormatKHR
+//public struct SurfaceFormatKHR {
+//    public let format: Format
+//    public let colorSpace: ColorSpaceKHR
+//}
+//
+//// Mapped from VkSurfaceProtectedCapabilitiesKHR
+//public struct SurfaceProtectedCapabilitiesKHR {
+//    public let supportsProtected: Bool
+//}
+//
+//// Mapped from VkSwapchainCounterCreateInfoEXT
+//public struct SwapchainCounterCreateInfoEXT {
+//    public let surfaceCounters: SurfaceCounterFlagsEXT?
+//}
 
-// Mapped from VkRayTracingPipelineCreateInfoNV
-public struct RayTracingPipelineCreateInfoNV {
-    public let flags: PipelineCreateFlags?
-    public let stages: [PipelineShaderStageCreateInfo]
-    public let groups: [RayTracingShaderGroupCreateInfoNV]
-    public let maxRecursionDepth: UInt32
-    public let layout: PipelineLayout
-    public let basePipelineHandle: Pipeline?
-    public let basePipelineIndex: Int32
-}
-
-// Mapped from VkRayTracingShaderGroupCreateInfoNV
-public struct RayTracingShaderGroupCreateInfoNV {
-    public let type: RayTracingShaderGroupTypeNV
-    public let generalShader: UInt32
-    public let closestHitShader: UInt32
-    public let anyHitShader: UInt32
-    public let intersectionShader: UInt32
-}
-
-// Mapped from VkRect2D
-public struct Rect2D {
-    public let offset: Offset2D
-    public let extent: Extent2D
-}
-
-// Mapped from VkRectLayerKHR
-public struct RectLayerKHR {
-    public let offset: Offset2D
-    public let extent: Extent2D
-    public let layer: UInt32
-}
-
-// Mapped from VkRefreshCycleDurationGOOGLE
-public struct RefreshCycleDurationGOOGLE {
-    public let refreshDuration: UInt64
-}
-
-// Mapped from VkRenderPassAttachmentBeginInfoKHR
-public struct RenderPassAttachmentBeginInfoKHR {
-    public let attachments: [ImageView]
-}
-
-// Mapped from VkRenderPassBeginInfo
-public struct RenderPassBeginInfo {
-    public let renderPass: RenderPass
-    public let framebuffer: Framebuffer
-    public let renderArea: Rect2D
-    public let clearValues: [ClearValue]
-}
-
-// Mapped from VkRenderPassCreateInfo
-public struct RenderPassCreateInfo {
-    public let flags: RenderPassCreateFlags?
-    public let attachments: [AttachmentDescription]
-    public let subpasses: [SubpassDescription]
-    public let dependencyCount: UInt32?
-    public let dependencies: [SubpassDependency]
-}
-
-// Mapped from VkRenderPassCreateInfo2KHR
-public struct RenderPassCreateInfo2KHR {
-    public let flags: RenderPassCreateFlags?
-    public let attachments: [AttachmentDescription2KHR]
-    public let subpasses: [SubpassDescription2KHR]
-    public let dependencyCount: UInt32?
-    public let dependencies: [SubpassDependency2KHR]
-    public let correlatedViewMasks: [UInt32]
-}
-
-// Mapped from VkRenderPassFragmentDensityMapCreateInfoEXT
-public struct RenderPassFragmentDensityMapCreateInfoEXT {
-    public let fragmentDensityMapAttachment: AttachmentReference
-}
-
-// Mapped from VkRenderPassInputAttachmentAspectCreateInfo
-public struct RenderPassInputAttachmentAspectCreateInfo {
-    public let aspectReferences: [InputAttachmentAspectReference]
-}
-public typealias RenderPassInputAttachmentAspectCreateInfoKHR = RenderPassInputAttachmentAspectCreateInfo
-
-// Mapped from VkRenderPassMultiviewCreateInfo
-public struct RenderPassMultiviewCreateInfo {
-    public let subpassCount: UInt32?
-    public let viewMasks: [UInt32]
-    public let dependencyCount: UInt32?
-    public let viewOffsets: [Int32]
-    public let correlationMasks: [UInt32]
-}
-public typealias RenderPassMultiviewCreateInfoKHR = RenderPassMultiviewCreateInfo
-
-// Mapped from VkRenderPassSampleLocationsBeginInfoEXT
-public struct RenderPassSampleLocationsBeginInfoEXT {
-    public let attachmentInitialSampleLocations: [AttachmentSampleLocationsEXT]
-    public let postSubpassSampleLocations: [SubpassSampleLocationsEXT]
-}
-
-// Mapped from VkSampleLocationEXT
-public struct SampleLocationEXT {
-    public let x: Float
-    public let y: Float
-}
-
-// Mapped from VkSampleLocationsInfoEXT
-public struct SampleLocationsInfoEXT {
-    public let sampleLocationsPerPixel: SampleCountFlagBits?
-    public let sampleLocationGridSize: Extent2D
-    public let sampleLocations: [SampleLocationEXT]
-}
-
-// Mapped from VkSamplerCreateInfo
-public struct SamplerCreateInfo {
-    public let flags: SamplerCreateFlags?
-    public let magFilter: Filter
-    public let minFilter: Filter
-    public let mipmapMode: SamplerMipmapMode
-    public let addressModeU: SamplerAddressMode
-    public let addressModeV: SamplerAddressMode
-    public let addressModeW: SamplerAddressMode
-    public let mipLodBias: Float
-    public let anisotropyEnable: Bool
-    public let maxAnisotropy: Float
-    public let compareEnable: Bool
-    public let compareOp: CompareOp
-    public let minLod: Float
-    public let maxLod: Float
-    public let borderColor: BorderColor
-    public let unnormalizedCoordinates: Bool
-}
-
-// Mapped from VkSamplerReductionModeCreateInfoEXT
-public struct SamplerReductionModeCreateInfoEXT {
-    public let reductionMode: SamplerReductionModeEXT
-}
-
-// Mapped from VkSamplerYcbcrConversionCreateInfo
-public struct SamplerYcbcrConversionCreateInfo {
-    public let format: Format
-    public let ycbcrModel: SamplerYcbcrModelConversion
-    public let ycbcrRange: SamplerYcbcrRange
-    public let components: ComponentMapping
-    public let xChromaOffset: ChromaLocation
-    public let yChromaOffset: ChromaLocation
-    public let chromaFilter: Filter
-    public let forceExplicitReconstruction: Bool
-}
-public typealias SamplerYcbcrConversionCreateInfoKHR = SamplerYcbcrConversionCreateInfo
-
-// Mapped from VkSamplerYcbcrConversionImageFormatProperties
-public struct SamplerYcbcrConversionImageFormatProperties {
-    public let combinedImageSamplerDescriptorCount: UInt32
-}
-public typealias SamplerYcbcrConversionImageFormatPropertiesKHR = SamplerYcbcrConversionImageFormatProperties
-
-// Mapped from VkSamplerYcbcrConversionInfo
-public struct SamplerYcbcrConversionInfo {
-    public let conversion: SamplerYcbcrConversion
-}
-public typealias SamplerYcbcrConversionInfoKHR = SamplerYcbcrConversionInfo
-
-// Mapped from VkSemaphoreCreateInfo
-public struct SemaphoreCreateInfo {
-    public let flags: SemaphoreCreateFlags?
-}
-
-// Mapped from VkSemaphoreGetFdInfoKHR
-public struct SemaphoreGetFdInfoKHR {
-    public let semaphore: Semaphore
-    public let handleType: ExternalSemaphoreHandleTypeFlagBits
-}
-
-// Mapped from VkShaderModuleCreateInfo
-public struct ShaderModuleCreateInfo {
-    public let flags: ShaderModuleCreateFlags?
-    public let codeSize: Int
-    public let code: [UInt32]
-}
-
-// Mapped from VkShaderModuleValidationCacheCreateInfoEXT
-public struct ShaderModuleValidationCacheCreateInfoEXT {
-    public let validationCache: ValidationCacheEXT
-}
-
-// Mapped from VkShaderResourceUsageAMD
-public struct ShaderResourceUsageAMD {
-    public let numUsedVgprs: UInt32
-    public let numUsedSgprs: UInt32
-    public let ldsSizePerLocalWorkGroup: UInt32
-    public let ldsUsageSizeInBytes: Int
-    public let scratchMemUsageInBytes: Int
-}
-
-// Mapped from VkShaderStatisticsInfoAMD
-public struct ShaderStatisticsInfoAMD {
-    public let shaderStageMask: ShaderStageFlags
-    public let resourceUsage: ShaderResourceUsageAMD
-    public let numPhysicalVgprs: UInt32
-    public let numPhysicalSgprs: UInt32
-    public let numAvailableVgprs: UInt32
-    public let numAvailableSgprs: UInt32
-    public let computeWorkGroupSize: [UInt32]
-}
-
-// Mapped from VkShadingRatePaletteNV
-public struct ShadingRatePaletteNV {
-    public let shadingRatePaletteEntryCount: UInt32
-    public let shadingRatePaletteEntries: [ShadingRatePaletteEntryNV]
-}
-
-// Mapped from VkSharedPresentSurfaceCapabilitiesKHR
-public struct SharedPresentSurfaceCapabilitiesKHR {
-    public let sharedPresentSupportedUsageFlags: ImageUsageFlags?
-}
-
-// Mapped from VkSparseBufferMemoryBindInfo
-public struct SparseBufferMemoryBindInfo {
-    public let buffer: Buffer
-    public let binds: [SparseMemoryBind]
-}
-
-// Mapped from VkSparseImageFormatProperties
-public struct SparseImageFormatProperties {
-    public let aspectMask: ImageAspectFlags?
-    public let imageGranularity: Extent3D
-    public let flags: SparseImageFormatFlags?
-}
-
-// Mapped from VkSparseImageFormatProperties2
-public struct SparseImageFormatProperties2 {
-    public let properties: SparseImageFormatProperties
-}
-public typealias SparseImageFormatProperties2KHR = SparseImageFormatProperties2
-
-// Mapped from VkSparseImageMemoryBind
-public struct SparseImageMemoryBind {
-    public let subresource: ImageSubresource
-    public let offset: Offset3D
-    public let extent: Extent3D
-    public let memory: DeviceMemory?
-    public let memoryOffset: DeviceSize
-    public let flags: SparseMemoryBindFlags?
-}
-
-// Mapped from VkSparseImageMemoryBindInfo
-public struct SparseImageMemoryBindInfo {
-    public let image: Image
-    public let binds: [SparseImageMemoryBind]
-}
-
-// Mapped from VkSparseImageMemoryRequirements
-public struct SparseImageMemoryRequirements {
-    public let formatProperties: SparseImageFormatProperties
-    public let imageMipTailFirstLod: UInt32
-    public let imageMipTailSize: DeviceSize
-    public let imageMipTailOffset: DeviceSize
-    public let imageMipTailStride: DeviceSize
-}
-
-// Mapped from VkSparseImageMemoryRequirements2
-public struct SparseImageMemoryRequirements2 {
-    public let memoryRequirements: SparseImageMemoryRequirements
-}
-public typealias SparseImageMemoryRequirements2KHR = SparseImageMemoryRequirements2
-
-// Mapped from VkSparseImageOpaqueMemoryBindInfo
-public struct SparseImageOpaqueMemoryBindInfo {
-    public let image: Image
-    public let binds: [SparseMemoryBind]
-}
-
-// Mapped from VkSparseMemoryBind
-public struct SparseMemoryBind {
-    public let resourceOffset: DeviceSize
-    public let size: DeviceSize
-    public let memory: DeviceMemory?
-    public let memoryOffset: DeviceSize
-    public let flags: SparseMemoryBindFlags?
-}
-
-// Mapped from VkSpecializationInfo
-public struct SpecializationInfo {
-    public let mapEntryCount: UInt32?
-    public let mapEntries: [SpecializationMapEntry]
-    public let dataSize: Int?
-    public let data: UnsafeRawPointer
-}
-
-// Mapped from VkSpecializationMapEntry
-public struct SpecializationMapEntry {
-    public let constantID: UInt32
-    public let offset: UInt32
-    public let size: Int
-}
-
-// Mapped from VkStencilOpState
-public struct StencilOpState {
-    public let failOp: StencilOp
-    public let passOp: StencilOp
-    public let depthFailOp: StencilOp
-    public let compareOp: CompareOp
-    public let compareMask: UInt32
-    public let writeMask: UInt32
-    public let reference: UInt32
-}
-
-// Mapped from VkSubmitInfo
-public struct SubmitInfo {
-    public let waitSemaphores: [Semaphore]
-    public let waitDstStageMask: [PipelineStageFlags]
-    public let commandBuffers: [CommandBuffer]
-    public let signalSemaphores: [Semaphore]
-}
-
-// Mapped from VkSubpassBeginInfoKHR
-public struct SubpassBeginInfoKHR {
-    public let contents: SubpassContents
-}
-
-// Mapped from VkSubpassDependency
-public struct SubpassDependency {
-    public let srcSubpass: UInt32
-    public let dstSubpass: UInt32
-    public let srcStageMask: PipelineStageFlags
-    public let dstStageMask: PipelineStageFlags
-    public let srcAccessMask: AccessFlags?
-    public let dstAccessMask: AccessFlags?
-    public let dependencyFlags: DependencyFlags?
-}
-
-// Mapped from VkSubpassDependency2KHR
-public struct SubpassDependency2KHR {
-    public let srcSubpass: UInt32
-    public let dstSubpass: UInt32
-    public let srcStageMask: PipelineStageFlags
-    public let dstStageMask: PipelineStageFlags
-    public let srcAccessMask: AccessFlags?
-    public let dstAccessMask: AccessFlags?
-    public let dependencyFlags: DependencyFlags?
-    public let viewOffset: Int32?
-}
-
-// Mapped from VkSubpassDescription
-public struct SubpassDescription {
-    public let flags: SubpassDescriptionFlags?
-    public let pipelineBindPoint: PipelineBindPoint
-    public let inputAttachments: [AttachmentReference]
-    public let colorAttachments: [AttachmentReference]
-    public let resolveAttachments: [AttachmentReference]?
-    public let depthStencilAttachment: AttachmentReference?
-    public let preserveAttachments: [UInt32]
-}
-
-// Mapped from VkSubpassDescription2KHR
-public struct SubpassDescription2KHR {
-    public let flags: SubpassDescriptionFlags?
-    public let pipelineBindPoint: PipelineBindPoint
-    public let viewMask: UInt32
-    public let inputAttachments: [AttachmentReference2KHR]
-    public let colorAttachments: [AttachmentReference2KHR]
-    public let resolveAttachments: [AttachmentReference2KHR]?
-    public let depthStencilAttachment: AttachmentReference2KHR?
-    public let preserveAttachments: [UInt32]
-}
-
-// Mapped from VkSubpassDescriptionDepthStencilResolveKHR
-public struct SubpassDescriptionDepthStencilResolveKHR {
-    public let depthResolveMode: ResolveModeFlagBitsKHR
-    public let stencilResolveMode: ResolveModeFlagBitsKHR
-    public let depthStencilResolveAttachment: AttachmentReference2KHR?
-}
-
-// Mapped from VkSubpassEndInfoKHR
-public struct SubpassEndInfoKHR {
-}
-
-// Mapped from VkSubpassSampleLocationsEXT
-public struct SubpassSampleLocationsEXT {
-    public let subpassIndex: UInt32
-    public let sampleLocationsInfo: SampleLocationsInfoEXT
-}
-
-// Mapped from VkSubresourceLayout
-public struct SubresourceLayout {
-    public let offset: DeviceSize
-    public let size: DeviceSize
-    public let rowPitch: DeviceSize
-    public let arrayPitch: DeviceSize
-    public let depthPitch: DeviceSize
-}
-
-// Mapped from VkSurfaceCapabilities2EXT
-public struct SurfaceCapabilities2EXT {
-    public let currentExtent: Extent2D
-    public let minImageExtent: Extent2D
-    public let maxImageExtent: Extent2D
-    public let maxImageArrayLayers: UInt32
-    public let supportedTransforms: SurfaceTransformFlagsKHR?
-    public let currentTransform: SurfaceTransformFlagBitsKHR
-    public let supportedCompositeAlpha: CompositeAlphaFlagsKHR?
-    public let supportedUsageFlags: ImageUsageFlags?
-    public let supportedSurfaceCounters: SurfaceCounterFlagsEXT?
-}
-
-// Mapped from VkSurfaceCapabilities2KHR
-public struct SurfaceCapabilities2KHR {
-    public let surfaceCapabilities: SurfaceCapabilitiesKHR
-}
-
-// Mapped from VkSurfaceCapabilitiesKHR
-public struct SurfaceCapabilitiesKHR {
-    public let currentExtent: Extent2D
-    public let minImageExtent: Extent2D
-    public let maxImageExtent: Extent2D
-    public let maxImageArrayLayers: UInt32
-    public let supportedTransforms: SurfaceTransformFlagsKHR?
-    public let currentTransform: SurfaceTransformFlagBitsKHR
-    public let supportedCompositeAlpha: CompositeAlphaFlagsKHR?
-    public let supportedUsageFlags: ImageUsageFlags?
-}
-
-// Mapped from VkSurfaceFormat2KHR
-public struct SurfaceFormat2KHR {
-    public let surfaceFormat: SurfaceFormatKHR
-}
-
-// Mapped from VkSurfaceFormatKHR
-public struct SurfaceFormatKHR {
-    public let format: Format
-    public let colorSpace: ColorSpaceKHR
-}
-
-// Mapped from VkSurfaceProtectedCapabilitiesKHR
-public struct SurfaceProtectedCapabilitiesKHR {
-    public let supportsProtected: Bool
-}
-
-// Mapped from VkSwapchainCounterCreateInfoEXT
-public struct SwapchainCounterCreateInfoEXT {
-    public let surfaceCounters: SurfaceCounterFlagsEXT?
-}
-
-// Mapped from VkSwapchainCreateInfoKHR
-public struct SwapchainCreateInfoKHR {
+// Mapped from VkSwapchainCreateInfo
+public struct SwapchainCreateInfo {
     public let flags: SwapchainCreateFlagsKHR?
     public let surface: SurfaceKHR
     public let minImageCount: UInt32
@@ -3230,106 +3192,106 @@ public struct SwapchainCreateInfoKHR {
     public let compositeAlpha: CompositeAlphaFlagBitsKHR
     public let presentMode: PresentModeKHR
     public let clipped: Bool
-    public let oldSwapchain: SwapchainKHR?
+//    public let oldSwapchain: SwapchainKHR?
 }
 
-// Mapped from VkSwapchainDisplayNativeHdrCreateInfoAMD
-public struct SwapchainDisplayNativeHdrCreateInfoAMD {
-    public let localDimmingEnable: Bool
-}
-
-// Mapped from VkTextureLODGatherFormatPropertiesAMD
-public struct TextureLODGatherFormatPropertiesAMD {
-    public let supportsTextureGatherLODBiasAMD: Bool
-}
-
-// Mapped from VkValidationCacheCreateInfoEXT
-public struct ValidationCacheCreateInfoEXT {
-    public let flags: ValidationCacheCreateFlagsEXT?
-    public let initialDataSize: Int?
-    public let initialData: UnsafeRawPointer
-}
-
-// Mapped from VkValidationFeaturesEXT
-public struct ValidationFeaturesEXT {
-    public let enabledValidationFeatures: [ValidationFeatureEnableEXT]
-    public let disabledValidationFeatures: [ValidationFeatureDisableEXT]
-}
-
-// Mapped from VkValidationFlagsEXT
-public struct ValidationFlagsEXT {
-    public let disabledValidationChecks: [ValidationCheckEXT]
-}
-
-// Mapped from VkVertexInputAttributeDescription
-public struct VertexInputAttributeDescription {
-    public let location: UInt32
-    public let binding: UInt32
-    public let format: Format
-    public let offset: UInt32
-}
-
-// Mapped from VkVertexInputBindingDescription
-public struct VertexInputBindingDescription {
-    public let binding: UInt32
-    public let stride: UInt32
-    public let inputRate: VertexInputRate
-}
-
-// Mapped from VkVertexInputBindingDivisorDescriptionEXT
-public struct VertexInputBindingDivisorDescriptionEXT {
-    public let binding: UInt32
-    public let divisor: UInt32
-}
-
-// Mapped from VkViewport
-public struct Viewport {
-    public let x: Float
-    public let y: Float
-    public let width: Float
-    public let height: Float
-    public let minDepth: Float
-    public let maxDepth: Float
-}
-
-// Mapped from VkViewportSwizzleNV
-public struct ViewportSwizzleNV {
-    public let x: ViewportCoordinateSwizzleNV
-    public let y: ViewportCoordinateSwizzleNV
-    public let z: ViewportCoordinateSwizzleNV
-    public let w: ViewportCoordinateSwizzleNV
-}
-
-// Mapped from VkViewportWScalingNV
-public struct ViewportWScalingNV {
-    public let xcoeff: Float
-    public let ycoeff: Float
-}
-
-// Mapped from VkWriteDescriptorSet
-public struct WriteDescriptorSet {
-    public let dstSet: DescriptorSet
-    public let dstBinding: UInt32
-    public let dstArrayElement: UInt32
-    public let descriptorType: DescriptorType
-    public let imageInfo: [DescriptorImageInfo]
-    public let bufferInfo: [DescriptorBufferInfo]
-    public let texelBufferView: [BufferView]
-}
-
-// Mapped from VkWriteDescriptorSetAccelerationStructureNV
-public struct WriteDescriptorSetAccelerationStructureNV {
-    public let accelerationStructures: [AccelerationStructureNV]
-}
-
-// Mapped from VkWriteDescriptorSetInlineUniformBlockEXT
-public struct WriteDescriptorSetInlineUniformBlockEXT {
-    public let dataSize: UInt32
-    public let data: UnsafeRawPointer
-}
-
-// Mapped from VkXYColorEXT
-public struct XYColorEXT {
-    public let x: Float
-    public let y: Float
-}
+//// Mapped from VkSwapchainDisplayNativeHdrCreateInfoAMD
+//public struct SwapchainDisplayNativeHdrCreateInfoAMD {
+//    public let localDimmingEnable: Bool
+//}
+//
+//// Mapped from VkTextureLODGatherFormatPropertiesAMD
+//public struct TextureLODGatherFormatPropertiesAMD {
+//    public let supportsTextureGatherLODBiasAMD: Bool
+//}
+//
+//// Mapped from VkValidationCacheCreateInfoEXT
+//public struct ValidationCacheCreateInfoEXT {
+//    public let flags: ValidationCacheCreateFlagsEXT?
+//    public let initialDataSize: Int?
+//    public let initialData: UnsafeRawPointer
+//}
+//
+//// Mapped from VkValidationFeaturesEXT
+//public struct ValidationFeaturesEXT {
+//    public let enabledValidationFeatures: [ValidationFeatureEnableEXT]
+//    public let disabledValidationFeatures: [ValidationFeatureDisableEXT]
+//}
+//
+//// Mapped from VkValidationFlagsEXT
+//public struct ValidationFlagsEXT {
+//    public let disabledValidationChecks: [ValidationCheckEXT]
+//}
+//
+//// Mapped from VkVertexInputAttributeDescription
+//public struct VertexInputAttributeDescription {
+//    public let location: UInt32
+//    public let binding: UInt32
+//    public let format: Format
+//    public let offset: UInt32
+//}
+//
+//// Mapped from VkVertexInputBindingDescription
+//public struct VertexInputBindingDescription {
+//    public let binding: UInt32
+//    public let stride: UInt32
+//    public let inputRate: VertexInputRate
+//}
+//
+//// Mapped from VkVertexInputBindingDivisorDescriptionEXT
+//public struct VertexInputBindingDivisorDescriptionEXT {
+//    public let binding: UInt32
+//    public let divisor: UInt32
+//}
+//
+//// Mapped from VkViewport
+//public struct Viewport {
+//    public let x: Float
+//    public let y: Float
+//    public let width: Float
+//    public let height: Float
+//    public let minDepth: Float
+//    public let maxDepth: Float
+//}
+//
+//// Mapped from VkViewportSwizzleNV
+//public struct ViewportSwizzleNV {
+//    public let x: ViewportCoordinateSwizzleNV
+//    public let y: ViewportCoordinateSwizzleNV
+//    public let z: ViewportCoordinateSwizzleNV
+//    public let w: ViewportCoordinateSwizzleNV
+//}
+//
+//// Mapped from VkViewportWScalingNV
+//public struct ViewportWScalingNV {
+//    public let xcoeff: Float
+//    public let ycoeff: Float
+//}
+//
+//// Mapped from VkWriteDescriptorSet
+//public struct WriteDescriptorSet {
+//    public let dstSet: DescriptorSet
+//    public let dstBinding: UInt32
+//    public let dstArrayElement: UInt32
+//    public let descriptorType: DescriptorType
+//    public let imageInfo: [DescriptorImageInfo]
+//    public let bufferInfo: [DescriptorBufferInfo]
+//    public let texelBufferView: [BufferView]
+//}
+//
+//// Mapped from VkWriteDescriptorSetAccelerationStructureNV
+//public struct WriteDescriptorSetAccelerationStructureNV {
+//    public let accelerationStructures: [AccelerationStructureNV]
+//}
+//
+//// Mapped from VkWriteDescriptorSetInlineUniformBlockEXT
+//public struct WriteDescriptorSetInlineUniformBlockEXT {
+//    public let dataSize: UInt32
+//    public let data: UnsafeRawPointer
+//}
+//
+//// Mapped from VkXYColorEXT
+//public struct XYColorEXT {
+//    public let x: Float
+//    public let y: Float
+//}

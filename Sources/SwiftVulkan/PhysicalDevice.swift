@@ -24,13 +24,14 @@ public class PhysicalDevice {
         let prop = cProps.pointee
 
         return PhysicalDeviceProperties(
-            apiVersion: prop.apiVersion,
-            driverVersion: prop.driverVersion,
-            vendorID: Int(prop.vendorID),
-            deviceID: Int(prop.deviceID),
-            deviceType: PhysicalDeviceType(rawValue: prop.deviceType.rawValue)!,
-            deviceName: convertTupleToString(prop.deviceName),
-            pipelineCacheUUID: convertTupleToArray(prop.pipelineCacheUUID)
+                apiVersion: prop.apiVersion,
+                driverVersion: prop.driverVersion,
+                vendorID: prop.vendorID,
+                deviceID: prop.deviceID,
+                deviceType: PhysicalDeviceType(rawValue: prop.deviceType.rawValue)!,
+                deviceName: convertTupleToString(prop.deviceName),
+                pipelineCacheUUID: convertTupleToArray(prop.pipelineCacheUUID)
+//                limits: PhysicalDeviceLimits()
         )
     }()
 
@@ -39,20 +40,20 @@ public class PhysicalDevice {
         var countArr: [UInt32] = [0]
 
         vkGetPhysicalDeviceQueueFamilyProperties(self.pointer, &countArr, nil)
-        
+
         var count = Int(countArr[0])
         if count > 0 {
             var properties = [VkQueueFamilyProperties](repeating: VkQueueFamilyProperties(), count: count)
             vkGetPhysicalDeviceQueueFamilyProperties(self.pointer, &countArr, &properties)
-          
+
             var counter = 0
             for cProp in properties {
                 let newProp = QueueFamilyProperties(
-                    index: UInt32(counter),
-                    queueFlags: QueueFamilyProperties.Flags(rawValue: cProp.queueFlags),
-                    queueCount: cProp.queueCount,
-                    timestampValidBits: cProp.timestampValidBits,
-                    minImageTransferGranularity: cProp.minImageTransferGranularity.swiftVersion()
+                        index: UInt32(counter),
+                        queueFlags: QueueFamilyProperties.Flags(rawValue: cProp.queueFlags),
+                        queueCount: cProp.queueCount,
+                        timestampValidBits: cProp.timestampValidBits,
+                        minImageTransferGranularity: cProp.minImageTransferGranularity.swiftVersion()
                 )
                 counter += 1
 
@@ -73,19 +74,19 @@ public class PhysicalDevice {
         let features = featuresPtr.pointee
 
         return PhysicalDeviceFeatures(
-            vkFeatures: features
+                vkFeatures: features
         )
     }()
 
     public func getFormatProperties(for format: Format) -> FormatProperties {
-        var props = [ VkFormatProperties() ]
+        var props = [VkFormatProperties()]
         vkGetPhysicalDeviceFormatProperties(self.pointer, format.vulkanValue, &props)
 
-        return FormatProperties(props[0]) 
+        return FormatProperties(props[0])
     }
 
     public func getExtensionProperties() throws -> [ExtensionProperties] {
-        var countArr: [UInt32] = [ 0 ]
+        var countArr: [UInt32] = [0]
         var opResult = vkEnumerateDeviceExtensionProperties(self.pointer, nil, &countArr, nil)
 
         guard opResult == VK_SUCCESS else {
@@ -99,7 +100,9 @@ public class PhysicalDevice {
             throw opResult.toResult()
         }
 
-        return vkProperties.map { ExtensionProperties(props: $0) }
+        return vkProperties.map {
+            ExtensionProperties(props: $0)
+        }
     }
 
     public func getMemoryProperties() throws -> PhysicalDeviceMemoryProperties {
@@ -111,14 +114,14 @@ public class PhysicalDevice {
     }
 
     public func getSurfaceFormats(for surface: SurfaceKHR) throws -> [SurfaceFormat] {
-        
+
         var returnValue: [SurfaceFormat] = []
         var opResult = VK_SUCCESS
 
         var count = UInt32(0)
         withUnsafeMutablePointer(to: &count) { countPtr in
             opResult = vkGetPhysicalDeviceSurfaceFormatsKHR(
-                self.pointer, surface.vulkanPointer, countPtr, nil)
+                    self.pointer, surface.vulkanPointer, countPtr, nil)
         }
 
         if opResult != VK_SUCCESS {
@@ -145,15 +148,15 @@ public class PhysicalDevice {
                 for i in 0..<count {
                     let format = cFormats[Int(i)]
                     let newFormat = SurfaceFormat(
-                        format: Format(rawValue: format.format.rawValue)!,
-                        colorSpace: ColorSpace(rawValue: format.colorSpace.rawValue)!
+                            format: Format(rawValue: format.format.rawValue)!,
+                            colorSpace: ColorSpace(rawValue: format.colorSpace.rawValue)!
                     )
 
                     returnValue.append(newFormat)
                 }
             }
         }
-        
+
         return returnValue
     }
 
@@ -163,7 +166,7 @@ public class PhysicalDevice {
         withUnsafeMutablePointer(to: &vulkanBool) {
             opResult = vkGetPhysicalDeviceSurfaceSupportKHR(self.pointer, family.index, surface.vulkanPointer, $0)
         }
-        
+
         if opResult == VK_SUCCESS {
             return vulkanBool > 0
         }
@@ -178,7 +181,7 @@ public class PhysicalDevice {
         withUnsafeMutablePointer(to: &cCapabilities) {
             opResult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self.pointer, surf.vulkanPointer, $0)
         }
-        
+
         if opResult == VK_SUCCESS {
             return SurfaceCapabilities(fromVulkan: cCapabilities)
         }
@@ -188,10 +191,10 @@ public class PhysicalDevice {
 
     public func getSurfacePresentModes(surface surf: SurfaceKHR) throws -> [PresentMode] {
         var countArr = [UInt32](repeating: 0, count: 1)
-        
+
         var opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
                 self.pointer, surf.vulkanPointer, &countArr, nil)
-        
+
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
@@ -199,12 +202,14 @@ public class PhysicalDevice {
         var cPresentModes = [VkPresentModeKHR](repeating: VkPresentModeKHR(rawValue: 0), count: Int(countArr[0]))
         opResult = vkGetPhysicalDeviceSurfacePresentModesKHR(
                 self.pointer, surf.vulkanPointer, &countArr, &cPresentModes)
-        
+
         guard opResult == VK_SUCCESS else {
             throw opResult.toResult()
         }
 
-        return cPresentModes.map { PresentMode(rawValue: $0.rawValue)! }
+        return cPresentModes.map {
+            PresentMode(rawValue: $0.rawValue)!
+        }
     }
 
     public func createDevice(createInfo info: DeviceCreateInfo) throws -> Device {
@@ -216,7 +221,7 @@ public class PhysicalDevice {
                 opResult = vkCreateDevice(self.pointer, deviceCreatePtr, nil, &device)
             }
         }
-        
+
         if opResult == VK_SUCCESS {
             return Device(instance: instance, device: device!)
         }
